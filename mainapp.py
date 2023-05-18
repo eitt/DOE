@@ -140,6 +140,15 @@ def homepage():
     df = compute_y(df, coefficients)
     st.subheader('Dataframe')
     st.dataframe(df)
+    
+    csv = df.to_csv(index=False)
+    st.download_button(
+    "Download data as CSV",
+    data=csv,
+    file_name="data.csv",
+    mime="csv")
+
+    
     st.subheader('Factors space')
     plot_3d(df)
     st.subheader('Analysis of Y based on a source of variability')
