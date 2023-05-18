@@ -1,4 +1,4 @@
-pip install streamlit numpy pandas intertools plotly statsmodels
+!pip install streamlit numpy pandas intertools plotly statsmodels
 
 import streamlit as st
 import numpy as np
