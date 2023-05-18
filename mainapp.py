@@ -1,5 +1,4 @@
-pip install streamlit numpy pandas intertools plotly statsmodels
-
+# loading packages
 import streamlit as st
 import numpy as np
 import pandas as pd
