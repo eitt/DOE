@@ -142,7 +142,7 @@ def homepage():
     st.dataframe(df)
     st.subheader('Factors space')
     plot_3d(df)
-    st.subheader('Analysis of Y based on a source of varaibility')
+    st.subheader('Analysis of Y based on a source of variability')
     st.subheader('Box plot')
     groupby_options = ['Temperature', 'Pressure', 'Thinner', 'Temperature*Pressure', 'Temperature*Thinner', 'Pressure*Thinner']
     groupby = st.selectbox('Group by', groupby_options, index=0)
