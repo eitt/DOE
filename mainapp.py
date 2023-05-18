@@ -96,8 +96,20 @@ def plot_boxplot(df, groupby):
         xaxis_title=groupby,
         yaxis_title='Y',
     )
-
+    formula = 'Y ~ ' + groupby
+    # Perform the regression
+    model = smf.ols(formula, data=df).fit()
+    
+        # Print the regression equation
+    params = model.params
+    equation = f"Y = {params[0]:.2f}"
+    if len(params) > 1:
+        equation += f" + {params[1]:.2f} * groupby"
+    equation += " + error"
+    
+    st.latex(equation)
     st.plotly_chart(fig)
+
 
 def fit_model(df):
     # Fit a linear regression model
