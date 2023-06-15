@@ -3,9 +3,14 @@
 
 format: jb-book
 root: intro
-chapters:
-- file: anova-oneway.md
-- file: one-way-anova.ipynb
-- file: markdown.md
-- file: notebooks
-- file: markdown-notebooks
+parts:
+  - caption: Anova One Way
+    chapters:
+    - file: anova-oneway.md
+    - file: one-way-anova.ipynb
+  - caption: Full-Factorial designs
+    chapters:
+    - file: markdown.md
+    - file: notebooks
+    - file: markdown-notebooks
+
