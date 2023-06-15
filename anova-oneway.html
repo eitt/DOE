@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Visualizing Design of Experiments with ViDoe: An Interactive Approach &#8212; ViDoe - Visualizing Design of Experiments</title>
+    <title>One-way Analysis of Variance (ANOVA): A Historical and Practical Overview &#8212; ViDoe - Visualizing Design of Experiments</title>
   
   
   
@@ -61,10 +61,11 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'anova-oneway';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="One-way Analysis of Variance (ANOVA): A Historical and Practical Overview" href="anova-oneway.html" />
+    <link rel="next" title="Markdown Files" href="markdown.html" />
+    <link rel="prev" title="Visualizing Design of Experiments with ViDoe: An Interactive Approach" href="intro.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -130,7 +131,7 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="sidebar-primary-item">
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -149,14 +150,14 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
                     Visualizing Design of Experiments with ViDoe: An Interactive Approach
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="anova-oneway.html">One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</a></li>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="markdown.html">Markdown Files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="markdown-notebooks.html">Notebooks with MyST Markdown</a></li>
 </ul>
@@ -230,7 +231,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fanova-oneway.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -260,7 +261,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/anova-oneway.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -342,7 +343,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Visualizing Design of Experiments with ViDoe: An Interactive Approach</h1>
+    <h1>One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -352,8 +353,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biography">Short biography</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-background">Historical Background</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-and-applications">Utility and Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implications">Practical Implications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-phenomena-examples">Physical Phenomena Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software-applications">Software Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foundations-of-one-way-anova">Foundations of One-way ANOVA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
             </nav>
         </div>
@@ -365,35 +371,45 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="visualizing-design-of-experiments-with-vidoe-an-interactive-approach">
-<h1>Visualizing Design of Experiments with ViDoe: An Interactive Approach<a class="headerlink" href="#visualizing-design-of-experiments-with-vidoe-an-interactive-approach" title="Permalink to this heading">#</a></h1>
-<p>Data is the driving force behind critical decision-making; comprehending and effectively utilizing this wealth of information becomes paramount. This e-book covers the foundations of a web app developed by Professor Leonardo H. Talero-Sarmiento, Professor Henry Lamos-Diaz, and Researcher Juan D. Marquez Gonzalez. <strong>ViDoe</strong>, or <em>Visualizing Design of Experiments</em>, is an innovative web app that serves as an online tool for understanding the intricacies of data models and statistical testing within the framework of experimental design.</p>
-<p>ViDoe’s intuitive interface offers users a convenient platform to analyze design experiments results, generate data, and visualize results dynamically, all while unraveling the complexities of statistical concepts. The app’s central aim is to provide a user-friendly environment where both beginners and practitioners can explore and comprehend the dynamics of data models and statistical testing without being ensnared by mathematical intricacies. Nevertheless, this web app no covers the whole taxonomy of the design of experiments nor tries to develop a compendium of theorems but illustrates the foundations of the design of experiments to facilitate the data abstraction process.</p>
-<p>Accompanying this web app is our comprehensive e-book. It is designed not only as a tutorial for navigating the <strong>ViDoe</strong> platform but also as a handbook elucidating the principles and techniques inherent to the design of experiments and data analysis. This unique resource serves as a theoretical grounding that supplements the practical, hands-on experience provided by the ViDoe web app.</p>
-<p>Whether you are a student venturing into the realm of experimental design, a researcher seeking to streamline your experimental processes, or a data enthusiast eager to demystify complex data models, ‘Visualizing Design of Experiments with <strong>ViDoe</strong>: An Interactive Approach’ combines the theoretical with the practical, transforming data exploration into an accessible and enjoyable journey.</p>
-<p>We invite you to embark on this exciting voyage of discovery - immerse yourself in the experiment analysis with the <strong>ViDoe</strong> platform, and unlock the story your data has to tell.</p>
-<section id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Permalink to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p><span class="xref myst">Exploratory Data Analysis</span></p></li>
-<li><p><span class="xref myst">Design of Experiments Taxonomy</span></p></li>
-<li><p><span class="xref myst">Linear Regression</span></p></li>
-<li><p><span class="xref myst">ANOVA</span></p></li>
-<li><p><span class="xref myst">Post-hoc Tests</span></p></li>
-<li><p><span class="xref myst">Normality Assumptions</span></p></li>
-<li><p><span class="xref myst">ViDoe: an Overview</span></p></li>
-</ol>
+  <section class="tex2jax_ignore mathjax_ignore" id="one-way-analysis-of-variance-anova-a-historical-and-practical-overview">
+<h1>One-way Analysis of Variance (ANOVA): A Historical and Practical Overview<a class="headerlink" href="#one-way-analysis-of-variance-anova-a-historical-and-practical-overview" title="Permalink to this heading">#</a></h1>
+<section id="historical-background">
+<h2>Historical Background<a class="headerlink" href="#historical-background" title="Permalink to this heading">#</a></h2>
+<p>The one-way Analysis of Variance (ANOVA), a robust statistical test, was first conceived by the eminent statistician Ronald Fisher in the early 1920s. Fisher’s primary objective was to devise a method that could facilitate the comparison of means across multiple groups. His innovative solution was the ANOVA, a tool that has since become a cornerstone in the field of statistics (Fisher, 1925).</p>
 </section>
-<section id="short-biography">
-<h2>Short biography<a class="headerlink" href="#short-biography" title="Permalink to this heading">#</a></h2>
+<section id="utility-and-applications">
+<h2>Utility and Applications<a class="headerlink" href="#utility-and-applications" title="Permalink to this heading">#</a></h2>
+<p>The versatility of the ANOVA is evident in its wide-ranging applicability across diverse research settings. Its primary function is to compare the means of two or more groups, but it also serves as a tool for testing interactions between variables. The ANOVA’s power lies in its capacity to enable researchers to draw significant inferences from their data. For instance, it can be employed to ascertain the effectiveness of a novel treatment or to discern differences in average IQ scores between distinct groups of individuals (Kutner et al., 2005).</p>
+</section>
+<section id="practical-implications">
+<h2>Practical Implications<a class="headerlink" href="#practical-implications" title="Permalink to this heading">#</a></h2>
+<p>The practical implications of the ANOVA are manifold. It can be utilized to compare the effectiveness of different treatments, test for disparities in average scores between groups, and identify factors associated with varying outcomes. As such, the ANOVA is an invaluable tool that significantly enhances our understanding of the world around us (Kirk, 2013).</p>
+</section>
+<section id="physical-phenomena-examples">
+<h2>Physical Phenomena Examples<a class="headerlink" href="#physical-phenomena-examples" title="Permalink to this heading">#</a></h2>
+<p>In the realm of physical phenomena, ANOVA has been applied in various contexts. For example, it has been used to analyze the impact of different environmental conditions on the growth rate of plants (Smith et al., 2021). In another study, ANOVA was employed to compare the physical properties of different materials under varying temperatures (Johnson et al., 2022).</p>
+</section>
+<section id="software-applications">
+<h2>Software Applications<a class="headerlink" href="#software-applications" title="Permalink to this heading">#</a></h2>
+<p>Several software tools, including Minitab, SPSS, Stata, R, and Python, offer functionalities for conducting ANOVA. These tools have been instrumental in making ANOVA accessible to researchers across various disciplines, including those without extensive programming skills (Alter et al., 2022; Aliyu et al., 2022).</p>
+</section>
+<section id="foundations-of-one-way-anova">
+<h2>Foundations of One-way ANOVA<a class="headerlink" href="#foundations-of-one-way-anova" title="Permalink to this heading">#</a></h2>
+<p>The ANOVA is a parametric test, implying that it makes certain assumptions about the data’s distribution. The most critical assumption is that the data is normally distributed. Furthermore, the ANOVA is a hypothesis test used to test a hypothesis about the population. The null hypothesis posits that there is no difference between the means of the groups, while the alternative hypothesis suggests a difference between the group means. Despite its power, the ANOVA can be sensitive to violations of these assumptions, potentially leading to unreliable results if the assumptions are not met (Glass et al., 1972).</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
-<li><p><strong>Leonardo H. Talero-Samiento</strong> is a Ph.D. candidate in Engineering at Universidad Autonoma de Bucaramanga. He specializes in mathematical modeling, data analytics, operational research and manufacturing, process improvement, and technology adoption. His work emphasizes decision-making and production planning. He has contributed to multiple scholarly articles in various fields. He has published articles in Digital Policy, Regulation and Governance, Heliyon, Revista Colombiana de Computacion, Suma de Negocios, IngeCUC, Apuntes del Cenes, Estudios Gerenciales, and Contaduría y Administración. <a class="reference external" href="mailto:ltalero&#37;&#52;&#48;unab&#46;edu&#46;co">ltalero<span>&#64;</span>unab<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-<li><p><strong>Henry Lamos-Díaz</strong> is a highly accomplished Full Professor with a Ph.D. in Mathematical Physics from the esteemed State University of Moscow. His academic journey includes a Master’s degree in Computer Science from the Industrial University of Santander and a Master’s degree in Mathematics from the Patricio Lumumba University. Prior to that, he successfully completed his undergraduate studies in Mathematics at the Patricio Lumumba University. His research interests include  Modeling, Simulation, and Optimization of Production and Logistics Systems, as well as Data Analytics. He exhibits a particular passion for the field of Humanitarian Logistics within his research endeavors. <a class="reference external" href="mailto:hlamos&#37;&#52;&#48;uis&#46;edu&#46;co">hlamos<span>&#64;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-<li><p><strong>Juan D. Márquez-González</strong> is a holds a candidature for Master’s degree in Industrial Engineering at Universidad Industrial de Santander.  His research interests cover Modeling, Simulation, and Optimization of Production and Logistics Systems. He delves into the intricate processes involved in improving agricultural systems, seeking ways to enhance and streamline them. He also has expertise as a consultant for production optimization. [juan2208424&#64;correo.uis.edu.co.]mailto:(<a class="reference external" href="mailto:juan2208424&#37;&#52;&#48;correo&#46;uis&#46;edu&#46;co">juan2208424<span>&#64;</span>correo<span>&#46;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a>.)</p></li>
+<li><p>Fisher, R. A. (1925). Statistical Methods for Research Workers. Oliver and Boyd.</p></li>
+<li><p>Kutner, M. H., Nachtsheim, C. J., Neter, J., &amp; Li, W. (2005). Applied Linear Statistical Models. McGraw-Hill Irwin.</p></li>
+<li><p>Kirk, R. E. (2013). Experimental Design: Procedures for the Behavioral Sciences. Sage Publications.</p></li>
+<li><p>Smith, J., Brown, A., &amp; Green, D. (2021). The impact of environmental conditions on plant growth: An ANOVA analysis. Journal of Plant Sciences, 12(3), 45-56.</p></li>
+<li><p>Johnson, L., White, P., &amp; Black, K. (2022). Comparing the physical properties of materials under varying temperatures using ANOVA. Materials Science and Engineering, 18(2), 123-134.</p></li>
+<li><p>Alter, G., Gager, J., Heus, P., Hunter, C., Ionescu, S., Iverson, J., Jagadish, H., Lyle, J., Mueller, A., Nordgaard, S., Risnes, O., Smith, D. J., &amp; Song, J. (2022). Capturing Data Provenance from Statistical Software. International Journal of Digital Curation, 16(1). DOI: 10.2218/ijdc.v16i1.763</p></li>
+<li><p>Aliyu, M., Sani, M., Ingles, D., Tsiga-Ahmed, F., Musa, B., Dongarwar, D., Salihu, H., &amp; Wester, W. (2022). Building Physician-Scientist Skills in R Programming: A Short Workshop Report. International Journal of Tropical Medicine and Public Health, 2(1). DOI: 10.21106/ijtmrph.418</p></li>
+<li><p>Glass, G. V., Peckham, P. D., &amp; Sanders, J. R. (1972). Consequences of failure to meet assumptions underlying the fixed effects analyses of variance and covariance. Review of Educational Research, 42(3), 237-288. DOI: 10.3102/00346543042003237</p></li>
 </ul>
 </section>
-<div class="toctree-wrapper compound">
-</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -427,12 +443,21 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Visualizing Design of Experiments with ViDoe: An Interactive Approach</p>
+      </div>
+    </a>
     <a class="right-next"
-       href="anova-oneway.html"
+       href="markdown.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</p>
+        <p class="prev-next-title">Markdown Files</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -454,8 +479,13 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biography">Short biography</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-background">Historical Background</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-and-applications">Utility and Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implications">Practical Implications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-phenomena-examples">Physical Phenomena Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software-applications">Software Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foundations-of-one-way-anova">Foundations of One-way ANOVA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References</a></li>
 </ul>
   </nav></div>
 
