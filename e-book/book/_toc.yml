@@ -4,8 +4,8 @@
 format: jb-book
 root: intro
 chapters:
-- file: anova-oneway
-- file: one-way-notebook
-- file: markdown
+- file: anova-oneway.md
+- file: one-way-anova.ipynb
+- file: markdown.md
 - file: notebooks
 - file: markdown-notebooks
