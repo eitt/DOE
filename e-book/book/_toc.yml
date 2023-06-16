@@ -13,4 +13,10 @@ parts:
     - file: markdown.md
     - file: notebooks
     - file: markdown-notebooks
+  - caption: Outputs Analysis
+    chapters:
+    - file: Boxplot-by-group.ipynb
+    - file: Surface-plot.ipynb
+    - file: regression-model.ipynb
+    - file: residual-analysis.ipynb
 
