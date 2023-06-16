@@ -4,19 +4,24 @@
 format: jb-book
 root: intro
 parts:
-  - caption: Anova One Way
+  - caption: ViDoe
+    chapters:
+    - file: ViDoe-Introduction.md
+    - file: ViDoe-ANOVA-One-Way.md
+    - file: ViDoe-Factorial-Designs.md
+    - caption: Anova One Way
     chapters:
     - file: anova-oneway.md
     - file: one-way-anova.ipynb
   - caption: Full-Factorial designs
     chapters:
     - file: markdown.md
-    - file: notebooks
-    - file: markdown-notebooks
   - caption: Outputs Analysis
     chapters:
     - file: Boxplot-by-group.ipynb
     - file: Surface-plot.ipynb
     - file: regression-model.ipynb
     - file: residual-analysis.ipynb
-
+- caption: Extras
+    chapters:
+    - file: Bibliography.md
