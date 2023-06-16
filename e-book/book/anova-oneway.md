@@ -16,7 +16,7 @@ In the realm of physical phenomena, ANOVA has been applied in various contexts. 
 Several software tools, including Minitab, SPSS, Stata, R, and Python, offer functionalities for conducting ANOVA. These tools have been instrumental in making ANOVA accessible to researchers across various disciplines, including those without extensive programming skills {cite:p}`Alter2022` {cite:p}`Aliyu_Sani_Ingles_Tsiga-Ahmed_Musa_Dongarwar_Salihu_Wester_2022`.
 
 ## Foundations of One-way ANOVA
-The ANOVA is a parametric test, implying that it makes certain assumptions about the data's distribution. The most critical assumption is that the data is normally distributed. Furthermore, the ANOVA is a hypothesis test used to test a hypothesis about the population. The null hypothesis posits that there is no difference between the means of the groups, while the alternative hypothesis suggests a difference between the group means. Despite its power, the ANOVA can be sensitive to violations of these assumptions, potentially leading to unreliable results if the assumptions are not met {cite:p}`Gene1972`.
+The ANOVA is a parametric test, implying that it makes certain assumptions about the data's distribution. The most critical assumption is that the data is normally distributed. Furthermore, the ANOVA is a hypothesis test used to test a hypothesis about the population. The null hypothesis posits that there is no difference between the means of the groups, while the alternative hypothesis suggests a difference between the group means. Despite its power, the ANOVA can be sensitive to violations of these assumptions, potentially leading to unreliable results if the assumptions are not met {cite:p}`Gene1972`. 
 
 ```{bibliography}
 :filter: docname in docnames
