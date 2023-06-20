@@ -13,29 +13,37 @@ We invite you to embark on this exciting voyage of discovery - immerse yourself 
 ## Table of Contents
 
 Section 1. **ViDoe**
+
  [ViDoe: Introduction](#ViDoe-Introduction)
+
  ViDoe-ANOVA-One-Way
+
  ViDoe-Factorial-Designs
+
 Section 2. **Anova One Way**
+
  anova-oneway
+
  one-way-anova
+
 Section 3. **Full-Factorial designs**
+
  markdown
+
 Section 4. **Outputs Analysis**
+
  Boxplot-by-group
+
  Surface-plot
+
  regression-model
+
  residual-analysis
+
 **Extras**
+
  Bibliography
 
-1. [Exploratory Data Analysis](#eda)
-2. [Design of Experiments Taxonomy](#doet)
-3. [Linear Regression](#lr)
-4. [ANOVA](#anova)
-5. [Post-hoc Tests](#pht)
-6. [Normality Assumptions](#na)
-7. [ViDoe: an Overview](#ViD)
 
 ## Short biography
 * **Leonardo H. Talero-Samiento** is a Ph.D. candidate in Engineering at Universidad Autonoma de Bucaramanga. He specializes in mathematical modeling, data analytics, operational research and manufacturing, process improvement, and technology adoption. His work emphasizes decision-making and production planning. He has contributed to multiple scholarly articles in various fields. He has published articles in Digital Policy, Regulation and Governance, Heliyon, Revista Colombiana de Computacion, Suma de Negocios, IngeCUC, Apuntes del Cenes, Estudios Gerenciales, and Contaduría y Administración. [ltalero@unab.edu.co](mailto:ltalero@unab.edu.co)
