@@ -12,6 +12,23 @@ We invite you to embark on this exciting voyage of discovery - immerse yourself 
 
 ## Table of Contents
 
+Section 1. **ViDoe**
+ [ViDoe: Introduction](#ViDoe-Introduction)
+ ViDoe-ANOVA-One-Way
+ ViDoe-Factorial-Designs
+Section 2. **Anova One Way**
+ anova-oneway
+ one-way-anova
+Section 3. **Full-Factorial designs**
+ markdown
+Section 4. **Outputs Analysis**
+ Boxplot-by-group
+ Surface-plot
+ regression-model
+ residual-analysis
+**Extras**
+ Bibliography
+
 1. [Exploratory Data Analysis](#eda)
 2. [Design of Experiments Taxonomy](#doet)
 3. [Linear Regression](#lr)
@@ -23,4 +40,4 @@ We invite you to embark on this exciting voyage of discovery - immerse yourself 
 ## Short biography
 * **Leonardo H. Talero-Samiento** is a Ph.D. candidate in Engineering at Universidad Autonoma de Bucaramanga. He specializes in mathematical modeling, data analytics, operational research and manufacturing, process improvement, and technology adoption. His work emphasizes decision-making and production planning. He has contributed to multiple scholarly articles in various fields. He has published articles in Digital Policy, Regulation and Governance, Heliyon, Revista Colombiana de Computacion, Suma de Negocios, IngeCUC, Apuntes del Cenes, Estudios Gerenciales, and Contaduría y Administración. [ltalero@unab.edu.co](mailto:ltalero@unab.edu.co)
 * **Henry Lamos-Díaz** is a highly accomplished Full Professor with a Ph.D. in Mathematical Physics from the esteemed State University of Moscow. His academic journey includes a Master's degree in Computer Science from the Industrial University of Santander and a Master's degree in Mathematics from the Patricio Lumumba University. Prior to that, he successfully completed his undergraduate studies in Mathematics at the Patricio Lumumba University. His research interests include  Modeling, Simulation, and Optimization of Production and Logistics Systems, as well as Data Analytics. He exhibits a particular passion for the field of Humanitarian Logistics within his research endeavors. [hlamos@uis.edu.co](mailto:hlamos@uis.edu.co)
-* **Juan D. Márquez-González** is a holds a candidature for Master's degree in Industrial Engineering at Universidad Industrial de Santander.  His research interests cover Modeling, Simulation, and Optimization of Production and Logistics Systems. He delves into the intricate processes involved in improving agricultural systems, seeking ways to enhance and streamline them. He also has expertise as a consultant for production optimization. [juan2208424@correo.uis.edu.co.]mailto:(juan2208424@correo.uis.edu.co.)
+* **Juan D. Márquez-González** is a holds a candidature for Master's degree in Industrial Engineering at Universidad Industrial de Santander.  His research interests cover Modeling, Simulation, and Optimization of Production and Logistics Systems. He delves into the intricate processes involved in improving agricultural systems, seeking ways to enhance and streamline them. He also has expertise as a consultant for production optimization. [juan2208424@correo.uis.edu.co](mailto:juan2208424@correo.uis.edu.co)
