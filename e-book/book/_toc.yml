@@ -3,6 +3,10 @@
 
 # jupyter-book build e-book/book
 # ghp-import -n -p -f e-book/book/_build/html
+#/home/codespace/.local/lib/python3.10/site-packages/ghp-import -n -p -f _build/html
+# export PATH=$PATH:/home/codespace/.local/lib/python3.10/site-packages/ghp-import
+
+
 format: jb-book
 root: intro
 parts:
