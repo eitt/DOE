@@ -176,6 +176,8 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="Boxplot-by-group.html">The Usefulness of Boxplots by Group in Data Analysis</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Surface-plot.html">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a></li>
 
+<li class="toctree-l1"><a class="reference internal" href="regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
@@ -460,7 +462,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/d3916f56beefa23a1414901d77de1f20ebfa41df18e4a5bb1447b31ecec900bb.png" src="_images/d3916f56beefa23a1414901d77de1f20ebfa41df18e4a5bb1447b31ecec900bb.png" />
+<img alt="_images/3e3419d3dbe08d25a25960b42c31f6fa26f84be717701a5d81e6aae17037f4a4.png" src="_images/3e3419d3dbe08d25a25960b42c31f6fa26f84be717701a5d81e6aae17037f4a4.png" />
 </div>
 </div>
 </section>
@@ -489,26 +491,26 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                  Score   R-squared:                       0.010
-Model:                            OLS   Adj. R-squared:                 -0.010
-Method:                 Least Squares   F-statistic:                    0.4963
-Date:                Tue, 20 Jun 2023   Prob (F-statistic):              0.610
-Time:                        15:30:05   Log-Likelihood:                -376.15
-No. Observations:                 100   AIC:                             758.3
-Df Residuals:                      97   BIC:                             766.1
+Dep. Variable:                  Score   R-squared:                       0.008
+Model:                            OLS   Adj. R-squared:                 -0.013
+Method:                 Least Squares   F-statistic:                    0.3788
+Date:                Mon, 11 Sep 2023   Prob (F-statistic):              0.686
+Time:                        09:33:54   Log-Likelihood:                -360.30
+No. Observations:                 100   AIC:                             726.6
+Df Residuals:                      97   BIC:                             734.4
 Df Model:                           2                                         
 Covariance Type:            nonrobust                                         
 =================================================================================
                     coef    std err          t      P&gt;|t|      [0.025      0.975]
 ---------------------------------------------------------------------------------
-Intercept        49.4325      1.868     26.460      0.000      45.725      53.140
-C(Group)[T.B]    -1.4467      2.709     -0.534      0.595      -6.824       3.931
-C(Group)[T.C]     1.1347      2.521      0.450      0.654      -3.868       6.138
+Intercept        52.7064      1.426     36.960      0.000      49.876      55.537
+C(Group)[T.B]    -1.8529      2.299     -0.806      0.422      -6.417       2.711
+C(Group)[T.C]    -0.0906      2.087     -0.043      0.965      -4.234       4.053
 ==============================================================================
-Omnibus:                        1.200   Durbin-Watson:                   2.053
-Prob(Omnibus):                  0.549   Jarque-Bera (JB):                1.067
-Skew:                          -0.042   Prob(JB):                        0.587
-Kurtosis:                       2.501   Cond. No.                         3.82
+Omnibus:                        3.668   Durbin-Watson:                   2.361
+Prob(Omnibus):                  0.160   Jarque-Bera (JB):                3.558
+Skew:                           0.458   Prob(JB):                        0.169
+Kurtosis:                       2.880   Cond. No.                         3.50
 ==============================================================================
 
 Notes:
