@@ -22,11 +22,11 @@ Section 1. **ViDoe**
 
 Section 2. **Anova One Way**
 
- [Introduction](#01-anova-oneway)
+ [01-anova-oneway](#01-anova-oneway)
 
- [Code Explanation](#01-one-way-anova)
+ [01-one-way-anova](#01-one-way-anova)
 
- [Illustrative Example](#01-one-way-example)
+ [01-one-way-example](#01-one-way-example)
 
 Section 3. **Full-Factorial designs**
 
