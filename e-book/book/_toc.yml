@@ -1,8 +1,10 @@
 # Table of contents
 # Learn more at https://jupyterbook.org/customize/toc.html
 
+# pip install -U jupyter-book
 # jupyter-book build e-book/book
-# ghp-import -n -p -f e-book/book/_build/html
+# pip install ghp-import
+# python -m ghp_import -n -p -f e-book/book/_build/html
 #/home/codespace/.local/lib/python3.10/site-packages/ghp-import -n -p -f _build/html
 # export PATH=$PATH:/home/codespace/.local/lib/python3.10/site-packages/ghp-import
 
@@ -19,6 +21,7 @@ parts:
       chapters:
       - file: anova-oneway.md
       - file: one-way-anova.ipynb
+      - file: one-way-example.ipynb
     - caption: Full-Factorial designs
       chapters:
       - file: markdown.md

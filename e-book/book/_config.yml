@@ -3,7 +3,7 @@
 
 title: ViDoe - Visualizing Design of Experiments
 author: Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
-logo: logo.png
+logo: INGENIERÍA-INDUSTRIAL_LOGO.png
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
@@ -30,3 +30,4 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+  home_page_in_navbar: true
