@@ -51,6 +51,4 @@ Section 4. **Outputs Analysis**
 * **Juan D. Márquez-González** is a holds a candidature for Master's degree in Industrial Engineering at Universidad Industrial de Santander.  His research interests cover Modeling, Simulation, and Optimization of Production and Logistics Systems. He delves into the intricate processes involved in improving agricultural systems, seeking ways to enhance and streamline them. He also has expertise as a consultant for production optimization. [juan2208424@correo.uis.edu.co](mailto:juan2208424@correo.uis.edu.co)
 
 
-![Industrial Engineering Program - Universidad Autónoma de Bucaramanga](e-book/book/_build/html/_images/INGENIERÍA-INDUSTRIAL_LOGO.png)
-
-
+![Industrial Engineering Program - Universidad Autónoma de Bucaramanga](/workspaces/DOE/e-book/book/INGENIERÍA-INDUSTRIAL_LOGO.png)
