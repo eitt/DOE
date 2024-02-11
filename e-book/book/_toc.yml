@@ -4,7 +4,7 @@
 # pip install -U jupyter-book
 # jupyter-book build e-book/book
 # pip install ghp-import
-# python -m ghp_import -n -p -f e-book/book/_build/html
+# python -m ghp_import -n -p -f _build/html
 #/home/codespace/.local/lib/python3.10/site-packages/ghp-import -n -p -f _build/html
 # export PATH=$PATH:/home/codespace/.local/lib/python3.10/site-packages/ghp-import
 
@@ -13,24 +13,31 @@ format: jb-book
 root: intro
 parts:
     - caption: ViDoe
+      numbered: true
       chapters:
-      - file: e-book/book/00-ViDoe-Introduction.md
-      - file: e-book/book/00-ViDoe-ANOVA-One-Way.md
-      - file: e-book/book/00-ViDoe-Factorial-Designs.md
+      - file: 00-ViDoe-Introduction.md
+        title: An overview of ViDoe
+      - file: 00-ViDoe-ANOVA-One-Way.md
+        title: Anova One-way using ViDoe
+      - file: 00-ViDoe-Factorial-Designs.md
+        title: Factorial Design using ViDoe
     - caption: Anova One-Way
+      numbered: true
       chapters:
-      - file: e-book/book/01-anova-oneway.md
-      - file: e-book/book/01-one-way-anova.ipynb
-      - file: e-book/book/01-one-way-example.ipynb
+      - file: 01-anova-oneway.md
+        title: Anova One-way Foundations
+      - file: 01-one-way-anova.ipynb
+      - file: 01-one-way-example.ipynb
     - caption: Full-Factorial designs
+      numbered: true
       chapters:
-      - file: e-book/book/02-markdown.md
+      - file: 02-markdown.md
     - caption: Outputs Analysis
       chapters:
-      - file: e-book/book/03-Boxplot-by-group.ipynb
-      - file: e-book/book/03-Surface-plot.ipynb
-      - file: e-book/book/03-regression-model.ipynb
-      - file: e-book/book/03-residual-analysis.ipynb
+      - file: 03-Boxplot-by-group.ipynb
+      - file: 03-Surface-plot.ipynb
+      - file: 03-regression-model.ipynb
+      - file: 03-residual-analysis.ipynb
     - caption: Extras
       chapters:
-      - file: e-book/book/Bibliography.md
+      - file: Bibliography.md
