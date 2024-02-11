@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Visualizing Design of Experiments with ViDoe: An Interactive Approach &#8212; ViDoe - Visualizing Design of Experiments</title>
+    <title>Title &#8212; ViDoe - Visualizing Design of Experiments</title>
   
   
   
@@ -57,10 +57,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '00-ViDoe-Factorial-Designs';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Title" href="00-ViDoe-Introduction.html" />
+    <link rel="next" title="One-way Analysis of Variance (ANOVA): A Historical and Practical Overview" href="01-anova-oneway.html" />
+    <link rel="prev" title="Title" href="00-ViDoe-ANOVA-One-Way.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -122,8 +123,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -140,7 +139,7 @@
 
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -171,8 +170,8 @@
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
                     Visualizing Design of Experiments with ViDoe: An Interactive Approach
                 </a>
             </li>
@@ -251,7 +250,7 @@
       
       
       
-      <li><a href="https://eitt.github.io/DOE/intro.html/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://eitt.github.io/DOE/intro.html/issues/new?title=Issue%20on%20page%20%2F00-ViDoe-Factorial-Designs.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -281,7 +280,7 @@
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/00-ViDoe-Factorial-Designs.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -352,9 +351,7 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="fa-solid fa-list"></span>
-</label>
+
 </div></div>
       
     </div>
@@ -365,20 +362,11 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Visualizing Design of Experiments with ViDoe: An Interactive Approach</h1>
+    <h1>Title</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
-            <div>
-                <h2> Contents </h2>
-            </div>
-            <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biography">Short biography</a></li>
-</ul>
-            </nav>
         </div>
     </div>
 </div>
@@ -388,52 +376,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="visualizing-design-of-experiments-with-vidoe-an-interactive-approach">
-<h1>Visualizing Design of Experiments with ViDoe: An Interactive Approach<a class="headerlink" href="#visualizing-design-of-experiments-with-vidoe-an-interactive-approach" title="Link to this heading">#</a></h1>
-<p>Data is the driving force behind critical decision-making; comprehending and effectively utilizing this wealth of information becomes paramount. This e-book covers the foundations of a web app developed by Professor Leonardo H. Talero-Sarmiento, Professor Henry Lamos-Diaz, and Researcher Juan D. Marquez Gonzalez. <strong>ViDoe</strong>, or <em>Visualizing Design of Experiments</em>, is an innovative web app that serves as an online tool for understanding the intricacies of data models and statistical testing within the framework of experimental design.</p>
-<p>ViDoe’s intuitive interface offers users a convenient platform to analyze design experiments results, generate data, and visualize results dynamically, all while unraveling the complexities of statistical concepts. The app’s central aim is to provide a user-friendly environment where both beginners and practitioners can explore and comprehend the dynamics of data models and statistical testing without being ensnared by mathematical intricacies. Nevertheless, this web app no covers the whole taxonomy of the design of experiments nor tries to develop a compendium of theorems but illustrates the foundations of the design of experiments to facilitate the data abstraction process.</p>
-<p>Accompanying this web app is our comprehensive e-book. It is designed not only as a tutorial for navigating the <strong>ViDoe</strong> platform but also as a handbook elucidating the principles and techniques inherent to the design of experiments and data analysis. This unique resource serves as a theoretical grounding that supplements the practical, hands-on experience provided by the ViDoe web app.</p>
-<p>Whether you are a student venturing into the realm of experimental design, a researcher seeking to streamline your experimental processes, or a data enthusiast eager to demystify complex data models, ‘Visualizing Design of Experiments with <strong>ViDoe</strong>: An Interactive Approach’ combines the theoretical with the practical, transforming data exploration into an accessible and enjoyable journey.</p>
-<p>We invite you to embark on this exciting voyage of discovery - immerse yourself in the experiment analysis with the <strong>ViDoe</strong> platform, and unlock the story your data has to tell.</p>
-<section id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
-<p>Section 1. <strong>ViDoe</strong></p>
-<p><a class="reference internal" href="00-ViDoe-Introduction.html"><span class="doc std std-doc">ViDoe: Introduction</span></a></p>
-<p><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html"><span class="doc std std-doc">ViDoe-ANOVA-One-Way</span></a></p>
-<p><a class="reference internal" href="00-ViDoe-Factorial-Designs.html"><span class="doc std std-doc">ViDoe-Factorial-Designs</span></a></p>
-<p>Section 2. <strong>Anova One Way</strong></p>
-<p><a class="reference internal" href="01-anova-oneway.html"><span class="doc std std-doc">Introduction</span></a></p>
-<p><a class="reference internal" href="01-one-way-anova.html"><span class="doc std std-doc">Code Explanation</span></a></p>
-<p><a class="reference internal" href="01-one-way-example.html"><span class="doc std std-doc">Illustrative Example</span></a></p>
-<p>Section 3. <strong>Full-Factorial designs</strong></p>
-<p><a class="reference internal" href="#markdown"><span class="xref myst">markdown</span></a></p>
-<p>Section 4. <strong>Outputs Analysis</strong></p>
-<p>03-Boxplot-by-group</p>
-<p>03-Surface-plot</p>
-<p>03-regression-model</p>
-<p>03-residual-analysis</p>
-<p><strong>Extras</strong></p>
-<p>Bibliography</p>
-</section>
-<section id="short-biography">
-<h2>Short biography<a class="headerlink" href="#short-biography" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><strong>Leonardo H. Talero-Samiento</strong> is a Ph.D. candidate in Engineering at Universidad Autonoma de Bucaramanga. He specializes in mathematical modeling, data analytics, operational research and manufacturing, process improvement, and technology adoption. His work emphasizes decision-making and production planning. He has contributed to multiple scholarly articles in various fields. He has published articles in Digital Policy, Regulation and Governance, Heliyon, Revista Colombiana de Computacion, Suma de Negocios, IngeCUC, Apuntes del Cenes, Estudios Gerenciales, and Contaduría y Administración. <a class="reference external" href="mailto:ltalero&#37;&#52;&#48;unab&#46;edu&#46;co">ltalero<span>&#64;</span>unab<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-<li><p><strong>Henry Lamos-Díaz</strong> is a highly accomplished Full Professor with a Ph.D. in Mathematical Physics from the esteemed State University of Moscow. His academic journey includes a Master’s degree in Computer Science from the Industrial University of Santander and a Master’s degree in Mathematics from the Patricio Lumumba University. Prior to that, he successfully completed his undergraduate studies in Mathematics at the Patricio Lumumba University. His research interests include  Modeling, Simulation, and Optimization of Production and Logistics Systems, as well as Data Analytics. He exhibits a particular passion for the field of Humanitarian Logistics within his research endeavors. <a class="reference external" href="mailto:hlamos&#37;&#52;&#48;uis&#46;edu&#46;co">hlamos<span>&#64;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-<li><p><strong>Juan D. Márquez-González</strong> is a holds a candidature for Master’s degree in Industrial Engineering at Universidad Industrial de Santander.  His research interests cover Modeling, Simulation, and Optimization of Production and Logistics Systems. He delves into the intricate processes involved in improving agricultural systems, seeking ways to enhance and streamline them. He also has expertise as a consultant for production optimization. <a class="reference external" href="mailto:juan2208424&#37;&#52;&#48;correo&#46;uis&#46;edu&#46;co">juan2208424<span>&#64;</span>correo<span>&#46;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-</ul>
-<p><img alt="Industrial Engineering Program - Universidad Autónoma de Bucaramanga" src="workspaces/DOE/e-book/book/INGENIER%C3%8DA-INDUSTRIAL_LOGO.png" /></p>
-</section>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="toctree-wrapper compound">
-</div>
+  <section class="tex2jax_ignore mathjax_ignore" id="title">
+<h1>Title<a class="headerlink" href="#title" title="Link to this heading">#</a></h1>
 </section>
 
     <script type="text/x-thebe-config">
@@ -466,12 +410,21 @@ document.write(`
                 <footer class="prev-next-footer">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="00-ViDoe-ANOVA-One-Way.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Title</p>
+      </div>
+    </a>
     <a class="right-next"
-       href="00-ViDoe-Introduction.html"
+       href="01-anova-oneway.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Title</p>
+        <p class="prev-next-title">One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -482,21 +435,7 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
-
-
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> Contents
-  </div>
-  <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biography">Short biography</a></li>
-</ul>
-  </nav></div>
-
-</div></div>
+                <div class="bd-sidebar-secondary bd-toc"></div>
               
             
           </div>

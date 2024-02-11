@@ -14,31 +14,33 @@ We invite you to embark on this exciting voyage of discovery - immerse yourself 
 
 Section 1. **ViDoe**
 
- [ViDoe: Introduction](#ViDoe-Introduction)
+ [ViDoe: Introduction](#00-ViDoe-Introduction)
 
- ViDoe-ANOVA-One-Way
+ [ViDoe-ANOVA-One-Way](#00-ViDoe-ANOVA-One-Way)
 
- ViDoe-Factorial-Designs
+ [ViDoe-Factorial-Designs](#00-ViDoe-Factorial-Designs)
 
 Section 2. **Anova One Way**
 
- anova-oneway
+ [Introduction](#01-anova-oneway)
 
- one-way-anova
+ [Code Explanation](#01-one-way-anova)
+
+ [Illustrative Example](#01-one-way-example)
 
 Section 3. **Full-Factorial designs**
 
- markdown
+ [markdown](#markdown)
 
 Section 4. **Outputs Analysis**
 
- Boxplot-by-group
+ 03-Boxplot-by-group
 
- Surface-plot
+ 03-Surface-plot
 
- regression-model
+ 03-regression-model
 
- residual-analysis
+ 03-residual-analysis
 
 **Extras**
 

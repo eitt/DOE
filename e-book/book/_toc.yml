@@ -14,23 +14,23 @@ root: intro
 parts:
     - caption: ViDoe
       chapters:
-      - file: ViDoe-Introduction.md
-      - file: ViDoe-ANOVA-One-Way.md
-      - file: ViDoe-Factorial-Designs.md
-    - caption: Anova One Way
+      - file: 00-ViDoe-Introduction.md
+      - file: 00-ViDoe-ANOVA-One-Way.md
+      - file: 00-ViDoe-Factorial-Designs.md
+    - caption: Anova One-Way
       chapters:
       - file: 01-anova-oneway.md
       - file: 01-one-way-anova.ipynb
       - file: 01-one-way-example.ipynb
     - caption: Full-Factorial designs
       chapters:
-      - file: markdown.md
+      - file: 02-markdown.md
     - caption: Outputs Analysis
       chapters:
-      - file: Boxplot-by-group.ipynb
-      - file: Surface-plot.ipynb
-      - file: regression-model.ipynb
-      - file: residual-analysis.ipynb
+      - file: 03-Boxplot-by-group.ipynb
+      - file: 03-Surface-plot.ipynb
+      - file: 03-regression-model.ipynb
+      - file: 03-residual-analysis.ipynb
     - caption: Extras
       chapters:
       - file: Bibliography.md
