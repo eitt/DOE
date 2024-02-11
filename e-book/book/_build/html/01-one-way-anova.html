@@ -176,28 +176,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="ViDoe-Introduction.html">Title</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ViDoe-ANOVA-One-Way.html">Title</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ViDoe-Factorial-Designs.html">Title</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Full-Factorial designs</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="markdown.html">Markdown Files</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="Boxplot-by-group.html">The Usefulness of Boxplots by Group in Data Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Surface-plot.html">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
-
-<li class="toctree-l1"><a class="reference internal" href="residual-analysis.html">Introduction to residual analysis</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="Bibliography.html">This is the Bibliography of this handbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Bibliography.html">References</a></li>
 </ul>
 
     </div>
@@ -410,7 +391,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="explaining-the-python-code">
+  <p><a name="01-one-way-anova"></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="explaining-the-python-code">
 <h1>Explaining the Python Code<a class="headerlink" href="#explaining-the-python-code" title="Link to this heading">#</a></h1>
 <p>This Python code is using several libraries to create a dataset, visualize it, and perform a one-way ANOVA analysis. Let’s break it down:</p>
 <section id="importing-libraries">
@@ -481,7 +463,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/d3a1130764328b924e5b914baca2825f9f98b94fed2b56e6a0bde35bf6c9a760.png" src="_images/d3a1130764328b924e5b914baca2825f9f98b94fed2b56e6a0bde35bf6c9a760.png" />
+<img alt="_images/0ca40dfb72dd703c7187bf9c6603f8fe681bf258ce66797faa5eee5845c8c813.png" src="_images/0ca40dfb72dd703c7187bf9c6603f8fe681bf258ce66797faa5eee5845c8c813.png" />
 </div>
 </div>
 </section>
@@ -510,26 +492,26 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                  Score   R-squared:                       0.005
-Model:                            OLS   Adj. R-squared:                 -0.016
-Method:                 Least Squares   F-statistic:                    0.2415
-Date:                Sun, 11 Feb 2024   Prob (F-statistic):              0.786
-Time:                        16:13:33   Log-Likelihood:                -374.79
-No. Observations:                 100   AIC:                             755.6
-Df Residuals:                      97   BIC:                             763.4
+Dep. Variable:                  Score   R-squared:                       0.002
+Model:                            OLS   Adj. R-squared:                 -0.019
+Method:                 Least Squares   F-statistic:                   0.09405
+Date:                Sun, 11 Feb 2024   Prob (F-statistic):              0.910
+Time:                        19:09:54   Log-Likelihood:                -356.69
+No. Observations:                 100   AIC:                             719.4
+Df Residuals:                      97   BIC:                             727.2
 Df Model:                           2                                         
 Covariance Type:            nonrobust                                         
 =================================================================================
                     coef    std err          t      P&gt;|t|      [0.025      0.975]
 ---------------------------------------------------------------------------------
-Intercept        50.4110      2.174     23.191      0.000      46.097      54.725
-C(Group)[T.B]     1.7825      2.958      0.603      0.548      -4.088       7.653
-C(Group)[T.C]     0.2404      2.627      0.092      0.927      -4.973       5.453
+Intercept        50.1842      1.562     32.120      0.000      47.083      53.285
+C(Group)[T.B]    -0.8055      2.118     -0.380      0.705      -5.009       3.398
+C(Group)[T.C]    -0.0495      2.192     -0.023      0.982      -4.400       4.301
 ==============================================================================
-Omnibus:                        0.544   Durbin-Watson:                   1.943
-Prob(Omnibus):                  0.762   Jarque-Bera (JB):                0.497
-Skew:                          -0.168   Prob(JB):                        0.780
-Kurtosis:                       2.919   Cond. No.                         4.53
+Omnibus:                        0.025   Durbin-Watson:                   1.758
+Prob(Omnibus):                  0.988   Jarque-Bera (JB):                0.063
+Skew:                           0.031   Prob(JB):                        0.969
+Kurtosis:                       2.894   Cond. No.                         3.86
 ==============================================================================
 
 Notes:
@@ -554,9 +536,9 @@ Notes:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                sum_sq    df         F    PR(&gt;F)
-C(Group)     52.496109   2.0  0.241522  0.785902
-Residual  10541.716871  97.0       NaN       NaN
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>               sum_sq    df         F    PR(&gt;F)
+C(Group)    14.234577   2.0  0.094054  0.910316
+Residual  7340.213133  97.0       NaN       NaN
 </pre></div>
 </div>
 </div>
