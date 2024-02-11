@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Visualizing Design of Experiments with ViDoe: An Interactive Approach &#8212; ViDoe - Visualizing Design of Experiments</title>
+    <title>Markdown Files &#8212; ViDoe - Visualizing Design of Experiments</title>
   
   
   
@@ -57,10 +57,11 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '02-markdown';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Title" href="00-ViDoe-Introduction.html" />
+    <link rel="next" title="The Usefulness of Boxplots by Group in Data Analysis" href="03-Boxplot-by-group.html" />
+    <link rel="prev" title="ANOVA One-way: An Illustrative example" href="01-one-way-example.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -122,8 +123,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -140,7 +139,7 @@
 
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -171,8 +170,8 @@
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
                     Visualizing Design of Experiments with ViDoe: An Interactive Approach
                 </a>
             </li>
@@ -251,7 +250,7 @@
       
       
       
-      <li><a href="https://eitt.github.io/DOE/intro.html/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://eitt.github.io/DOE/intro.html/issues/new?title=Issue%20on%20page%20%2F02-markdown.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -281,7 +280,7 @@
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/02-markdown.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -365,7 +364,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Visualizing Design of Experiments with ViDoe: An Interactive Approach</h1>
+    <h1>Markdown Files</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -375,8 +374,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biography">Short biography</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-myst">What is MyST?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-roles-and-directives">Sample Roles and Directives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citations">Citations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learn-more">Learn more</a></li>
 </ul>
             </nav>
         </div>
@@ -388,52 +389,112 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="visualizing-design-of-experiments-with-vidoe-an-interactive-approach">
-<h1>Visualizing Design of Experiments with ViDoe: An Interactive Approach<a class="headerlink" href="#visualizing-design-of-experiments-with-vidoe-an-interactive-approach" title="Link to this heading">#</a></h1>
-<p>Data is the driving force behind critical decision-making; comprehending and effectively utilizing this wealth of information becomes paramount. This e-book covers the foundations of a web app developed by Professor Leonardo H. Talero-Sarmiento, Professor Henry Lamos-Diaz, and Researcher Juan D. Marquez Gonzalez. <strong>ViDoe</strong>, or <em>Visualizing Design of Experiments</em>, is an innovative web app that serves as an online tool for understanding the intricacies of data models and statistical testing within the framework of experimental design.</p>
-<p>ViDoe’s intuitive interface offers users a convenient platform to analyze design experiments results, generate data, and visualize results dynamically, all while unraveling the complexities of statistical concepts. The app’s central aim is to provide a user-friendly environment where both beginners and practitioners can explore and comprehend the dynamics of data models and statistical testing without being ensnared by mathematical intricacies. Nevertheless, this web app no covers the whole taxonomy of the design of experiments nor tries to develop a compendium of theorems but illustrates the foundations of the design of experiments to facilitate the data abstraction process.</p>
-<p>Accompanying this web app is our comprehensive e-book. It is designed not only as a tutorial for navigating the <strong>ViDoe</strong> platform but also as a handbook elucidating the principles and techniques inherent to the design of experiments and data analysis. This unique resource serves as a theoretical grounding that supplements the practical, hands-on experience provided by the ViDoe web app.</p>
-<p>Whether you are a student venturing into the realm of experimental design, a researcher seeking to streamline your experimental processes, or a data enthusiast eager to demystify complex data models, ‘Visualizing Design of Experiments with <strong>ViDoe</strong>: An Interactive Approach’ combines the theoretical with the practical, transforming data exploration into an accessible and enjoyable journey.</p>
-<p>We invite you to embark on this exciting voyage of discovery - immerse yourself in the experiment analysis with the <strong>ViDoe</strong> platform, and unlock the story your data has to tell.</p>
-<section id="table-of-contents">
-<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
-<p>Section 1. <strong>ViDoe</strong></p>
-<p><a class="reference internal" href="00-ViDoe-Introduction.html"><span class="doc std std-doc">ViDoe: Introduction</span></a></p>
-<p><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html"><span class="doc std std-doc">ViDoe-ANOVA-One-Way</span></a></p>
-<p><a class="reference internal" href="00-ViDoe-Factorial-Designs.html"><span class="doc std std-doc">ViDoe-Factorial-Designs</span></a></p>
-<p>Section 2. <strong>Anova One Way</strong></p>
-<p><a class="reference internal" href="01-anova-oneway.html"><span class="doc std std-doc">Introduction</span></a></p>
-<p><a class="reference internal" href="01-one-way-anova.html"><span class="doc std std-doc">Code Explanation</span></a></p>
-<p><a class="reference internal" href="01-one-way-example.html"><span class="doc std std-doc">Illustrative Example</span></a></p>
-<p>Section 3. <strong>Full-Factorial designs</strong></p>
-<p><a class="reference internal" href="#markdown"><span class="xref myst">markdown</span></a></p>
-<p>Section 4. <strong>Outputs Analysis</strong></p>
-<p>03-Boxplot-by-group</p>
-<p>03-Surface-plot</p>
-<p>03-regression-model</p>
-<p>03-residual-analysis</p>
-<p><strong>Extras</strong></p>
-<p>Bibliography</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="markdown-files">
+<h1>Markdown Files<a class="headerlink" href="#markdown-files" title="Link to this heading">#</a></h1>
+<p>Whether you write your book’s content in Jupyter Notebooks (<code class="docutils literal notranslate"><span class="pre">.ipynb</span></code>) or
+in regular markdown files (<code class="docutils literal notranslate"><span class="pre">.md</span></code>), you’ll write in the same flavor of markdown
+called <strong>MyST Markdown</strong>.
+This is a simple file to help you get started and show off some syntax.</p>
+<section id="what-is-myst">
+<h2>What is MyST?<a class="headerlink" href="#what-is-myst" title="Link to this heading">#</a></h2>
+<p>MyST stands for “Markedly Structured Text”. It
+is a slight variation on a flavor of markdown called “CommonMark” markdown,
+with small syntax extensions to allow you to write <strong>roles</strong> and <strong>directives</strong>
+in the Sphinx ecosystem.</p>
+<p>For more about MyST, see <a class="reference external" href="https://jupyterbook.org/content/myst.html">the MyST Markdown Overview</a>.</p>
 </section>
-<section id="short-biography">
-<h2>Short biography<a class="headerlink" href="#short-biography" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><strong>Leonardo H. Talero-Samiento</strong> is a Ph.D. candidate in Engineering at Universidad Autonoma de Bucaramanga. He specializes in mathematical modeling, data analytics, operational research and manufacturing, process improvement, and technology adoption. His work emphasizes decision-making and production planning. He has contributed to multiple scholarly articles in various fields. He has published articles in Digital Policy, Regulation and Governance, Heliyon, Revista Colombiana de Computacion, Suma de Negocios, IngeCUC, Apuntes del Cenes, Estudios Gerenciales, and Contaduría y Administración. <a class="reference external" href="mailto:ltalero&#37;&#52;&#48;unab&#46;edu&#46;co">ltalero<span>&#64;</span>unab<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-<li><p><strong>Henry Lamos-Díaz</strong> is a highly accomplished Full Professor with a Ph.D. in Mathematical Physics from the esteemed State University of Moscow. His academic journey includes a Master’s degree in Computer Science from the Industrial University of Santander and a Master’s degree in Mathematics from the Patricio Lumumba University. Prior to that, he successfully completed his undergraduate studies in Mathematics at the Patricio Lumumba University. His research interests include  Modeling, Simulation, and Optimization of Production and Logistics Systems, as well as Data Analytics. He exhibits a particular passion for the field of Humanitarian Logistics within his research endeavors. <a class="reference external" href="mailto:hlamos&#37;&#52;&#48;uis&#46;edu&#46;co">hlamos<span>&#64;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-<li><p><strong>Juan D. Márquez-González</strong> is a holds a candidature for Master’s degree in Industrial Engineering at Universidad Industrial de Santander.  His research interests cover Modeling, Simulation, and Optimization of Production and Logistics Systems. He delves into the intricate processes involved in improving agricultural systems, seeking ways to enhance and streamline them. He also has expertise as a consultant for production optimization. <a class="reference external" href="mailto:juan2208424&#37;&#52;&#48;correo&#46;uis&#46;edu&#46;co">juan2208424<span>&#64;</span>correo<span>&#46;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-</ul>
-<p><img alt="Industrial Engineering Program - Universidad Autónoma de Bucaramanga" src="workspaces/DOE/e-book/book/INGENIER%C3%8DA-INDUSTRIAL_LOGO.png" /></p>
+<section id="sample-roles-and-directives">
+<h2>Sample Roles and Directives<a class="headerlink" href="#sample-roles-and-directives" title="Link to this heading">#</a></h2>
+<p>Roles and directives are two of the most powerful tools in Jupyter Book. They
+are kind of like functions, but written in a markup language. They both
+serve a similar purpose, but <strong>roles are written in one line</strong>, whereas
+<strong>directives span many lines</strong>. They both accept different kinds of inputs,
+and what they do with those inputs depends on the specific role or directive
+that is being called.</p>
+<p>Here is a “note” directive:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Here is a note</p>
+</div>
+<p>It will be rendered in a special box when you build your book.</p>
+<p>Here is an inline directive to refer to a document: <a class="reference internal" href="markdown-notebooks.html"><span class="doc">Notebooks with MyST Markdown</span></a>.</p>
 </section>
-<div class="toctree-wrapper compound">
+<section id="citations">
+<h2>Citations<a class="headerlink" href="#citations" title="Link to this heading">#</a></h2>
+<p>You can also cite references that are stored in a <code class="docutils literal notranslate"><span class="pre">bibtex</span></code> file. For example,
+the following syntax: <code class="docutils literal notranslate"><span class="pre">{cite}`holdgraf_evidence_2014`</span></code> will render like
+this: <span id="id1">[<a class="reference internal" href="Bibliography.html#id2" title="Christopher Ramsay Holdgraf, Wendy de Heer, Brian N. Pasley, and Robert T. Knight. Evidence for Predictive Coding in Human Auditory Cortex. In International Conference on Cognitive Neuroscience. Brisbane, Australia, Australia, 2014. Frontiers in Neuroscience.">HdHPK14</a>]</span>.</p>
+<p>Moreover, you can insert a bibliography into your page with this syntax:
+The <code class="docutils literal notranslate"><span class="pre">{bibliography}</span></code> directive must be used for all the <code class="docutils literal notranslate"><span class="pre">{cite}</span></code> roles to
+render properly.
+For example, if the references for your book are stored in <code class="docutils literal notranslate"><span class="pre">references.bib</span></code>,
+then the bibliography is inserted with:</p>
+<div class="docutils container" id="id2">
+<div role="list" class="citation-list">
+<div class="citation" id="id8" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>AM18<span class="fn-bracket">]</span></span>
+<p>Duraj Agnieszka and Ludwicka Magdalena. Detection of outliers in the financial time series using arima models. <em>2018 Applications of Electromagnetics in Modern Techniques and Medicine (PTZE)</em>, pages 49–52, 2018.</p>
 </div>
-<div class="toctree-wrapper compound">
+<div class="citation" id="id13" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>AZVV23<span class="fn-bracket">]</span></span>
+<p>Olha Aleksandrova, Tetiana Zhmykhova, Rando Värnik, and Ants-Hannes Viira. The one-way analysis of variance of heat-storage materials used in building of poultry houses. <em>Processes</em>, 2023. URL: <a class="reference external" href="https://www.mdpi.com/2227-9717/11/1/104">https://www.mdpi.com/2227-9717/11/1/104</a>, <a class="reference external" href="https://doi.org/10.3390/pr11010104">doi:10.3390/pr11010104</a>.</p>
 </div>
-<div class="toctree-wrapper compound">
+<div class="citation" id="id19" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>ASI+22<span class="fn-bracket">]</span></span>
+<p>Muktar H. Aliyu, Mahmoud Sani, Donna Ingles, Fatima Tsiga-Ahmed, Baba Musa, Deepa Dongarwar, Hamisu Salihu, and William Wester. Building physician-scientist skills in r programming: a short workshop report. <em>International Journal of Translational Medical Research and Public Health</em>, May 2022. URL: <a class="reference external" href="https://ijtmrph.org/index.php/IJTMRPH/article/view/418">https://ijtmrph.org/index.php/IJTMRPH/article/view/418</a>, <a class="reference external" href="https://doi.org/10.21106/ijtmrph.418">doi:10.21106/ijtmrph.418</a>.</p>
 </div>
-<div class="toctree-wrapper compound">
+<div class="citation" id="id18" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>AGH+22<span class="fn-bracket">]</span></span>
+<p>George Charles Alter, Jack Gager, Pascal Heus, Carson Hunter, Sanda Ionescu, Jeremy Iverson, H.V. Jagadish, Jared Lyle, Alexander Mueller, Sigve Nordgaard, Ornulf Risnes, Dan Smith, and Jie Song. Capturing data provenance from statistical software. <em>International Journal of Digital Curation</em>, 2022. <a class="reference external" href="https://doi.org/10.2218/ijdc.v16i1.763">doi:10.2218/ijdc.v16i1.763</a>.</p>
 </div>
-<div class="toctree-wrapper compound">
+<div class="citation" id="id9" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Fis92<span class="fn-bracket">]</span></span>
+<p>R. A. Fisher. <em>Statistical Methods for Research Workers</em>, pages 66–70. Springer New York, New York, NY, 1992. URL: <a class="reference external" href="https://doi.org/10.1007/978-1-4612-4380-9_6">https://doi.org/10.1007/978-1-4612-4380-9_6</a>, <a class="reference external" href="https://doi.org/10.1007/978-1-4612-4380-9_6">doi:10.1007/978-1-4612-4380-9_6</a>.</p>
 </div>
+<div class="citation" id="id20" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GPS72<span class="fn-bracket">]</span></span>
+<p>Gene V Glass, Percy D. Peckham, and James R. Sanders. Consequences of failure to meet assumptions underlying the fixed effects analyses of variance and covariance. <em>Review of Educational Research</em>, 42(3):237–288, 1972. URL: <a class="reference external" href="https://doi.org/10.3102/00346543042003237">https://doi.org/10.3102/00346543042003237</a>, <a class="reference external" href="https://arxiv.org/abs/https://doi.org/10.3102/00346543042003237">arXiv:https://doi.org/10.3102/00346543042003237</a>, <a class="reference external" href="https://doi.org/10.3102/00346543042003237">doi:10.3102/00346543042003237</a>.</p>
+</div>
+<div class="citation" id="id12" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>GFP21<span class="fn-bracket">]</span></span>
+<p>Valda Gudynaitė-Franckevičienė and Alfas Pliūra. The impact of different environmental conditions during vegetative propagation on growth, survival, and biochemical characteristics in populus hybrids in clonal field trial. <em>Forests</em>, 2021. URL: <a class="reference external" href="https://www.mdpi.com/1999-4907/12/7/892">https://www.mdpi.com/1999-4907/12/7/892</a>, <a class="reference external" href="https://doi.org/10.3390/f12070892">doi:10.3390/f12070892</a>.</p>
+</div>
+<div class="citation" id="id3" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">HdHPK14</a><span class="fn-bracket">]</span></span>
+<p>Christopher Ramsay Holdgraf, Wendy de Heer, Brian N. Pasley, and Robert T. Knight. Evidence for Predictive Coding in Human Auditory Cortex. In <em>International Conference on Cognitive Neuroscience</em>. Brisbane, Australia, Australia, 2014. Frontiers in Neuroscience.</p>
+</div>
+<div class="citation" id="id11" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Kir13<span class="fn-bracket">]</span></span>
+<p>Roger E. Kirk. <em>Experimental design: Procedures for the behavioral sciences</em>. SAGE Publications, Inc., 4 edition, 2013. ISBN 9781412974455. <a class="reference external" href="https://doi.org/10.4135/9781483384733">doi:10.4135/9781483384733</a>.</p>
+</div>
+<div class="citation" id="id14" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>KronungE11<span class="fn-bracket">]</span></span>
+<p>Julia Krönung and Andreas Eckhardt. Three classes of attitude and their implications for is research. In <em>International Conference on Interaction Sciences</em>. 2011.</p>
+</div>
+<div class="citation" id="id10" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>Kut05<span class="fn-bracket">]</span></span>
+<p>M.H. Kutner. <em>Applied Linear Statistical Models</em>. McGrwa-Hill international edition. McGraw-Hill Irwin, 2005. ISBN 9780071122214. URL: <a class="reference external" href="https://books.google.com.co/books?id=0xqCAAAACAAJ">https://books.google.com.co/books?id=0xqCAAAACAAJ</a>.</p>
+</div>
+<div class="citation" id="id15" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>MAA+23<span class="fn-bracket">]</span></span>
+<p>N. A. Mohamed, A. R. A. Alanzi, N. A. Azizan, S. A. Azizan, N. Samsudin, and H. S. Jenatabadi. Evaluation of depression and obesity indices based on applications of ANOVA, regression, structural equation modeling and taguchi algorithm process. <em>Frontiers in psychology</em>, 14:1060963, 2023. <a class="reference external" href="https://doi.org/10.3389/fpsyg.2023.1060963">doi:10.3389/fpsyg.2023.1060963</a>.</p>
+</div>
+<div class="citation" id="id16" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>NP16<span class="fn-bracket">]</span></span>
+<p>Tomasz Niedoba and Paulina Pięta. Applications of anova in mineral processing. <em>Mining Science</em>, 2016.</p>
+</div>
+<div class="citation" id="id17" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>SC22<span class="fn-bracket">]</span></span>
+<p>Pei-Ling Sheu and Shu-Chun Chang. Relationship of service quality dimensions, customer satisfaction and loyalty in e-commerce: a case study of the shopee app. <em>Applied Economics</em>, 54:4597 – 4607, 2022.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="learn-more">
+<h2>Learn more<a class="headerlink" href="#learn-more" title="Link to this heading">#</a></h2>
+<p>This is just a simple starter to get you started.
+You can learn a lot more at <a class="reference external" href="https://jupyterbook.org">jupyterbook.org</a>.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -466,12 +527,21 @@ document.write(`
                 <footer class="prev-next-footer">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="01-one-way-example.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">ANOVA One-way: An Illustrative example</p>
+      </div>
+    </a>
     <a class="right-next"
-       href="00-ViDoe-Introduction.html"
+       href="03-Boxplot-by-group.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Title</p>
+        <p class="prev-next-title">The Usefulness of Boxplots by Group in Data Analysis</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -491,8 +561,10 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biography">Short biography</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-myst">What is MyST?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-roles-and-directives">Sample Roles and Directives</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#citations">Citations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#learn-more">Learn more</a></li>
 </ul>
   </nav></div>
 
