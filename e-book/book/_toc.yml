@@ -19,9 +19,9 @@ parts:
       - file: ViDoe-Factorial-Designs.md
     - caption: Anova One Way
       chapters:
-      - file: anova-oneway.md
-      - file: one-way-anova.ipynb
-      - file: one-way-example.ipynb
+      - file: 01-anova-oneway.md
+      - file: 01-one-way-anova.ipynb
+      - file: 01-one-way-example.ipynb
     - caption: Full-Factorial designs
       chapters:
       - file: markdown.md
