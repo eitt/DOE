@@ -14,23 +14,23 @@ We invite you to embark on this exciting voyage of discovery - immerse yourself 
 
 Section 1. **ViDoe**
 
- [ViDoe: Introduction](#00-ViDoe-Introduction)
+ [00-ViDoe: Introduction](#00-ViDoe-Introduction)
 
- [ViDoe-ANOVA-One-Way](#00-ViDoe-ANOVA-One-Way)
+ [00-ViDoe-ANOVA-One-Way](#00-ViDoe-ANOVA-One-Way)
 
- [ViDoe-Factorial-Designs](#00-ViDoe-Factorial-Designs)
+ [00-ViDoe-Factorial-Designs](#00-ViDoe-Factorial-Designs)
 
 Section 2. **Anova One Way**
 
- [01-anova-oneway](#01-anova-oneway)
+ [01-anova-oneway.md](#01-anova-oneway)
 
- [01-one-way-anova](#01-one-way-anova)
+ [01-one-way-anova.ipynb](#01-one-way-anova)
 
- [01-one-way-example](#01-one-way-example)
+ [01-one-way-example.ipynb](#01-one-way-example)
 
 Section 3. **Full-Factorial designs**
 
- [markdown](#markdown)
+ [markdown.md](#markdown)
 
 Section 4. **Outputs Analysis**
 

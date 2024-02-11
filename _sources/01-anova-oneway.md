@@ -1,6 +1,7 @@
 <a name="01-anova-oneway"></a>
 # One-way Analysis of Variance (ANOVA): A Historical and Practical Overview
-
+```{contents}
+```
 ## Historical Background
 The one-way Analysis of Variance (ANOVA), a robust statistical test, was first conceived by the eminent statistician Ronald Fisher in the early 1920s. Fisher's primary objective was to devise a method that could facilitate the comparison of means across multiple groups. His innovative solution was the ANOVA, a tool that has since become a cornerstone in the field of statistics {cite:p}`Fisher1992`.
 

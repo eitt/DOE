@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Explaining the Python Code &#8212; ViDoe - Visualizing Design of Experiments</title>
+    <title>5. Explaining the Python Code &#8212; ViDoe - Visualizing Design of Experiments</title>
   
   
   
@@ -60,8 +60,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '01-one-way-anova';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ANOVA One-way: An Illustrative example" href="01-one-way-example.html" />
-    <link rel="prev" title="One-way Analysis of Variance (ANOVA): A Historical and Practical Overview" href="01-anova-oneway.html" />
+    <link rel="next" title="6. ANOVA One-way: An Illustrative example" href="01-one-way-example.html" />
+    <link rel="prev" title="4. One-way Analysis of Variance (ANOVA): A Historical and Practical Overview" href="01-anova-oneway.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -176,7 +176,35 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. An overview of ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Anova One-way using ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">3. Factorial Design using ViDoe</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova One-Way</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Full-Factorial designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="02-markdown.html">10. Markdown Files</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="03-Boxplot-by-group.html">The Usefulness of Boxplots by Group in Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-Surface-plot.html">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="03-regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="03-residual-analysis.html">Introduction to residual analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="Bibliography.html">References</a></li>
 </ul>
@@ -374,12 +402,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-libraries">Importing Libraries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-dataframe">Creating a DataFrame</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-a-boxplot">Plotting a Boxplot</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-a-box-plot-with-plotly">Plotting a Box Plot with Plotly</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-linear-regression">Adding Linear Regression</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-anova-test">The ANOVA Test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-libraries">5.1. Importing Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-dataframe">5.2. Creating a DataFrame</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-a-boxplot">5.3. Plotting a Boxplot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-a-box-plot-with-plotly">5.4. Plotting a Box Plot with Plotly</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-linear-regression">5.5. Adding Linear Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-anova-test">5.6. The ANOVA Test</a></li>
 </ul>
             </nav>
         </div>
@@ -393,10 +421,25 @@ document.write(`
                   
   <p><a name="01-one-way-anova"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="explaining-the-python-code">
-<h1>Explaining the Python Code<a class="headerlink" href="#explaining-the-python-code" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">5. </span>Explaining the Python Code</a><a class="headerlink" href="#explaining-the-python-code" title="Link to this heading">#</a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#explaining-the-python-code" id="id1">Explaining the Python Code</a></p>
+<ul>
+<li><p><a class="reference internal" href="#importing-libraries" id="id2">Importing Libraries</a></p></li>
+<li><p><a class="reference internal" href="#creating-a-dataframe" id="id3">Creating a DataFrame</a></p></li>
+<li><p><a class="reference internal" href="#plotting-a-boxplot" id="id4">Plotting a Boxplot</a></p></li>
+<li><p><a class="reference internal" href="#plotting-a-box-plot-with-plotly" id="id5">Plotting a Box Plot with Plotly</a></p></li>
+<li><p><a class="reference internal" href="#adding-linear-regression" id="id6">Adding Linear Regression</a></p></li>
+<li><p><a class="reference internal" href="#the-anova-test" id="id7">The ANOVA Test</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
 <p>This Python code is using several libraries to create a dataset, visualize it, and perform a one-way ANOVA analysis. Let’s break it down:</p>
 <section id="importing-libraries">
-<h2>Importing Libraries<a class="headerlink" href="#importing-libraries" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">5.1. </span>Importing Libraries</a><a class="headerlink" href="#importing-libraries" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -432,7 +475,7 @@ document.write(`
 </div>
 </section>
 <section id="creating-a-dataframe">
-<h2>Creating a DataFrame<a class="headerlink" href="#creating-a-dataframe" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">5.2. </span>Creating a DataFrame</a><a class="headerlink" href="#creating-a-dataframe" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Group&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">),</span>
                     <span class="s1">&#39;Score&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)})</span>
 </pre></div>
@@ -449,7 +492,7 @@ document.write(`
 </div>
 </section>
 <section id="plotting-a-boxplot">
-<h2>Plotting a Boxplot<a class="headerlink" href="#plotting-a-boxplot" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">5.3. </span>Plotting a Boxplot</a><a class="headerlink" href="#plotting-a-boxplot" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Group&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Score&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -463,12 +506,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/0ca40dfb72dd703c7187bf9c6603f8fe681bf258ce66797faa5eee5845c8c813.png" src="_images/0ca40dfb72dd703c7187bf9c6603f8fe681bf258ce66797faa5eee5845c8c813.png" />
+<img alt="_images/d4da758f74510c77f70d40415576cf2aece207a43c1c10c6fcace35ddeda5f4a.png" src="_images/d4da758f74510c77f70d40415576cf2aece207a43c1c10c6fcace35ddeda5f4a.png" />
 </div>
 </div>
 </section>
 <section id="plotting-a-box-plot-with-plotly">
-<h2>Plotting a Box Plot with Plotly<a class="headerlink" href="#plotting-a-box-plot-with-plotly" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">5.4. </span>Plotting a Box Plot with Plotly</a><a class="headerlink" href="#plotting-a-box-plot-with-plotly" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Group&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Score&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Group&#39;</span><span class="p">,</span><span class="n">points</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -476,7 +519,7 @@ document.write(`
 <p>This code uses Plotly Express to create an interactive boxplot of the scores for each group. The <code class="docutils literal notranslate"><span class="pre">fig.show()</span></code> function is used to display the plot. Nevertheless, this environment does not support Plotly. Look for a in-deep information in the following link: <a class="reference external" href="https://plotly.com/python/">Plotly for Python</a></p>
 </section>
 <section id="adding-linear-regression">
-<h2>Adding Linear Regression<a class="headerlink" href="#adding-linear-regression" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">5.5. </span>Adding Linear Regression</a><a class="headerlink" href="#adding-linear-regression" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ols</span><span class="p">(</span><span class="s1">&#39;Score ~ C(Group)&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -492,26 +535,26 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                  Score   R-squared:                       0.002
-Model:                            OLS   Adj. R-squared:                 -0.019
-Method:                 Least Squares   F-statistic:                   0.09405
-Date:                Sun, 11 Feb 2024   Prob (F-statistic):              0.910
-Time:                        19:09:54   Log-Likelihood:                -356.69
-No. Observations:                 100   AIC:                             719.4
-Df Residuals:                      97   BIC:                             727.2
+Dep. Variable:                  Score   R-squared:                       0.008
+Model:                            OLS   Adj. R-squared:                 -0.013
+Method:                 Least Squares   F-statistic:                    0.3743
+Date:                Sun, 11 Feb 2024   Prob (F-statistic):              0.689
+Time:                        19:35:19   Log-Likelihood:                -369.34
+No. Observations:                 100   AIC:                             744.7
+Df Residuals:                      97   BIC:                             752.5
 Df Model:                           2                                         
 Covariance Type:            nonrobust                                         
 =================================================================================
                     coef    std err          t      P&gt;|t|      [0.025      0.975]
 ---------------------------------------------------------------------------------
-Intercept        50.1842      1.562     32.120      0.000      47.083      53.285
-C(Group)[T.B]    -0.8055      2.118     -0.380      0.705      -5.009       3.398
-C(Group)[T.C]    -0.0495      2.192     -0.023      0.982      -4.400       4.301
+Intercept        49.3296      1.718     28.706      0.000      45.919      52.740
+C(Group)[T.B]    -1.0935      2.681     -0.408      0.684      -6.415       4.228
+C(Group)[T.C]     1.0686      2.273      0.470      0.639      -3.443       5.580
 ==============================================================================
-Omnibus:                        0.025   Durbin-Watson:                   1.758
-Prob(Omnibus):                  0.988   Jarque-Bera (JB):                0.063
-Skew:                           0.031   Prob(JB):                        0.969
-Kurtosis:                       2.894   Cond. No.                         3.86
+Omnibus:                        0.568   Durbin-Watson:                   2.294
+Prob(Omnibus):                  0.753   Jarque-Bera (JB):                0.190
+Skew:                           0.017   Prob(JB):                        0.909
+Kurtosis:                       3.211   Cond. No.                         3.86
 ==============================================================================
 
 Notes:
@@ -522,7 +565,7 @@ Notes:
 </div>
 </section>
 <section id="the-anova-test">
-<h2>The ANOVA Test<a class="headerlink" href="#the-anova-test" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">5.6. </span>The ANOVA Test</a><a class="headerlink" href="#the-anova-test" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">anova_table</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">anova_lm</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">anova_table</span><span class="p">)</span>
 </pre></div>
@@ -537,8 +580,8 @@ Notes:
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>               sum_sq    df         F    PR(&gt;F)
-C(Group)    14.234577   2.0  0.094054  0.910316
-Residual  7340.213133  97.0       NaN       NaN
+C(Group)    72.958325   2.0  0.374345  0.688728
+Residual  9452.442672  97.0       NaN       NaN
 </pre></div>
 </div>
 </div>
@@ -582,7 +625,7 @@ Residual  7340.213133  97.0       NaN       NaN
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</p>
       </div>
     </a>
     <a class="right-next"
@@ -590,7 +633,7 @@ Residual  7340.213133  97.0       NaN       NaN
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ANOVA One-way: An Illustrative example</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>ANOVA One-way: An Illustrative example</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -610,12 +653,12 @@ Residual  7340.213133  97.0       NaN       NaN
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-libraries">Importing Libraries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-dataframe">Creating a DataFrame</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-a-boxplot">Plotting a Boxplot</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-a-box-plot-with-plotly">Plotting a Box Plot with Plotly</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-linear-regression">Adding Linear Regression</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-anova-test">The ANOVA Test</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-libraries">5.1. Importing Libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-a-dataframe">5.2. Creating a DataFrame</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-a-boxplot">5.3. Plotting a Boxplot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-a-box-plot-with-plotly">5.4. Plotting a Box Plot with Plotly</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-linear-regression">5.5. Adding Linear Regression</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-anova-test">5.6. The ANOVA Test</a></li>
 </ul>
   </nav></div>
 
