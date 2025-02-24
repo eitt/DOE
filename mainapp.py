@@ -151,6 +151,30 @@ def plot_surface(df, factor1, factor2):
     ))
     
     st.plotly_chart(fig)
+def plot_surface_twolevels(df, factor_names):
+    """
+    Generates a 3D surface plot for a two-level factorial design.
+
+    Args:
+        df (pd.DataFrame): Input dataframe.
+        factor_names (dict): Mapping of factor names.
+    """
+    pivot_df = df.pivot_table(values='Y', index=f"{factor_names['FactorA']}_num", columns=f"{factor_names['FactorB']}_num")
+
+    fig = go.Figure(data=[go.Surface(z=pivot_df.values, x=pivot_df.index, y=pivot_df.columns)])
+
+    fig.update_layout(
+        title='Surface Plot for Two-Level Factorial Design',
+        width=800, height=500,
+        scene=dict(
+            xaxis_title=factor_names['FactorA'],
+            yaxis_title=factor_names['FactorB'],
+            zaxis_title='Y'
+        ),
+        margin=dict(l=65, r=50, b=65, t=90)
+    )
+
+    st.plotly_chart(fig)
 
 def plot_boxplot(df, groupby, factor_names):
     """
