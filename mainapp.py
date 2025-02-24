@@ -383,6 +383,10 @@ def factorial_twolevels():
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+import matplotlib.pyplot as plt
+
 def anova_oneway():
     """
     Streamlit app to demonstrate One-Way ANOVA with one factor, three levels, and 15 replications per level.
@@ -394,12 +398,7 @@ def anova_oneway():
     to determine if there is a statistically significant difference between them. It helps to test 
     whether the population means of the different levels of a factor are equal.
 
-    ### **Key Features:**
-    - **Factor with Three Levels**
-    - **15 Replications per Level**
-    - **Boxplot for Visualization**
-    - **Linear Regression for Statistical Analysis**
-    - **Dataset Download Option**
+   
     """)
 
     st.subheader('One Factor with Three Levels')
@@ -475,6 +474,35 @@ def anova_oneway():
     # Regression Summary
     st.write("### **Linear Regression Model Summary:**")
     st.text(model.summary())
+
+    # Linear Equation Representation
+    st.subheader("Regression Equation Representation")
+    equation = f"Y = {model.params[0]:.2f}"
+    for i, level in enumerate(level_names.values(), start=1):
+        if i < len(model.params):  # Ensure level exists in model parameters
+            equation += f" + {model.params[i]:.2f} * I({factor_name} == '{level}')"
+    st.latex(equation)
+
+    # Extract Sum of Squares from ANOVA table
+    sst = anova_table["sum_sq"].sum()  # Sum of Squares Total
+    sstr = anova_table["sum_sq"][0]  # Sum of Squares Treatment
+    sse = anova_table["sum_sq"][1]  # Sum of Squares Error
+
+    # Pie Chart for Sum of Squares
+    st.subheader("Visualization of Sum of Squares")
+    
+    fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+
+    # Pie chart for SST
+    axs[0].pie([sst], labels=[f"SST: {sst:.2f}"], autopct='%1.1f%%', colors=["#1f77b4"])
+    axs[0].set_title("Total Sum of Squares (SST)")
+
+    # Pie chart for SSTR vs. SSE
+    axs[1].pie([sstr, sse], labels=[f"SSTr: {sstr:.2f}", f"SSE: {sse:.2f}"], autopct='%1.1f%%', colors=["#ff7f0e", "#2ca02c"])
+    axs[1].set_title("Sum of Squares Treatment vs. Error")
+
+    st.pyplot(fig)
+
 
 
 def Analysis():
