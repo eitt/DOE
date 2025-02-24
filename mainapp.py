@@ -177,32 +177,39 @@ def plot_boxplot(df, groupby, factor_names):
     """
     fig = go.Figure()
 
-    # Ensure correct mapping for single-factor or interaction term
+    # Handle interaction term dynamically
     if "*" in groupby:
         factors = groupby.split(" * ")
-        
-        # Check if both factors exist in factor_names before using them
-        if factors[0] not in factor_names or factors[1] not in factor_names:
+
+        # Ensure factors exist in factor_names before using them
+        if factors[0] not in factor_names.values() or factors[1] not in factor_names.values():
             st.error(f"Error: One of the selected factors '{factors[0]}' or '{factors[1]}' does not exist.")
             return
 
-        # Ensure that the correct _num columns exist in df
-        col1 = f'{factor_names[factors[0]]}_num'
-        col2 = f'{factor_names[factors[1]]}_num'
+        # Find corresponding column names in df
+        col1 = [key for key, value in factor_names.items() if value == factors[0]]
+        col2 = [key for key, value in factor_names.items() if value == factors[1]]
+
+        if not col1 or not col2:
+            st.error(f"Error: Could not find corresponding columns for '{factors[0]}' and '{factors[1]}' in DataFrame.")
+            return
+        
+        col1 = f'{factor_names[col1[0]]}_num'
+        col2 = f'{factor_names[col2[0]]}_num'
 
         if col1 not in df.columns or col2 not in df.columns:
             st.error(f"Error: Columns '{col1}' or '{col2}' not found in DataFrame.")
             return
 
-        # Create interaction column
+        # Create interaction column dynamically
         df['Interaction'] = df[col1].astype(str) + " * " + df[col2].astype(str)
         groupby = 'Interaction'
     else:
-        # Ensure correct factor name mapping
+        # Ensure correct factor name mapping to `_num` columns
         groupby_mapped = {v: f"{v}_num" for v in factor_names.values()}
         groupby = groupby_mapped.get(groupby, groupby)
 
-    # Verify column existence in DataFrame
+    # Verify that `groupby` exists before running `.groupby()`
     if groupby not in df.columns:
         st.error(f"Error: The selected column '{groupby}' does not exist in the dataset.")
         return
@@ -213,7 +220,6 @@ def plot_boxplot(df, groupby, factor_names):
 
     fig.update_layout(xaxis_title=groupby, yaxis_title='Y')
     st.plotly_chart(fig)
-
 
 
 
@@ -248,8 +254,8 @@ def three_factorial():
     # Create DataFrame
     df = create_factorial_dataframe(levels, FACTOR_VALUES, replications=2)
 
-    # Ensure correct column renaming before computation
-    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names if f"{factor}_num" in df.columns}
+    # Rename columns before computing response
+    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
     df.rename(columns=rename_mapping, inplace=True)
 
     # Compute Y
@@ -271,11 +277,11 @@ def three_factorial():
     st.subheader('Analysis of Y based on Variability Source')
     st.subheader('Box Plot')
 
-    # Ensure `groupby_options` matches renamed factor names
+    # Dynamically update `groupby_options`
     groupby_options = list(factor_names.values()) + [f"{factor_names[f1]} * {factor_names[f2]}" for f1, f2 in combinations(factor_names.values(), 2)]
     groupby = st.selectbox('Group by', groupby_options, index=0)
 
-    # Ensure valid column selection
+    # Ensure correct column selection
     plot_boxplot(df, groupby, factor_names)
 
     # Surface Plot Selection
@@ -294,6 +300,7 @@ def three_factorial():
     results = fit_factorial_model(df, factor_names)
     st.latex(print_equation(results, factor_names))
     st.text(results.summary())
+
 
 
 
