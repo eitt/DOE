@@ -380,6 +380,103 @@ def factorial_twolevels():
     st.latex(print_equation(results, two_level_factor_names))
     st.text(results.summary())
 
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+
+def anova_oneway():
+    """
+    Streamlit app to demonstrate One-Way ANOVA with one factor, three levels, and 15 replications per level.
+    """
+    st.title("One-Way ANOVA: Analysis of Variance with One Factor")
+    st.markdown("By **Leonardo H. Talero-Sarmiento** [View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
+    st.markdown("""
+    One-Way ANOVA is a statistical method used to compare the means of three or more independent groups 
+    to determine if there is a statistically significant difference between them. It helps to test 
+    whether the population means of the different levels of a factor are equal.
+
+    ### **Key Features:**
+    - **Factor with Three Levels**
+    - **15 Replications per Level**
+    - **Boxplot for Visualization**
+    - **Linear Regression for Statistical Analysis**
+    - **Dataset Download Option**
+    """)
+
+    st.subheader('One Factor with Three Levels')
+
+    # Custom Factor Name from Sidebar
+    factor_name = st.sidebar.text_input("Enter a custom name for the factor", "Factor")
+
+    # Custom Level Names from Sidebar
+    level_names = {
+        "low": st.sidebar.text_input("Enter a custom name for Level 1", "Low"),
+        "medium": st.sidebar.text_input("Enter a custom name for Level 2", "Medium"),
+        "high": st.sidebar.text_input("Enter a custom name for Level 3", "High")
+    }
+
+    # Coefficients Input
+    coefficients = [
+        st.sidebar.slider('Intercept (Baseline Level)', -10.0, 10.0, 0.0),
+        st.sidebar.slider(f'Effect of {level_names["medium"]}', -10.0, 10.0, 0.0),
+        st.sidebar.slider(f'Effect of {level_names["high"]}', -10.0, 10.0, 0.0)
+    ]
+
+    # Define factor levels and replications
+    levels = ["low", "medium", "high"]
+    replications = 15  # Each level appears 15 times
+
+    # Create DataFrame
+    df = pd.DataFrame({
+        factor_name: np.repeat(levels, replications)  # Repeat each level 15 times
+    })
+
+    # Assign numeric values to factor levels
+    level_mapping = {'low': 0, 'medium': 1, 'high': 2}
+    df[f"{factor_name}_num"] = df[factor_name].map(level_mapping)
+
+    # Rename levels to user-defined names
+    df[factor_name] = df[factor_name].map(level_names)
+
+    # Compute Response Variable (Y)
+    noise = np.random.normal(0, 2, len(df))  # Normally distributed random noise
+    df["Y"] = (coefficients[0]  # Intercept
+               + coefficients[1] * (df[factor_name] == level_names["medium"])  # Effect of Medium
+               + coefficients[2] * (df[factor_name] == level_names["high"])  # Effect of High
+               + noise)
+
+    # Display DataFrame
+    st.subheader('Generated Data')
+    st.dataframe(df)
+
+    # CSV Download Button
+    csv = df.to_csv(index=False)
+    st.download_button("Download CSV", data=csv, file_name="anova_data.csv", mime="text/csv")
+
+    # Boxplot Analysis
+    st.subheader('Box Plot for Factor Levels')
+    fig = go.Figure()
+    for level in df[factor_name].unique():
+        fig.add_trace(go.Box(y=df[df[factor_name] == level]["Y"], name=level, boxmean=True))
+
+    fig.update_layout(xaxis_title=factor_name, yaxis_title="Y", title="Distribution of Y across Levels")
+    st.plotly_chart(fig)
+
+    # One-Way ANOVA using Linear Regression
+    st.subheader('Statistical Analysis: One-Way ANOVA')
+
+    formula = f"Y ~ C({factor_name})"
+    model = smf.ols(formula, data=df).fit()
+    anova_table = sm.stats.anova_lm(model, typ=2)
+
+    # Display ANOVA table
+    st.write("### **ANOVA Table:**")
+    st.write(anova_table)
+
+    # Regression Summary
+    st.write("### **Linear Regression Model Summary:**")
+    st.text(model.summary())
+
+
 def Analysis():
     """
     Tips to Analyze the Statistical Outputs.
@@ -440,13 +537,13 @@ def Analysis():
     👉 **Another example:** In a **manufacturing setting**, box plots can help compare **defect rates across production shifts**, identifying if a certain shift tends to produce more defective items than others.
     """)
     
-    st.subheader('📊 How to Read an OLS Regression Output')
+    st.subheader('# How to Read an OLS Regression Output')
 
     st.markdown("""
     When running an **Ordinary Least Squares (OLS) regression**, the output provides key statistics to evaluate the model’s performance and understand the relationship between variables. Below is a breakdown of the main components and what they mean.
     """)
     
-    st.markdown("## 1️⃣ Model Summary")
+    st.markdown("## 1. Model Summary")
     st.markdown("""
     This section gives an overview of the regression model:
     
@@ -459,7 +556,7 @@ def Analysis():
     - **Covariance Type:** Describes how standard errors are calculated (e.g., "nonrobust" or "robust").
     """)
     
-    st.markdown("## 2️⃣ Model Fit Statistics")
+    st.markdown("## 2. Model Fit Statistics")
     st.markdown("""
     These metrics indicate how well the model explains the variability in the dependent variable:
     
@@ -471,7 +568,7 @@ def Analysis():
     - **AIC / BIC:** Model selection criteria (lower values indicate a better fit with fewer parameters).
     """)
     
-    st.markdown("## 3️⃣ Understanding R-Squared (R²)")
+    st.markdown("## 3. Understanding R-Squared (R²)")
     st.markdown("""
     - **What it tells you:** R² represents the percentage of variation in the dependent variable explained by the independent variables.
     - **High R²:** The model explains most of the variability in Y.
@@ -480,7 +577,7 @@ def Analysis():
     🔍 **Important:** A **high R² does not always mean a good model**—overfitting can occur if too many variables are used.
     """)
     
-    st.markdown("## 4️⃣ Checking Model Significance")
+    st.markdown("## 4. Checking Model Significance")
     st.markdown("""
     - **F-statistic & Prob (F-statistic):**  
       - If the p-value is **low** (e.g., < 0.05), at least one predictor significantly contributes to the model.  
@@ -488,7 +585,7 @@ def Analysis():
     - **Adjusted R²:** If negative or decreasing as more variables are added, it suggests that additional predictors are not improving the model.
     """)
     
-    st.markdown("## 5️⃣ Next Steps: Improving the Model")
+    st.markdown("## 5. Next Steps: Improving the Model")
     st.markdown("""
     If the model has **poor fit** (low R², high p-values), consider:
     ✅ Checking for **missing or irrelevant variables**  
@@ -510,6 +607,7 @@ def Analysis():
 
 # Navigation System
 pages = {
+    "Anova One-way - Introduction": anova_oneway,
     "Introduction to Factorial Designs": factorial_twolevels,
     "Factorial Designs with Three Factors and Three Levels": three_factorial,
     "Tips to Analyze the Statistical Outputs":Analysis
