@@ -44,6 +44,10 @@ def compute_response(df, coefficients, factor_names):
     """
     noise = np.random.normal(0, 2, len(df))
 
+    # Ensure factor columns exist before renaming
+    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names if f"{factor}_num" in df.columns}
+    df = df.rename(columns=rename_mapping)
+
     # Compute main effects
     y = coefficients[0] + sum(
         coefficients[i] * df[f'{factor_names[factor]}_num']
@@ -90,10 +94,6 @@ def print_equation(results, factor_names):
 def plot_2d(df, factor_names):
     """
     Generates a 2D scatter plot for a two-level factorial design.
-
-    Args:
-        df (pd.DataFrame): Input dataframe.
-        factor_names (dict): Mapping of factor names.
     """
     fig = go.Figure(data=go.Scatter(
         x=df[f'{factor_names["FactorA"]}_num'], 
@@ -101,9 +101,9 @@ def plot_2d(df, factor_names):
         mode='markers', 
         marker=dict(
             size=8,
-            color=df['Y'],  # Set color to Y
-            colorscale='Viridis',  # Choose a colorscale
-            colorbar=dict(title='Y')  # Title for colorbar
+            color=df['Y'],  
+            colorscale='Viridis',  
+            colorbar=dict(title='Y')
         )
     ))
 
@@ -113,31 +113,6 @@ def plot_2d(df, factor_names):
         title='2D Plot for Two-Level Factorial Design'
     )
     st.plotly_chart(fig)
-
-def compute_response(df, coefficients, factor_names):
-    """
-    Computes response variable Y dynamically for any factorial design.
-    """
-    noise = np.random.normal(0, 2, len(df))
-
-    # Rename columns in the DataFrame to match updated factor names
-    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
-    df = df.rename(columns=rename_mapping)
-
-    # Compute main effects
-    y = coefficients[0] + sum(
-        coefficients[i] * df[f'{factor_names[factor]}_num']
-        for i, factor in enumerate(factor_names, start=1)
-    )
-
-    # Compute interaction effects
-    interaction_index = len(factor_names) + 1
-    for i, (f1, f2) in enumerate(combinations(factor_names, 2)):
-        y += coefficients[interaction_index + i] * df[f'{factor_names[f1]}_num'] * df[f'{factor_names[f2]}_num']
-
-    df['Y'] = y + noise
-    return df
-
 
 def plot_3d(df, factor_names):
     """
@@ -174,13 +149,10 @@ def plot_surface(df, factor1, factor2):
     ))
     
     st.plotly_chart(fig)
+
 def plot_surface_twolevels(df, factor_names):
     """
     Generates a 3D surface plot for a two-level factorial design.
-
-    Args:
-        df (pd.DataFrame): Input dataframe.
-        factor_names (dict): Mapping of factor names.
     """
     pivot_df = df.pivot_table(values='Y', index=f"{factor_names['FactorA']}_num", columns=f"{factor_names['FactorB']}_num")
 
@@ -205,19 +177,17 @@ def plot_boxplot(df, groupby, factor_names):
     """
     fig = go.Figure()
 
-    # Check if the selected groupby column is an interaction term
+    # Ensure correct mapping for single-factor or interaction term
     if "*" in groupby:
         factors = groupby.split(" * ")
-        interaction_col = f'{factor_names[factors[0]]}_num * {factor_names[factors[1]]}_num'
-        
-        # Ensure interaction column exists
         df['Interaction'] = df[f'{factor_names[factors[0]]}_num'].astype(str) + " * " + df[f'{factor_names[factors[1]]}_num'].astype(str)
         groupby = 'Interaction'
     else:
-        # Ensure we are using the correct column mapping
-        groupby = f'{factor_names[groupby]}_num' if groupby in factor_names.values() else groupby
+        # Map factor names correctly to _num columns
+        groupby_mapped = {v: f"{v}_num" for v in factor_names.values()}
+        groupby = groupby_mapped.get(groupby, groupby)
 
-    # Verify that groupby column exists in DataFrame
+    # Check if column exists in DataFrame before grouping
     if groupby not in df.columns:
         st.error(f"Error: The selected column '{groupby}' does not exist in the dataset.")
         return
@@ -228,6 +198,7 @@ def plot_boxplot(df, groupby, factor_names):
 
     fig.update_layout(xaxis_title=groupby, yaxis_title='Y')
     st.plotly_chart(fig)
+
 
 
 def three_factorial():
@@ -249,7 +220,7 @@ def three_factorial():
         st.sidebar.slider('Intercept (Coefficient 0)', -10.0, 10.0, 0.0)
     ] + [
         st.sidebar.slider(f'Coefficient {i+1} ({factor_names[factor]})', -10.0, 10.0, 0.0)
-        for i, factor in enumerate(["Temperature", "Pressure", "Thinner"])
+        for i, factor in ["Temperature", "Pressure", "Thinner"]
     ] + [
         st.sidebar.slider(f'Coefficient {i+4} ({factor_names[f1]} * {factor_names[f2]})', -10.0, 10.0, 0.0)
         for i, (f1, f2) in enumerate(combinations(["Temperature", "Pressure", "Thinner"], 2))
@@ -260,19 +231,13 @@ def three_factorial():
 
     # Create DataFrame
     df = create_factorial_dataframe(levels, FACTOR_VALUES, replications=2)
-    
-     # Rename columns before computing response
-    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
-    df = df.rename(columns=rename_mapping)
 
+    # Ensure correct column renaming before computation
+    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
+    df.rename(columns=rename_mapping, inplace=True)
 
     # Compute Y
     df = compute_response(df, coefficients, factor_names)
-
-    # Display DataFrame
-    st.subheader('Generated Data')
-    st.dataframe(df)
-
 
     # Display DataFrame
     st.subheader('Generated Data')
@@ -286,7 +251,7 @@ def three_factorial():
     st.subheader('Factors Space')
     plot_3d(df, factor_names)
 
-     # Boxplot Analysis
+    # Boxplot Analysis
     st.subheader('Analysis of Y based on Variability Source')
     st.subheader('Box Plot')
 
@@ -294,19 +259,26 @@ def three_factorial():
     groupby_options = list(factor_names.values()) + [f"{factor_names[f1]} * {factor_names[f2]}" for f1, f2 in combinations(factor_names.values(), 2)]
     groupby = st.selectbox('Group by', groupby_options, index=0)
 
+    # Ensure groupby column exists before plotting
     plot_boxplot(df, groupby, factor_names)
 
     # Surface Plot Selection
     st.subheader('Surface Plot')
     factor1 = st.selectbox('Select First Factor', list(factor_names.values()), index=0)
     factor2 = st.selectbox('Select Second Factor', list(factor_names.values()), index=1)
-    plot_surface(df, factor1, factor2)
+    
+    # Ensure valid surface plot selection
+    if factor1 != factor2:
+        plot_surface(df, factor1, factor2)
+    else:
+        st.error("Please select two different factors for the surface plot.")
 
     # Model Fitting
     st.subheader('Model Fitting')
     results = fit_factorial_model(df, factor_names)
     st.latex(print_equation(results, factor_names))
     st.text(results.summary())
+
 
 
 def factorial_twolevels():
@@ -326,7 +298,7 @@ def factorial_twolevels():
     # Define two-level factor values
     two_level_factor_values = {'FactorA': ['low', 'high'], 'FactorB': ['low', 'high']}
 
-    # Custom Factor Names
+    # Custom Factor Names from Sidebar
     two_level_factor_names = {
         "FactorA": st.sidebar.text_input("Enter a custom name for Factor A", "FactorA"),
         "FactorB": st.sidebar.text_input("Enter a custom name for Factor B", "FactorB")
@@ -343,8 +315,9 @@ def factorial_twolevels():
     # Create DataFrame
     df = create_factorial_dataframe(two_level_factor_values, TWO_LEVEL_MAPPING, replications=3)
 
-    # Rename columns to match user-defined factor names
-    df.rename(columns={f"{factor}_num": f"{two_level_factor_names[factor]}_num" for factor in ["FactorA", "FactorB"]}, inplace=True)
+    # Ensure correct column renaming before computation
+    rename_mapping = {f"{factor}_num": f"{two_level_factor_names[factor]}_num" for factor in two_level_factor_values}
+    df.rename(columns=rename_mapping, inplace=True)
 
     # Compute Y
     df = compute_response(df, coefficients, two_level_factor_names)
@@ -365,9 +338,11 @@ def factorial_twolevels():
     st.subheader('Analysis of Y based on Variability Source')
     st.subheader('Box Plot')
 
+    # Dynamically Generate Grouping Options for Boxplots
     groupby_options = list(two_level_factor_names.values()) + [f"{two_level_factor_names['FactorA']} * {two_level_factor_names['FactorB']}"]
     groupby = st.selectbox('Group by', groupby_options, index=0)
 
+    # Ensure correct mapping before passing to plot_boxplot
     plot_boxplot(df, groupby, two_level_factor_names)
 
     # Surface Plot Selection
