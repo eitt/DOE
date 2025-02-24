@@ -11,10 +11,14 @@ mappings = {'low': -1, 'medium': 0, 'high': 1}
 
 def create_dataframe(replications=2):
     """Generates a factorial design dataframe."""
-    df = pd.DataFrame(itertools.product(*levels.values()) * replications, columns=levels.keys())
+    combinations = list(itertools.product(*levels.values()))  # Generate all factor combinations
+    df = pd.DataFrame(combinations * replications, columns=levels.keys())  # Repeat for replications
+
     for col in df.columns:
-        df[f'{col}_num'] = df[col].map(mappings)
+        df[f'{col}_num'] = df[col].map(mappings)  # Apply numeric mappings
+
     return df
+
 
 def compute_y(df, coefficients):
     """Computes response variable Y based on given coefficients."""
