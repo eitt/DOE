@@ -42,7 +42,7 @@ def compute_response(df, coefficients, factor_names):
     Returns:
         pd.DataFrame: Dataframe with computed Y values.
     """
-    noise = np.random.normal(0, 2, len(df))
+    noise = np.random.normal(0, 1, len(df))
 
     # Ensure factor columns exist before renaming
     rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names if f"{factor}_num" in df.columns}
@@ -238,12 +238,12 @@ def three_factorial():
 
     # Coefficients Input
     coefficients = [
-        st.sidebar.slider('Intercept (Coefficient 0)', -10.0, 10.0, 0.0)
+        st.sidebar.slider('Intercept (Coefficient 0)', -100.0, 100.0, 0.0)
     ] + [
-        st.sidebar.slider(f'Coefficient {i+1} ({factor_names[factor]})', -10.0, 10.0, 0.0)
+        st.sidebar.slider(f'Coefficient {i+1} ({factor_names[factor]})', -100.0, 100.0, 0.0)
         for i, factor in enumerate(["Temperature", "Pressure", "Thinner"])
     ] + [
-        st.sidebar.slider(f'Coefficient {i+4} ({factor_names[f1]} * {factor_names[f2]})', -10.0, 10.0, 0.0)
+        st.sidebar.slider(f'Coefficient {i+4} ({factor_names[f1]} * {factor_names[f2]})', -100.0, 100.0, 0.0)
         for i, (f1, f2) in enumerate(combinations(["Temperature", "Pressure", "Thinner"], 2))
     ]
 
@@ -333,10 +333,10 @@ def factorial_twolevels():
 
     # Coefficients Input
     coefficients = [
-        st.sidebar.slider('Intercept (Coefficient 0)', -10.0, 10.0, 0.0),
-        st.sidebar.slider(f'{two_level_factor_names["FactorA"]} Coefficient', -10.0, 10.0, 0.0),
-        st.sidebar.slider(f'{two_level_factor_names["FactorB"]} Coefficient', -10.0, 10.0, 0.0),
-        st.sidebar.slider(f'Interaction ({two_level_factor_names["FactorA"]} * {two_level_factor_names["FactorB"]})', -10.0, 10.0, 0.0)
+        st.sidebar.slider('Intercept (Coefficient 0)', -100.0, 100.0, 0.0),
+        st.sidebar.slider(f'{two_level_factor_names["FactorA"]} Coefficient', -100.0, 100.0, 0.0),
+        st.sidebar.slider(f'{two_level_factor_names["FactorB"]} Coefficient', -100.0, 100.0, 0.0),
+        st.sidebar.slider(f'Interaction ({two_level_factor_names["FactorA"]} * {two_level_factor_names["FactorB"]})', -100.0, 100.0, 0.0)
     ]
 
     # Create DataFrame
