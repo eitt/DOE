@@ -440,17 +440,73 @@ def Analysis():
     👉 **Another example:** In a **manufacturing setting**, box plots can help compare **defect rates across production shifts**, identifying if a certain shift tends to produce more defective items than others.
     """)
     
-    st.markdown("## *Why It Matters*")
+    st.subheader('📊 How to Read an OLS Regression Output')
+
     st.markdown("""
-    Box plots make it easier to **compare**, **detect outliers**, **spot patterns**, and **understand distributions**.
-    
-    By using box plots effectively, you can:
-    ✅ **Make data-driven decisions**  
-    ✅ **Identify trends early**  
-    ✅ **Spot anomalies before they become problems**  
-    
-    All in a visually intuitive way! 🚀
+    When running an **Ordinary Least Squares (OLS) regression**, the output provides key statistics to evaluate the model’s performance and understand the relationship between variables. Below is a breakdown of the main components and what they mean.
     """)
+    
+    st.markdown("## 1️⃣ Model Summary")
+    st.markdown("""
+    This section gives an overview of the regression model:
+    
+    - **Dep. Variable:** The dependent variable (Y) being predicted.
+    - **Model:** Specifies the regression type (OLS - Ordinary Least Squares).
+    - **Method:** Indicates how the model estimates coefficients (Least Squares).
+    - **No. Observations:** The number of data points used in the model.
+    - **Df Model:** The degrees of freedom for the predictors (number of independent variables).
+    - **Df Residuals:** The degrees of freedom remaining after estimating the model.
+    - **Covariance Type:** Describes how standard errors are calculated (e.g., "nonrobust" or "robust").
+    """)
+    
+    st.markdown("## 2️⃣ Model Fit Statistics")
+    st.markdown("""
+    These metrics indicate how well the model explains the variability in the dependent variable:
+    
+    - **R-squared (R²):** Measures how much variation in Y is explained by the model. Ranges from 0 to 1, with higher values indicating a better fit.
+    - **Adjusted R-squared:** Similar to R² but adjusted for the number of predictors. Useful when comparing models with different numbers of variables.
+    - **F-statistic:** Tests whether at least one predictor is statistically significant. A higher value suggests a more meaningful model.
+    - **Prob (F-statistic):** The p-value for the F-test. A low value (e.g., < 0.05) suggests the model is statistically significant.
+    - **Log-Likelihood:** Measures model fit; higher values indicate a better model.
+    - **AIC / BIC:** Model selection criteria (lower values indicate a better fit with fewer parameters).
+    """)
+    
+    st.markdown("## 3️⃣ Understanding R-Squared (R²)")
+    st.markdown("""
+    - **What it tells you:** R² represents the percentage of variation in the dependent variable explained by the independent variables.
+    - **High R²:** The model explains most of the variability in Y.
+    - **Low R²:** The model does not explain much variation, meaning the predictors may not be strong enough.
+    
+    🔍 **Important:** A **high R² does not always mean a good model**—overfitting can occur if too many variables are used.
+    """)
+    
+    st.markdown("## 4️⃣ Checking Model Significance")
+    st.markdown("""
+    - **F-statistic & Prob (F-statistic):**  
+      - If the p-value is **low** (e.g., < 0.05), at least one predictor significantly contributes to the model.  
+      - If the p-value is **high**, the model may not be useful.
+    - **Adjusted R²:** If negative or decreasing as more variables are added, it suggests that additional predictors are not improving the model.
+    """)
+    
+    st.markdown("## 5️⃣ Next Steps: Improving the Model")
+    st.markdown("""
+    If the model has **poor fit** (low R², high p-values), consider:
+    ✅ Checking for **missing or irrelevant variables**  
+    ✅ Transforming variables (e.g., log transformation for skewed data)  
+    ✅ Using **interaction terms** or polynomial regression  
+    ✅ Trying **different models** (e.g., Ridge, Lasso, Decision Trees)  
+    """)
+    
+    st.markdown("## 🔍 Key Takeaways")
+    st.markdown("""
+    - **R² tells you how much variance the model explains, but it’s not the only factor to consider.**  
+    - **F-statistic and its p-value help determine if the model is significant.**  
+    - **Adjusted R² helps evaluate if additional predictors improve the model.**  
+    - **Low performance suggests revising predictors, transforming variables, or considering other modeling approaches.**  
+    
+    🚀 **Understanding these metrics helps in making better, data-driven decisions!**
+    """)
+
 
 # Navigation System
 pages = {
