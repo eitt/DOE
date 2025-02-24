@@ -87,6 +87,35 @@ def print_equation(results, factor_names):
             [f"{factor_names[f1]}_num:{factor_names[f2]}_num" for f1, f2 in combinations(factor_names, 2)]
     return "Y = " + " + ".join(f"{coefs[i]:.2f} * {term}" for i, term in enumerate(terms))
 
+def plot_2d(df, factor_names):
+    """
+    Generates a 2D scatter plot for a two-level factorial design.
+
+    Args:
+        df (pd.DataFrame): Input dataframe.
+        factor_names (dict): Mapping of factor names.
+    """
+    fig = go.Figure(data=go.Scatter(
+        x=df[f'{factor_names["FactorA"]}_num'], 
+        y=df[f'{factor_names["FactorB"]}_num'], 
+        mode='markers', 
+        marker=dict(
+            size=8,
+            color=df['Y'],  # Set color to Y
+            colorscale='Viridis',  # Choose a colorscale
+            colorbar=dict(title='Y')  # Title for colorbar
+        )
+    ))
+
+    fig.update_layout(
+        xaxis_title=factor_names["FactorA"],
+        yaxis_title=factor_names["FactorB"],
+        title='2D Plot for Two-Level Factorial Design'
+    )
+    st.plotly_chart(fig)
+
+
+
 def plot_3d(df, factor_names):
     """
     Generates a 3D scatter plot of the factorial design.
