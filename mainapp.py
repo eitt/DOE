@@ -180,14 +180,29 @@ def plot_boxplot(df, groupby, factor_names):
     # Ensure correct mapping for single-factor or interaction term
     if "*" in groupby:
         factors = groupby.split(" * ")
-        df['Interaction'] = df[f'{factor_names[factors[0]]}_num'].astype(str) + " * " + df[f'{factor_names[factors[1]]}_num'].astype(str)
+        
+        # Check if both factors exist in factor_names before using them
+        if factors[0] not in factor_names or factors[1] not in factor_names:
+            st.error(f"Error: One of the selected factors '{factors[0]}' or '{factors[1]}' does not exist.")
+            return
+
+        # Ensure that the correct _num columns exist in df
+        col1 = f'{factor_names[factors[0]]}_num'
+        col2 = f'{factor_names[factors[1]]}_num'
+
+        if col1 not in df.columns or col2 not in df.columns:
+            st.error(f"Error: Columns '{col1}' or '{col2}' not found in DataFrame.")
+            return
+
+        # Create interaction column
+        df['Interaction'] = df[col1].astype(str) + " * " + df[col2].astype(str)
         groupby = 'Interaction'
     else:
-        # Map factor names correctly to _num columns
+        # Ensure correct factor name mapping
         groupby_mapped = {v: f"{v}_num" for v in factor_names.values()}
         groupby = groupby_mapped.get(groupby, groupby)
 
-    # Check if column exists in DataFrame before grouping
+    # Verify column existence in DataFrame
     if groupby not in df.columns:
         st.error(f"Error: The selected column '{groupby}' does not exist in the dataset.")
         return
@@ -198,6 +213,7 @@ def plot_boxplot(df, groupby, factor_names):
 
     fig.update_layout(xaxis_title=groupby, yaxis_title='Y')
     st.plotly_chart(fig)
+
 
 
 
@@ -220,7 +236,7 @@ def three_factorial():
         st.sidebar.slider('Intercept (Coefficient 0)', -10.0, 10.0, 0.0)
     ] + [
         st.sidebar.slider(f'Coefficient {i+1} ({factor_names[factor]})', -10.0, 10.0, 0.0)
-        for i, factor in ["Temperature", "Pressure", "Thinner"]
+        for i, factor in enumerate(["Temperature", "Pressure", "Thinner"])
     ] + [
         st.sidebar.slider(f'Coefficient {i+4} ({factor_names[f1]} * {factor_names[f2]})', -10.0, 10.0, 0.0)
         for i, (f1, f2) in enumerate(combinations(["Temperature", "Pressure", "Thinner"], 2))
@@ -233,7 +249,7 @@ def three_factorial():
     df = create_factorial_dataframe(levels, FACTOR_VALUES, replications=2)
 
     # Ensure correct column renaming before computation
-    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
+    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names if f"{factor}_num" in df.columns}
     df.rename(columns=rename_mapping, inplace=True)
 
     # Compute Y
@@ -259,7 +275,7 @@ def three_factorial():
     groupby_options = list(factor_names.values()) + [f"{factor_names[f1]} * {factor_names[f2]}" for f1, f2 in combinations(factor_names.values(), 2)]
     groupby = st.selectbox('Group by', groupby_options, index=0)
 
-    # Ensure groupby column exists before plotting
+    # Ensure valid column selection
     plot_boxplot(df, groupby, factor_names)
 
     # Surface Plot Selection
