@@ -314,12 +314,10 @@ def factorial_twolevels():
     """
     st.title("Introduction to Factorial Designs")
     st.markdown("By **Leonardo H. Talero-Sarmiento** [View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
-    st.markdown("""
-    A factorial design is an experimental design that studies the effects of two or more factors, 
-    each with multiple levels, on a dependent variable. It allows researchers to study main effects 
-    and interactions efficiently.
-    """)
-
+     st.markdown("A factorial design is an experimental design that studies the effects of two or more factors, each with multiple levels, on a dependent variable. In a factorial design, the factors are manipulated independently of each other, and the levels of each factor are crossed with the levels of the other factors. This allows researchers to study the main effects of each factor, as well as the interactions between the factors.")
+    st.markdown("Factorial designs are more efficient than one-factor-at-a-time designs, because they allow researchers to study the effects of multiple factors with the same number of participants. Additionally, factorial designs can help researchers to identify interactions between factors, which can be important for understanding the effects of the factors on the dependent variable.")
+    st.markdown("There are two main types of factorial designs: full factorial designs and fractional factorial designs. Full factorial designs include all possible combinations of levels for each factor. Fractional factorial designs are a subset of full factorial designs that include only a subset of the possible combinations of levels. Fractional factorial designs are less efficient than full factorial designs, but they can be used when resources are limited.")
+    
     st.subheader('Two Factors and Two Levels')
 
     # Define two-level factor values
@@ -382,11 +380,83 @@ def factorial_twolevels():
     st.latex(print_equation(results, two_level_factor_names))
     st.text(results.summary())
 
+def Analysis():
+    """
+    Tips to Analyze the Statistical Outputs.
+    """
+    st.title("Tips to Analyze the Statistical Outputs")
+    st.markdown("By **Leonardo H. Talero-Sarmiento** [View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
+    st.subheader('📊 Analysis of Y Based on a Source of Variability')
+
+st.subheader('📦 Box Plot')
+
+st.markdown("### *Why Are Box Plots by Group So Useful in Data Analysis?*")
+st.markdown("""
+Creating a box plot for different groups is a powerful way to visually explore and compare data distributions across categories. This simple yet effective visualization can reveal patterns, differences, and anomalies that might be hidden in raw numbers. Here’s why box plots are incredibly useful and what insights they can provide:
+""")
+
+st.markdown("## 1️⃣ Comparing Distributions Across Groups")
+st.markdown("""
+Box plots allow us to compare the spread and central tendency of data across different categories at a glance.
+
+👉 **Example:** Imagine you're analyzing **student test scores** across multiple schools. A box plot can quickly show whether some schools have consistently higher scores, if others have a wider range of performance, or if certain schools have unusually low or high scores compared to the rest.
+
+👉 **Another example:** If you're studying **salaries across different industries**, a box plot can instantly highlight whether some fields (like tech) have a broader pay range while others (like education) have more uniform salaries.
+""")
+
+st.markdown("## 2️⃣ Spotting Outliers 🚨")
+st.markdown("""
+Outliers—data points that fall far outside the typical range—are clearly visible in box plots as dots beyond the "whiskers." These can signal interesting insights or potential data issues.
+
+👉 **Example:** If you're analyzing **delivery times** for different shipping companies, and one company consistently has extreme delays (represented by outliers), this could indicate operational inefficiencies.
+
+👉 **Another example:** If you're studying **home prices** in different neighborhoods, outliers might reveal luxury properties or undervalued homes that merit deeper investigation.
+""")
+
+st.markdown("## 3️⃣ Understanding Skewness and Symmetry 📈📉")
+st.markdown("""
+A box plot isn’t just about the median (the middle value); it also shows how data is distributed. If the median is off-center within the box, it indicates skewness.
+
+👉 **Example:** Suppose you're analyzing **commute times** for employees in different cities. If the median commute time in one city is much closer to the lower quartile, it suggests that most people have short commutes, but a few endure very long ones—perhaps due to traffic congestion or urban sprawl.
+
+Recognizing skewness helps in making fair comparisons and drawing better conclusions.
+""")
+
+st.markdown("## 4️⃣ Detecting Shifts and Trends Over Time ⏳")
+st.markdown("""
+If you compare box plots over different time periods, you can see how things change.
+
+👉 **Example:** A retail business tracking **monthly customer spending** can use box plots to reveal seasonal trends—perhaps spending spikes in **December** (holiday shopping) and drops in **January**.
+
+👉 **Another example:** If you're analyzing **stock market performance**, box plots can show how price volatility changes from one quarter to the next.
+""")
+
+st.markdown("## 5️⃣ Exploring Relationships Between Variables 🔗")
+st.markdown("""
+Box plots help uncover connections between categorical and continuous variables.
+
+👉 **Example:** Suppose you're studying the impact of **different diet plans on weight loss**. By grouping individuals based on their diet type and plotting their weight loss results, a box plot could quickly reveal which diets tend to lead to the most consistent or extreme results.
+
+👉 **Another example:** In a **manufacturing setting**, box plots can help compare **defect rates across production shifts**, identifying if a certain shift tends to produce more defective items than others.
+""")
+
+st.markdown("## 🔍 *Why It Matters*")
+st.markdown("""
+Box plots make it easier to **compare**, **detect outliers**, **spot patterns**, and **understand distributions**.
+
+By using box plots effectively, you can:
+✅ **Make data-driven decisions**  
+✅ **Identify trends early**  
+✅ **Spot anomalies before they become problems**  
+
+All in a visually intuitive way! 🚀
+""")
 
 # Navigation System
 pages = {
     "Introduction to Factorial Designs": factorial_twolevels,
-    "Factorial Designs with Three Factors and Three Levels": three_factorial
+    "Factorial Designs with Three Factors and Three Levels": three_factorial,
+    "Tips to Analyze the Statistical Outputs":Analysis
 }
 
 st.title('Navigation')
