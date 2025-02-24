@@ -42,7 +42,7 @@ def compute_response(df, coefficients, factor_names):
     Returns:
         pd.DataFrame: Dataframe with computed Y values.
     """
-    noise = np.random.normal(0, 1, len(df))
+    noise = np.random.normal(0, 0.5, len(df))
 
     # Ensure factor columns exist before renaming
     rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names if f"{factor}_num" in df.columns}
