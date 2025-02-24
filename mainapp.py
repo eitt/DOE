@@ -205,16 +205,30 @@ def plot_boxplot(df, groupby, factor_names):
     """
     fig = go.Figure()
 
+    # Check if the selected groupby column is an interaction term
     if "*" in groupby:
         factors = groupby.split(" * ")
-        df['Interaction'] = df[f'{factors[0]}_num'].astype(str) + " * " + df[f'{factors[1]}_num'].astype(str)
+        interaction_col = f'{factor_names[factors[0]]}_num * {factor_names[factors[1]]}_num'
+        
+        # Ensure interaction column exists
+        df['Interaction'] = df[f'{factor_names[factors[0]]}_num'].astype(str) + " * " + df[f'{factor_names[factors[1]]}_num'].astype(str)
         groupby = 'Interaction'
+    else:
+        # Ensure we are using the correct column mapping
+        groupby = f'{factor_names[groupby]}_num' if groupby in factor_names.values() else groupby
 
+    # Verify that groupby column exists in DataFrame
+    if groupby not in df.columns:
+        st.error(f"Error: The selected column '{groupby}' does not exist in the dataset.")
+        return
+
+    # Group and plot the data
     for name, group in df.groupby(groupby):
         fig.add_trace(go.Box(y=group['Y'], name=str(name), boxmean=True))
 
     fig.update_layout(xaxis_title=groupby, yaxis_title='Y')
     st.plotly_chart(fig)
+
 
 def three_factorial():
     """
@@ -271,11 +285,12 @@ def three_factorial():
     st.subheader('Factors Space')
     plot_3d(df, factor_names)
 
-    # Boxplot Analysis
+     # Boxplot Analysis
     st.subheader('Analysis of Y based on Variability Source')
     st.subheader('Box Plot')
 
-    groupby_options = list(factor_names.values()) + [f"{f1} * {f2}" for f1, f2 in combinations(factor_names.values(), 2)]
+    # Ensure `groupby_options` matches renamed factor names
+    groupby_options = list(factor_names.values()) + [f"{factor_names[f1]} * {factor_names[f2]}" for f1, f2 in combinations(factor_names.values(), 2)]
     groupby = st.selectbox('Group by', groupby_options, index=0)
 
     plot_boxplot(df, groupby, factor_names)
