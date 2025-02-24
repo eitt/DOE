@@ -114,6 +114,29 @@ def plot_2d(df, factor_names):
     )
     st.plotly_chart(fig)
 
+def compute_response(df, coefficients, factor_names):
+    """
+    Computes response variable Y dynamically for any factorial design.
+    """
+    noise = np.random.normal(0, 2, len(df))
+
+    # Rename columns in the DataFrame to match updated factor names
+    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
+    df = df.rename(columns=rename_mapping)
+
+    # Compute main effects
+    y = coefficients[0] + sum(
+        coefficients[i] * df[f'{factor_names[factor]}_num']
+        for i, factor in enumerate(factor_names, start=1)
+    )
+
+    # Compute interaction effects
+    interaction_index = len(factor_names) + 1
+    for i, (f1, f2) in enumerate(combinations(factor_names, 2)):
+        y += coefficients[interaction_index + i] * df[f'{factor_names[f1]}_num'] * df[f'{factor_names[f2]}_num']
+
+    df['Y'] = y + noise
+    return df
 
 
 def plot_3d(df, factor_names):
@@ -200,7 +223,7 @@ def three_factorial():
     st.title('Factorial Design Visualization')
     st.markdown("By **Leonardo H. Talero-Sarmiento** [View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
 
-    # Custom Factor Names
+    # User-defined custom factor names
     factor_names = {
         "Temperature": st.sidebar.text_input("Enter a custom name for Temperature", "Temperature"),
         "Pressure": st.sidebar.text_input("Enter a custom name for Pressure", "Pressure"),
@@ -224,8 +247,17 @@ def three_factorial():
     # Create DataFrame
     df = create_factorial_dataframe(levels, FACTOR_VALUES, replications=2)
 
+    # Rename DataFrame columns before computing response
+    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
+    df = df.rename(columns=rename_mapping)
+
     # Compute Y
     df = compute_response(df, coefficients, factor_names)
+
+    # Display DataFrame
+    st.subheader('Generated Data')
+    st.dataframe(df)
+
 
     # Display DataFrame
     st.subheader('Generated Data')
@@ -259,6 +291,8 @@ def three_factorial():
     results = fit_factorial_model(df, factor_names)
     st.latex(print_equation(results, factor_names))
     st.text(results.summary())
+
+
 def factorial_twolevels():
     """
     Streamlit app to interactively explore two-factor, two-level factorial designs.
