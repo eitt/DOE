@@ -437,7 +437,7 @@ def anova_oneway():
     df[factor_name] = df[factor_name].map(level_names)
 
     # Compute Response Variable (Y)
-    noise = np.random.normal(0, 2, len(df))  # Normally distributed random noise
+    noise = np.random.normal(0, 0.5, len(df))  # Normally distributed random noise
     df["Y"] = (coefficients[0]  # Intercept
                + coefficients[1] * (df[factor_name] == level_names["medium"])  # Effect of Medium
                + coefficients[2] * (df[factor_name] == level_names["high"])  # Effect of High
