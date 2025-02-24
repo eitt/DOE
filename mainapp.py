@@ -276,3 +276,15 @@ def factorial_twolevels():
     results = fit_factorial_model(df, two_level_factor_names)
     st.latex(print_equation(results, two_level_factor_names))
     st.text(results.summary())
+
+
+# Navigation System
+pages = {
+    "Introduction to Factorial Designs": factorial_twolevels,
+    "Factorial Designs with Three Factors and Three Levels": three_factorial
+}
+
+st.title('Navigation')
+selection = st.radio("Go to", list(pages.keys()))
+pages[selection]()
+
