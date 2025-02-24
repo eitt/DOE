@@ -415,9 +415,9 @@ def anova_oneway():
 
     # Coefficients Input
     coefficients = [
-        st.sidebar.slider('Intercept (Baseline Level)', -10.0, 10.0, 0.0),
-        st.sidebar.slider(f'Effect of {level_names["medium"]}', -10.0, 10.0, 0.0),
-        st.sidebar.slider(f'Effect of {level_names["high"]}', -10.0, 10.0, 0.0)
+        st.sidebar.slider('Intercept (Baseline Level)', -100.0, 100.0, 0.0),
+        st.sidebar.slider(f'Effect of {level_names["medium"]}', -100.0, 100.0, 0.0),
+        st.sidebar.slider(f'Effect of {level_names["high"]}', -100.0, 100.0, 0.0)
     ]
 
     # Define factor levels and replications
