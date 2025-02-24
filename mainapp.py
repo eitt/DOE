@@ -222,7 +222,6 @@ def plot_boxplot(df, groupby, factor_names):
     st.plotly_chart(fig)
 
 
-
 def three_factorial():
     """
     Streamlit app for three-factor factorial design visualization and analysis.
@@ -254,7 +253,7 @@ def three_factorial():
     # Create DataFrame
     df = create_factorial_dataframe(levels, FACTOR_VALUES, replications=2)
 
-    # Rename columns before computing response
+    # Ensure correct column renaming before computation
     rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
     df.rename(columns=rename_mapping, inplace=True)
 
@@ -277,8 +276,15 @@ def three_factorial():
     st.subheader('Analysis of Y based on Variability Source')
     st.subheader('Box Plot')
 
-    # Dynamically update `groupby_options`
-    groupby_options = list(factor_names.values()) + [f"{factor_names[f1]} * {factor_names[f2]}" for f1, f2 in combinations(factor_names.values(), 2)]
+    # 🔥 **Fix: Ensure interaction terms are correctly mapped**
+    original_factors = list(factor_names.keys())  # Extract original factor names
+    renamed_factors = list(factor_names.values())  # Extract renamed factor names
+
+    # Create `groupby_options` using renamed factor names
+    groupby_options = renamed_factors + [
+        f"{factor_names[f1]} * {factor_names[f2]}" for f1, f2 in combinations(original_factors, 2)
+    ]
+
     groupby = st.selectbox('Group by', groupby_options, index=0)
 
     # Ensure correct column selection
@@ -286,8 +292,8 @@ def three_factorial():
 
     # Surface Plot Selection
     st.subheader('Surface Plot')
-    factor1 = st.selectbox('Select First Factor', list(factor_names.values()), index=0)
-    factor2 = st.selectbox('Select Second Factor', list(factor_names.values()), index=1)
+    factor1 = st.selectbox('Select First Factor', renamed_factors, index=0)
+    factor2 = st.selectbox('Select Second Factor', renamed_factors, index=1)
     
     # Ensure valid surface plot selection
     if factor1 != factor2:
@@ -300,8 +306,6 @@ def three_factorial():
     results = fit_factorial_model(df, factor_names)
     st.latex(print_equation(results, factor_names))
     st.text(results.summary())
-
-
 
 
 def factorial_twolevels():
