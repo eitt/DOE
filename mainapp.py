@@ -260,10 +260,11 @@ def three_factorial():
 
     # Create DataFrame
     df = create_factorial_dataframe(levels, FACTOR_VALUES, replications=2)
-
-    # Rename DataFrame columns before computing response
+    
+     # Rename columns before computing response
     rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
     df = df.rename(columns=rename_mapping)
+
 
     # Compute Y
     df = compute_response(df, coefficients, factor_names)
