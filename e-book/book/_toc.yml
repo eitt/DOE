@@ -28,10 +28,16 @@ parts:
         title: Anova One-way Foundations
       - file: 01-one-way-anova.ipynb
       - file: 01-one-way-example.ipynb
-    - caption: Full-Factorial designs
+    - caption: Factorial Experimental Designs
       numbered: true
       chapters:
-      - file: 02-markdown.md
+      - file: 00-ViDoe-Factorial-Designs.md
+        title: Principles of 2^k and Fractional Factorial Designs
+    - caption: Taguchi Designs
+      numbered: true
+      chapters:
+      - file: 05-Taguchi-Designs.md
+        title: Taguchi Methods and Robust Design
     - caption: Block Designs
       numbered: true
       chapters:
