@@ -32,6 +32,11 @@ parts:
       numbered: true
       chapters:
       - file: 02-markdown.md
+    - caption: Block Designs
+      numbered: true
+      chapters:
+      - file: 04-block-designs.md
+        title: Block Designs Explained
     - caption: Outputs Analysis
       chapters:
       - file: 03-Boxplot-by-group.ipynb
