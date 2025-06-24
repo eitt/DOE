@@ -15,7 +15,7 @@ parts:
       numbered: true
       chapters:
       - file: 00-ViDoe-Introduction.md
-        title: An overview of ViDoe
+        title: Introduction and Justification
       - file: 00-ViDoe-ANOVA-One-Way.md
         title: Anova One-way using ViDoe
       
