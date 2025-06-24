@@ -10,3 +10,8 @@ The platform was designed with the understanding that **visual representation si
 Information and communication technologies (ICT) have shown clear benefits in making learning more accessible and engaging. The use of such technologies promotes student-centered models and supports autonomy and critical thinking {cite:p}`CuevaInga2022`, {cite:p}`Dahal2022`. In alignment with these pedagogical shifts, ViDoe integrates a digital handbook—built in Markdown and Jupyter Book format—that guides learners through each module with Python examples and hands-on activities.
 
 While ViDoe is not intended to replace comprehensive theoretical texts like Montgomery’s *Design and Analysis of Experiments*, it serves as a **didactic bridge**. Its goal is to make the abstraction process in DoE more approachable through structured interaction and practical insight. The application was implemented between 2023-Q1 and 2023-Q4 with undergraduate students from Universidad Autónoma de Bucaramanga and Universidad Industrial de Santander, who later incorporated it into final projects and peer-led study sessions. This e-book offers a guided exploration of the ViDoe platform and serves as a stepping stone for further learning in experimental design and applied statistics.
+
+```{bibliography}
+:filter: docname in docnames
+```
+
