@@ -14,38 +14,38 @@ We invite you to embark on this exciting voyage of discovery - immerse yourself 
 
 Section 1. **ViDoe**
 
- [00-ViDoe: Introduction](#00-ViDoe-Introduction)
-
- [00-ViDoe-ANOVA-One-Way](#00-ViDoe-ANOVA-One-Way)
-
- [00-ViDoe-Factorial-Designs](#00-ViDoe-Factorial-Designs)
+ [An overview of ViDoe](#00-ViDoe-Introduction)
+ [Anova One-way using ViDoe](#00-ViDoe-ANOVA-One-Way)
+ [Factorial Design using ViDoe](#00-ViDoe-Factorial-Designs)
 
 Section 2. **Anova One Way**
 
- [01-anova-oneway.md](#01-anova-oneway)
-
+ [Anova One-way Foundations](#01-anova-oneway)
  [01-one-way-anova.ipynb](#01-one-way-anova)
-
  [01-one-way-example.ipynb](#01-one-way-example)
 
-Section 3. **Full-Factorial designs**
+Section 3. **Factorial Experimental Designs**
 
- [markdown.md](#markdown)
+ [Principles of 2^k and Fractional Factorial Designs](#00-ViDoe-Factorial-Designs)
 
-Section 4. **Outputs Analysis**
+Section 4. **Taguchi Designs**
 
- [03-Boxplot-by-group](#03-Boxplot-by-group)
+ [Taguchi Methods and Robust Design](#05-Taguchi-Designs)
 
- [03-Surface-plot](#03-Surface-plot)
+Section 5. **Block Designs**
 
- [03-regression-model](#03-regression-model)
+ [Block Designs Explained](#04-block-designs)
 
- [03-residual-analysis](#03-residual-analysis)
+Section 6. **Outputs Analysis**
+
+ [03-Boxplot-by-group.ipynb](#03-Boxplot-by-group)
+ [03-Surface-plot.ipynb](#03-Surface-plot)
+ [03-regression-model.ipynb](#03-regression-model)
+ [03-residual-analysis.ipynb](#03-residual-analysis)
 
 **Extras**
 
- Bibliography
-
+ [Bibliography](#Bibliography)
 
 ## Short biography
 * **Leonardo H. Talero-Samiento** is a Ph.D. candidate in Engineering at Universidad Autonoma de Bucaramanga. He specializes in mathematical modeling, data analytics, operational research and manufacturing, process improvement, and technology adoption. His work emphasizes decision-making and production planning. He has contributed to multiple scholarly articles in various fields. He has published articles in Digital Policy, Regulation and Governance, Heliyon, Revista Colombiana de Computacion, Suma de Negocios, IngeCUC, Apuntes del Cenes, Estudios Gerenciales, and Contaduría y Administración. [ltalero@unab.edu.co](mailto:ltalero@unab.edu.co)
