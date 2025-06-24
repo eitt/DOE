@@ -1,12 +1,11 @@
 # Table of contents
 # Learn more at https://jupyterbook.org/customize/toc.html
 
-# pip install -U jupyter-book
-# jupyter-book build e-book/book
-# pip install ghp-import
-# python -m ghp_import -n -p -f _build/html
-#/home/codespace/.local/lib/python3.10/site-packages/ghp-import -n -p -f _build/html
-# export PATH=$PATH:/home/codespace/.local/lib/python3.10/site-packages/ghp-import
+# 1. pip install -U jupyter-book
+# 2. jupyter-book build e-book/book
+# 3. pip install --user ghp-import
+# 4. python3 -m ghp_import -n -p -f e-book/book/_build/html
+# 5. export PATH="$HOME/.local/bin:$PATH"
 
 
 format: jb-book
@@ -19,8 +18,7 @@ parts:
         title: An overview of ViDoe
       - file: 00-ViDoe-ANOVA-One-Way.md
         title: Anova One-way using ViDoe
-      - file: 00-ViDoe-Factorial-Designs.md
-        title: Factorial Design using ViDoe
+      
     - caption: Anova One-Way
       numbered: true
       chapters:

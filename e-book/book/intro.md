@@ -1,56 +1,88 @@
 # Visualizing Design of Experiments with ViDoe: An Interactive Approach
 
-Data is the driving force behind critical decision-making; comprehending and effectively utilizing this wealth of information becomes paramount. This e-book covers the foundations of a web app developed by Professor Leonardo H. Talero-Sarmiento, Professor Henry Lamos-Diaz, and Researcher Juan D. Marquez Gonzalez. **ViDoe**, or *Visualizing Design of Experiments*, is an innovative web app that serves as an online tool for understanding the intricacies of data models and statistical testing within the framework of experimental design.
+Data is a central asset in decision-making processes, especially when reliability and efficiency are key. Understanding how to design experiments and analyze their results is a practical skill that helps students, researchers, and professionals translate questions into structured insights. This e-book presents the foundations of a web application called **ViDoe**—*Visualizing Design of Experiments*—developed by Professors Leonardo H. Talero-Sarmiento, Henry Lamos-Díaz, and engineer David Márquez-González.
 
-ViDoe's intuitive interface offers users a convenient platform to analyze design experiments results, generate data, and visualize results dynamically, all while unraveling the complexities of statistical concepts. The app's central aim is to provide a user-friendly environment where both beginners and practitioners can explore and comprehend the dynamics of data models and statistical testing without being ensnared by mathematical intricacies. Nevertheless, this web app no covers the whole taxonomy of the design of experiments nor tries to develop a compendium of theorems but illustrates the foundations of the design of experiments to facilitate the data abstraction process.
+**ViDoe** is a user-friendly web platform created to support the learning and teaching of design of experiments (DoE). Through interactive tools, it allows users to generate datasets, apply experimental designs, and visualize results dynamically. It is intended for those who want to explore core ideas behind statistical modeling and hypothesis testing, without needing advanced knowledge in mathematics or programming.
 
-Accompanying this web app is our comprehensive e-book. It is designed not only as a tutorial for navigating the **ViDoe** platform but also as a handbook elucidating the principles and techniques inherent to the design of experiments and data analysis. This unique resource serves as a theoretical grounding that supplements the practical, hands-on experience provided by the ViDoe web app.
+This e-book does not aim to cover the entire theory or taxonomy of DoE, nor does it provide a detailed compendium of theorems. Instead, it introduces the main principles and structures that support practical experimentation. Its focus is on using **ViDoe** as an applied tool to foster understanding and experimentation. While the theoretical depth required for advanced study is beyond the scope of this material, readers looking for a more rigorous foundation are encouraged to consult **Montgomery’s “Design and Analysis of Experiments”**, a standard reference in the field.
 
-Whether you are a student venturing into the realm of experimental design, a researcher seeking to streamline your experimental processes, or a data enthusiast eager to demystify complex data models, 'Visualizing Design of Experiments with **ViDoe**: An Interactive Approach' combines the theoretical with the practical, transforming data exploration into an accessible and enjoyable journey.
+We recognize that this quantitative approach is not commonly emphasized in many undergraduate programs. In fact, it is often sought after by graduate students working on process improvement or experimental design in engineering and related fields. With this in mind, the handbook offers a bridge between basic concepts and interactive practice, helping users gain confidence in structuring and analyzing experiments.
 
-We invite you to embark on this exciting voyage of discovery - immerse yourself in the experiment analysis with the **ViDoe** platform, and unlock the story your data has to tell.
+Whether you are just beginning to explore the world of experimental design or looking for a practical companion to complement your theoretical learning, **ViDoe** and this handbook are designed to support your journey in a clear, structured, and hands-on way.
+
+---
 
 ## Table of Contents
 
-Section 1. **ViDoe**
+**Section 1. Introduction to ViDoe**
 
- [An overview of ViDoe](#00-ViDoe-Introduction)
- [Anova One-way using ViDoe](#00-ViDoe-ANOVA-One-Way)
- [Factorial Design using ViDoe](#00-ViDoe-Factorial-Designs)
+- [Overview of ViDoe](#00-ViDoe-Introduction)  
+- [One-Way ANOVA using ViDoe](#00-ViDoe-ANOVA-One-Way)  
+- [Factorial Designs in ViDoe](#00-ViDoe-Factorial-Designs)
 
-Section 2. **Anova One Way**
+**Section 2. One-Way ANOVA**
 
- [Anova One-way Foundations](#01-anova-oneway)
- [01-one-way-anova.ipynb](#01-one-way-anova)
- [01-one-way-example.ipynb](#01-one-way-example)
+- [Foundations of One-Way ANOVA](#01-anova-oneway)  
+- [Notebook: 01-one-way-anova.ipynb](#01-one-way-anova)  
+- [Notebook: 01-one-way-example.ipynb](#01-one-way-example)
 
-Section 3. **Factorial Experimental Designs**
+**Section 3. Factorial Experimental Designs**
 
- [Principles of 2^k and Fractional Factorial Designs](#00-ViDoe-Factorial-Designs)
+- [Principles of \(2^k\) and Fractional Factorial Designs](#00-ViDoe-Factorial-Designs)
 
-Section 4. **Taguchi Designs**
+**Section 4. Taguchi Designs**
 
- [Taguchi Methods and Robust Design](#05-Taguchi-Designs)
+- [Taguchi Methods and Robust Design](#05-Taguchi-Designs)
 
-Section 5. **Block Designs**
+**Section 5. Block Designs**
 
- [Block Designs Explained](#04-block-designs)
+- [Explanation of Block Designs](#04-block-designs)
 
-Section 6. **Outputs Analysis**
+**Section 6. Output Analysis**
 
- [03-Boxplot-by-group.ipynb](#03-Boxplot-by-group)
- [03-Surface-plot.ipynb](#03-Surface-plot)
- [03-regression-model.ipynb](#03-regression-model)
- [03-residual-analysis.ipynb](#03-residual-analysis)
+- [Boxplot by Group](#03-Boxplot-by-group)  
+- [Surface Plot](#03-Surface-plot)  
+- [Regression Model](#03-regression-model)  
+- [Residual Analysis](#03-residual-analysis)
 
 **Extras**
 
- [Bibliography](#Bibliography)
+- [Bibliography](#Bibliography)
 
-## Short biography
-* **Leonardo H. Talero-Samiento** is a Ph.D. candidate in Engineering at Universidad Autonoma de Bucaramanga. He specializes in mathematical modeling, data analytics, operational research and manufacturing, process improvement, and technology adoption. His work emphasizes decision-making and production planning. He has contributed to multiple scholarly articles in various fields. He has published articles in Digital Policy, Regulation and Governance, Heliyon, Revista Colombiana de Computacion, Suma de Negocios, IngeCUC, Apuntes del Cenes, Estudios Gerenciales, and Contaduría y Administración. [ltalero@unab.edu.co](mailto:ltalero@unab.edu.co)
-* **Henry Lamos-Díaz** is a highly accomplished Full Professor with a Ph.D. in Mathematical Physics from the esteemed State University of Moscow. His academic journey includes a Master's degree in Computer Science from the Industrial University of Santander and a Master's degree in Mathematics from the Patricio Lumumba University. Prior to that, he successfully completed his undergraduate studies in Mathematics at the Patricio Lumumba University. His research interests include  Modeling, Simulation, and Optimization of Production and Logistics Systems, as well as Data Analytics. He exhibits a particular passion for the field of Humanitarian Logistics within his research endeavors. [hlamos@uis.edu.co](mailto:hlamos@uis.edu.co)
-* **Juan D. Márquez-González** is a holds a candidature for Master's degree in Industrial Engineering at Universidad Industrial de Santander.  His research interests cover Modeling, Simulation, and Optimization of Production and Logistics Systems. He delves into the intricate processes involved in improving agricultural systems, seeking ways to enhance and streamline them. He also has expertise as a consultant for production optimization. [juan2208424@correo.uis.edu.co](mailto:juan2208424@correo.uis.edu.co)
+---
 
+## Short Biographies
+
+**Leonardo H. Talero-Sarmiento** holds a Ph.D. in Engineering from Universidad Autónoma de Bucaramanga. His academic focus includes mathematical modeling, data analytics, operations research, process improvement, and technology adoption. He has authored scientific articles in journals such as *Digital Policy, Regulation and Governance*, *Heliyon*, *Revista Colombiana de Computación*, *Suma de Negocios*, *IngeCUC*, *Apuntes del Cenes*, *Estudios Gerenciales*, and *Contaduría y Administración*.  
+📧 [ltalero@unab.edu.co](mailto:ltalero@unab.edu.co)  
+🔗 [ResearchGate Profile](https://www.researchgate.net/profile/Leonardo-Talero?ev=hdr_xprf)  
+🔗 [Institutional Profile](https://apolo.unab.edu.co/en/persons/leonardo-hernan-talero-sarmiento-3)
+
+**Henry Lamos-Díaz** is a Full Professor with a Ph.D. in Mathematical Physics from the State University of Moscow. He also holds Master’s degrees in Computer Science from Universidad Industrial de Santander and in Mathematics from Patricio Lumumba University, where he completed his undergraduate studies. His research focuses on modeling, simulation, and optimization of production and logistics systems, with particular interest in humanitarian logistics.  
+📧 [hlamos@uis.edu.co](mailto:hlamos@uis.edu.co)
+
+**David Márquez-González** holds a Master's degree in Industrial Engineering from Universidad Industrial de Santander. His work focuses on modeling and optimizing production and logistics systems, with a strong emphasis on improving agricultural systems. He also works as a consultant in production optimization.  
+📧 [juan2208424@correo.uis.edu.co](mailto:juan2208424@correo.uis.edu.co)
+
+---
 
 ![Industrial Engineering Program - Universidad Autónoma de Bucaramanga](e-book/book/INGENIERÍA-INDUSTRIAL_LOGO.png)
+
+## Note:
+The ViDoe platform and its conceptual framework were originally presented at the **INNODOCT 2023 International Conference on Innovation, Documentation, Education and Teaching Technologies**, held in Bucaramanga. The paper details the motivation, technical approach, and educational goals behind the development of the tool. Readers may cite this work as follows:
+
+> Talero-Sarmiento, L. H., Lamos-Díaz, H., & Márquez-González, J. D. (2024). *ViDoe: A novel tool for visualizing Design of Experiments*. In **INNODOCT 2023: Proceedings of the International Conference on Innovation, Documentation, Education and Teaching Technologies** (Vol. 11, pp. 88–95). Bucaramanga, Colombia.  
+> [https://www.researchgate.net/publication/378149141_ViDoe_A_novel_tool_for_visualizing_Design_of_Experiments](https://www.researchgate.net/publication/378149141_ViDoe_A_novel_tool_for_visualizing_Design_of_Experiments)
+
+### How to cite this work
+```bibtex
+@inproceedings{Talero2024ViDoe,
+  author       = {Leonardo H. Talero-Sarmiento and Henry Lamos-Díaz and Juan David Márquez-González},
+  title        = {{ViDoe: A novel tool for visualizing Design of Experiments}},
+  booktitle    = {Proceedings of the International Conference on Innovation, Documentation, Education and Teaching Technologies (INNODOCT 2023)},
+  year         = {2024},
+  volume       = {11},
+  pages        = {88--95},
+  address      = {Bucaramanga, Colombia},
+  url          = {https://www.researchgate.net/publication/378149141_ViDoe_A_novel_tool_for_visualizing_Design_of_Experiments}
+}
