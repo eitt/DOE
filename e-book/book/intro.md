@@ -66,7 +66,11 @@ Whether you are just beginning to explore the world of experimental design or lo
 
 ---
 
-![Industrial Engineering Program - Universidad Autónoma de Bucaramanga](e-book/book/INGENIERÍA-INDUSTRIAL_LOGO.png)
+```{figure} INGENIERÍA-INDUSTRIAL_LOGO.png
+---
+alt: Industrial Engineering Program – Universidad Autónoma de Bucaramanga
+---
+
 
 ## Note:
 The ViDoe platform and its conceptual framework were originally presented at the **INNODOCT 2023 International Conference on Innovation, Documentation, Education and Teaching Technologies**, held in Bucaramanga. The paper details the motivation, technical approach, and educational goals behind the development of the tool. Readers may cite this work as follows:
