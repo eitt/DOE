@@ -5,11 +5,11 @@
 
 ## Historical Background
 
-The One-Way Analysis of Variance (ANOVA) is a foundational statistical method introduced by Ronald A. Fisher in the early 1920s. Fisher sought a formal procedure to compare means across multiple groups within agricultural experiments. His innovation allowed for simultaneous testing of multiple group means while controlling for overall error rate—unifying experimental design and inferential statistics {cite\:p}`Fisher1992`.
+The One-Way Analysis of Variance (ANOVA) is a foundational statistical method introduced by Ronald A. Fisher in the early 1920s. Fisher sought a formal procedure to compare means across multiple groups within agricultural experiments. His innovation allowed for simultaneous testing of multiple group means while controlling for overall error rate—unifying experimental design and inferential statistics {cite:p}`Fisher1992`.
 
 ## Utility and Applications
 
-The primary function of ANOVA is to test whether the means of several groups are equal. It allows researchers to determine whether any observed differences are statistically significant or likely due to random variation. While ANOVA is often used in experimental research, its applications extend to observational studies, product testing, medical trials, psychology, education, and beyond {cite\:p}`kutner2005applied`.
+The primary function of ANOVA is to test whether the means of several groups are equal. It allows researchers to determine whether any observed differences are statistically significant or likely due to random variation. While ANOVA is often used in experimental research, its applications extend to observational studies, product testing, medical trials, psychology, education, and beyond {cite:p}`kutner2005applied`.
 
 ## Mathematical Foundations of One-Way ANOVA
 
@@ -97,18 +97,18 @@ One-way ANOVA is particularly useful when comparing the performance or effect of
 * Compare productivity across manufacturing shifts
 * Measure academic performance across instructional styles
 
-Its capacity to reveal both statistically and practically significant differences makes ANOVA a cornerstone of inferential statistics {cite\:p}`kirk2013experimental`.
+Its capacity to reveal both statistically and practically significant differences makes ANOVA a cornerstone of inferential statistics {cite:p}`kirk2013experimental`.
 
 ## Examples from Practice and Scientific Fields
 
 ANOVA’s flexibility makes it useful across domains:
 
-* **Forestry**: Evaluating environmental effects on clonal propagation success in *Populus* hybrids {cite\:p}`Gudynaitė`.
-* **Thermal Systems**: Comparing phase-change materials for energy optimization in poultry housing {cite\:p}`Aleksandrova2023`.
-* **Technology Acceptance**: Examining user attitudes toward utilitarian vs. hedonic technologies {cite\:p}`Krnung2011ThreeCO`.
-* **Health**: Investigating how obesity and depression interact, comparing ANOVA with regression and SEM {cite\:p}`mohamed2023evaluation`.
-* **Engineering**: Assessing flotation properties in coal processing using ANOVA {cite\:p}`Niedoba2016ApplicationsOA`.
-* **E-commerce**: Measuring differences in service quality perception across customer groups on Shopee {cite\:p}`Sheu2022RelationshipOS`.
+* **Forestry**: Evaluating environmental effects on clonal propagation success in *Populus* hybrids {cite:p}`Gudynaitė`.
+* **Thermal Systems**: Comparing phase-change materials for energy optimization in poultry housing {cite:p}`Aleksandrova2023`.
+* **Technology Acceptance**: Examining user attitudes toward utilitarian vs. hedonic technologies {cite:p}`Krnung2011ThreeCO`.
+* **Health**: Investigating how obesity and depression interact, comparing ANOVA with regression and SEM {cite:p}`mohamed2023evaluation`.
+* **Engineering**: Assessing flotation properties in coal processing using ANOVA {cite:p}`Niedoba2016ApplicationsOA`.
+* **E-commerce**: Measuring differences in service quality perception across customer groups on Shopee {cite:p}`Sheu2022RelationshipOS`.
 
 ## Software Applications
 
@@ -119,7 +119,7 @@ One-way ANOVA is widely accessible through statistical software:
 * **SPSS**, **Minitab**, **Stata**: GUI-based workflows
 * **Excel**: Data Analysis Toolpak
 
-These tools simplify ANOVA implementation, even for users without programming backgrounds {cite\:p}`Alter2022`, {cite\:p}`Aliyu_Sani_Ingles_Tsiga-Ahmed_Musa_Dongarwar_Salihu_Wester_2022`.
+These tools simplify ANOVA implementation, even for users without programming backgrounds {cite:p}`Alter2022`, {cite:p}`Aliyu_Sani_Ingles_Tsiga-Ahmed_Musa_Dongarwar_Salihu_Wester_2022`.
 
 ## Assumptions and Limitations
 
@@ -160,7 +160,7 @@ For the results of a one-way ANOVA to be valid and interpretable, several statis
 - Ensure proper **randomization** and **experimental design** during data collection.
 
 
-In practice, these assumptions should be **checked before interpreting ANOVA results**. Visual diagnostics such as residual histograms, Q–Q plots, and residuals vs. fitted value plots are useful tools to assess assumption validity. When assumptions are not met, robust or non-parametric methods can preserve the integrity of the analysis while offering more appropriate inference. {cite\:p}`Gene1972`.
+In practice, these assumptions should be **checked before interpreting ANOVA results**. Visual diagnostics such as residual histograms, Q–Q plots, and residuals vs. fitted value plots are useful tools to assess assumption validity. When assumptions are not met, robust or non-parametric methods can preserve the integrity of the analysis while offering more appropriate inference. {cite:p}`Gene1972`.
 
 ---
 

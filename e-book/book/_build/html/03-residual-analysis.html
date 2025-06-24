@@ -57,6 +57,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '03-residual-analysis';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -182,28 +184,29 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Anova One-way using ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Exploring Two-Level Factorial Designs with ViDoE</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova One-Way</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">3. Anova One-way Foundations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">4. Explaining the Python Code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">5. ANOVA One-way: An Illustrative example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
 
 
 
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">9. Principles of 2^k and Fractional Factorial Designs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">10. Principles of 2^k and Fractional Factorial Designs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">10. Taguchi Methods and Robust Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">11. Taguchi Methods and Robust Design</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">11. Block Designs Explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">12. Block Designs Explained</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
 <ul class="current nav bd-sidenav">
@@ -213,6 +216,7 @@
 <li class="toctree-l1"><a class="reference internal" href="03-regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
 
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Introduction to residual analysis</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
@@ -389,7 +393,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -405,6 +411,52 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction to residual analysis</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-analysis-in-a-333-factorial-design">Residual Analysis in a 3×3×3 Factorial Design</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experimental-design-setup">1. Experimental Design Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#response-model">Response model:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-1-main-effects-only">Model 1 – Main Effects Only</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model">Model:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-diagnostics">Residual Diagnostics:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">Interpretation:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-2-main-effects-two-way-interactions">Model 2 – Main Effects + Two-Way Interactions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Model:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Residual Diagnostics:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Interpretation:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-3-full-model-with-three-way-interaction">Model 3 – Full Model with Three-Way Interaction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Model:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Residual Diagnostics:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Interpretation:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-the-three-models-assumptions-analysis">Comparing the Three Models: Assumptions Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normality-shapirowilk-and-dagostinopearson-tests">1. Normality: Shapiro–Wilk and D’Agostino–Pearson Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#homoscedasticity-breuschpagan-test">2. Homoscedasticity: Breusch–Pagan Test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#randomness-durbinwatson-statistic">3. Randomness: Durbin–Watson Statistic</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-assumption-validity">Summary of Assumption Validity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#final-interpretation">Final Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-residual-normality-matters">Why Residual Normality Matters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-normality-is-violated">When normality is violated:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -416,25 +468,841 @@ document.write(`
                   
   <p><a name="03-residual-analysis"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-residual-analysis">
-<h1><a class="toc-backref" href="#id1" role="doc-backlink">Introduction to residual analysis</a><a class="headerlink" href="#introduction-to-residual-analysis" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id7" role="doc-backlink">Introduction to residual analysis</a><a class="headerlink" href="#introduction-to-residual-analysis" title="Link to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#introduction-to-residual-analysis" id="id1">Introduction to residual analysis</a></p></li>
+<li><p><a class="reference internal" href="#introduction-to-residual-analysis" id="id7">Introduction to residual analysis</a></p></li>
+<li><p><a class="reference internal" href="#residual-analysis-in-a-333-factorial-design" id="id8">Residual Analysis in a 3×3×3 Factorial Design</a></p>
+<ul>
+<li><p><a class="reference internal" href="#experimental-design-setup" id="id9">1. Experimental Design Setup</a></p>
+<ul>
+<li><p><a class="reference internal" href="#response-model" id="id10">Response model:</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#model-1-main-effects-only" id="id11">Model 1 – Main Effects Only</a></p>
+<ul>
+<li><p><a class="reference internal" href="#model" id="id12">Model:</a></p></li>
+<li><p><a class="reference internal" href="#residual-diagnostics" id="id13">Residual Diagnostics:</a></p></li>
+<li><p><a class="reference internal" href="#interpretation" id="id14">Interpretation:</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#model-2-main-effects-two-way-interactions" id="id15">Model 2 – Main Effects + Two-Way Interactions</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id1" id="id16">Model:</a></p></li>
+<li><p><a class="reference internal" href="#id2" id="id17">Residual Diagnostics:</a></p></li>
+<li><p><a class="reference internal" href="#id3" id="id18">Interpretation:</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#model-3-full-model-with-three-way-interaction" id="id19">Model 3 – Full Model with Three-Way Interaction</a></p>
+<ul>
+<li><p><a class="reference internal" href="#id4" id="id20">Model:</a></p></li>
+<li><p><a class="reference internal" href="#id5" id="id21">Residual Diagnostics:</a></p></li>
+<li><p><a class="reference internal" href="#id6" id="id22">Interpretation:</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#comparing-the-three-models-assumptions-analysis" id="id23">Comparing the Three Models: Assumptions Analysis</a></p>
+<ul>
+<li><p><a class="reference internal" href="#normality-shapirowilk-and-dagostinopearson-tests" id="id24">1. Normality: Shapiro–Wilk and D’Agostino–Pearson Tests</a></p></li>
+<li><p><a class="reference internal" href="#homoscedasticity-breuschpagan-test" id="id25">2. Homoscedasticity: Breusch–Pagan Test</a></p></li>
+<li><p><a class="reference internal" href="#randomness-durbinwatson-statistic" id="id26">3. Randomness: Durbin–Watson Statistic</a></p></li>
+<li><p><a class="reference internal" href="#summary-of-assumption-validity" id="id27">Summary of Assumption Validity</a></p></li>
+<li><p><a class="reference internal" href="#final-interpretation" id="id28">Final Interpretation</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#why-residual-normality-matters" id="id29">Why Residual Normality Matters</a></p>
+<ul>
+<li><p><a class="reference internal" href="#when-normality-is-violated" id="id30">When normality is violated:</a></p></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </nav>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="residual-analysis-in-a-333-factorial-design">
+<h1><a class="toc-backref" href="#id8" role="doc-backlink">Residual Analysis in a 3×3×3 Factorial Design</a><a class="headerlink" href="#residual-analysis-in-a-333-factorial-design" title="Link to this heading">#</a></h1>
+<p>This notebook illustrates how to generate, fit, and evaluate models in a three-factor factorial design where each factor has three levels and two replications. The objective is to evaluate model adequacy using residual analysis, focusing on <strong>normality</strong>, <strong>randomness</strong>, and <strong>homoscedasticity</strong>.</p>
+<section id="experimental-design-setup">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">1. Experimental Design Setup</a><a class="headerlink" href="#experimental-design-setup" title="Link to this heading">#</a></h2>
+<p>We define three factors: A, B, and C, each at three levels (<code class="docutils literal notranslate"><span class="pre">-1</span></code>, <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">+1</span></code>) using effect coding. The full factorial design includes all <span class="math notranslate nohighlight">\( 3^3 = 27 \)</span> treatment combinations, each replicated twice (54 total observations). The response variable is generated using a known model with additive and interaction terms, plus Gaussian noise.</p>
+<section id="response-model">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Response model:</a><a class="headerlink" href="#response-model" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+Y = \beta_0 + \beta_A A + \beta_B B + \beta_C C + \beta_{AB} AB + \beta_{AC} AC + \beta_{BC} BC + \beta_{ABC} ABC + \varepsilon
+\]</div>
+<p>Where <span class="math notranslate nohighlight">\( \varepsilon \sim N(0, 1) \)</span> and coefficients are set for pedagogical purposes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Residual analysis&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+
+<span class="c1"># 1. Define factor levels</span>
+<span class="n">factors</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;A1&quot;</span><span class="p">,</span> <span class="s2">&quot;A2&quot;</span><span class="p">,</span> <span class="s2">&quot;A3&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;B1&quot;</span><span class="p">,</span> <span class="s2">&quot;B2&quot;</span><span class="p">,</span> <span class="s2">&quot;B3&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;C1&quot;</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">,</span> <span class="s2">&quot;C3&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># 2. Generate full factorial combinations</span>
+<span class="n">replications</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">design</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="n">factors</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span> <span class="o">*</span> <span class="n">replications</span>  <span class="c1"># 3x3x3 full factorial replicated</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">design</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">])</span>
+
+<span class="c1"># 3. Map categorical levels to numeric effect coding (-1, 0, +1)</span>
+<span class="n">coding</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;A1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;A2&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;A3&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+    <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;B1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B2&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;B3&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;C1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;C2&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C3&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">levels</span> <span class="ow">in</span> <span class="n">coding</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">_num&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">levels</span><span class="p">)</span>
+
+<span class="c1"># 4. Define simulation function with main, 2-way, 3-way effects + random noise</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">simulate_response</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+    <span class="n">intercept</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">main</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;A_num&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;B_num&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;C_num&quot;</span><span class="p">]</span>
+    <span class="n">two_way</span> <span class="o">=</span> <span class="mf">1.5</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;A_num&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;B_num&quot;</span><span class="p">]</span> \
+            <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;A_num&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;C_num&quot;</span><span class="p">]</span> \
+            <span class="o">+</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;B_num&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;C_num&quot;</span><span class="p">]</span>
+    <span class="n">three_way</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.2</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;A_num&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;B_num&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;C_num&quot;</span><span class="p">]</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">intercept</span> <span class="o">+</span> <span class="n">main</span> <span class="o">+</span> <span class="n">two_way</span> <span class="o">+</span> <span class="n">three_way</span> <span class="o">+</span> <span class="n">noise</span>
+
+<span class="c1"># 5. Generate the response variable Y</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;Y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">simulate_response</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># 6. View the first few rows</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># Optional: Save to CSV</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;residual_analysis_3x3x3.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Residual analysis
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    A   B   C  A_num  B_num  C_num         Y
+0  A1  B1  C1     -1     -1     -1  8.308682
+1  A1  B1  C2     -1     -1      0  6.744027
+2  A1  B1  C3     -1     -1      1  3.674295
+3  A1  B2  C1     -1      0     -1  6.360846
+4  A1  B2  C2     -1      0      0  7.596931
 </pre></div>
 </div>
 </div>
 </div>
+</section>
+</section>
+<section id="model-1-main-effects-only">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Model 1 – Main Effects Only</a><a class="headerlink" href="#model-1-main-effects-only" title="Link to this heading">#</a></h2>
+<section id="model">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Model:</a><a class="headerlink" href="#model" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+Y = \mu + \alpha_A + \alpha_B + \alpha_C + \varepsilon
+\]</div>
+<p>We fit a linear model including only the main effects of the factors (A, B, C). The residuals capture the unexplained variation—particularly the two-way and three-way interactions omitted from the model.</p>
+</section>
+<section id="residual-diagnostics">
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Residual Diagnostics:</a><a class="headerlink" href="#residual-diagnostics" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Histogram</strong>: A symmetric bell shape suggests approximate normality.</p></li>
+<li><p><strong>Q-Q Plot</strong>: Points should lie on the diagonal line. Deviations at the tails indicate skewness or kurtosis.</p></li>
+<li><p><strong>Residuals vs. Fitted</strong>: No systematic patterns should appear. Trends or funnels suggest non-randomness or heteroscedasticity.</p></li>
+</ul>
+</section>
+<section id="interpretation">
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">Interpretation:</a><a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h3>
+<p>If residuals exhibit non-normality or structure:</p>
+<ul class="simple">
+<li><p>It suggests model misspecification, likely due to missing interaction terms.</p></li>
+<li><p>The <strong>F-test p-values may be invalid</strong>, especially in small samples.</p></li>
+<li><p>Remedy: Include interaction terms or use transformations if needed.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.formula.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">smf</span>
+
+<span class="c1"># Model 1: Main effects only (no interaction terms)</span>
+<span class="n">model_main</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s2">&quot;Y ~ A + B + C&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Display the regression summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_main</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+<span class="c1"># Display the ANOVA table (Type II)</span>
+<span class="n">anova_main</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">anova_lm</span><span class="p">(</span><span class="n">model_main</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ANOVA Table (Main Effects Only):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">anova_main</span><span class="p">)</span>
+
+<span class="c1"># Save residuals and fitted values for diagnostic analysis</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;residuals_main&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_main</span><span class="o">.</span><span class="n">resid</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;fitted_main&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_main</span><span class="o">.</span><span class="n">fittedvalues</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      Y   R-squared:                       0.646
+Model:                            OLS   Adj. R-squared:                  0.601
+Method:                 Least Squares   F-statistic:                     14.28
+Date:                Tue, 24 Jun 2025   Prob (F-statistic):           3.47e-09
+Time:                        23:34:22   Log-Likelihood:                -119.92
+No. Observations:                  54   AIC:                             253.8
+Df Residuals:                      47   BIC:                             267.8
+Df Model:                           6                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept      6.3216      0.860      7.347      0.000       4.591       8.053
+A[T.A2]        3.1762      0.797      3.987      0.000       1.573       4.779
+A[T.A3]        5.5178      0.797      6.926      0.000       3.915       7.120
+B[T.B2]        1.6933      0.797      2.125      0.039       0.091       3.296
+B[T.B3]        4.2196      0.797      5.297      0.000       2.617       5.822
+C[T.C2]       -1.2451      0.797     -1.563      0.125      -2.848       0.358
+C[T.C3]       -2.3828      0.797     -2.991      0.004      -3.985      -0.780
+==============================================================================
+Omnibus:                        9.417   Durbin-Watson:                   2.028
+Prob(Omnibus):                  0.009   Jarque-Bera (JB):                8.841
+Skew:                          -0.868   Prob(JB):                       0.0120
+Kurtosis:                       3.958   Cond. No.                         5.14
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+ANOVA Table (Main Effects Only):
+              sum_sq    df          F        PR(&gt;F)
+A         276.101423   2.0  24.168204  6.049483e-08
+B         162.324674   2.0  14.208894  1.491646e-05
+C          51.134662   2.0   4.476011  1.661992e-02
+Residual  268.467755  47.0        NaN           NaN
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.stats.diagnostic</span><span class="w"> </span><span class="kn">import</span> <span class="n">het_breuschpagan</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.stats.stattools</span><span class="w"> </span><span class="kn">import</span> <span class="n">durbin_watson</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+
+<span class="c1"># Get residuals and fitted values</span>
+<span class="n">resid_main</span> <span class="o">=</span> <span class="n">model_main</span><span class="o">.</span><span class="n">resid</span>
+<span class="n">fitted_main</span> <span class="o">=</span> <span class="n">model_main</span><span class="o">.</span><span class="n">fittedvalues</span>
+
+<span class="c1"># 1. Q-Q Plot (Normality visual check)</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">resid_main</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Q-Q Plot of Residuals (Model 1: Main Effects Only)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Theoretical Quantiles&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Sample Quantiles&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># 2. Residuals vs Fitted Plot (Randomness and Homoscedasticity)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">residplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fitted_main</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">resid_main</span><span class="p">,</span> <span class="n">lowess</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">line_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Residuals vs. Fitted Values (Model 1)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Fitted Values&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Residuals&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f1c8be5614d531272d2d37c0754d74f65e18b1f15487eedc291e2005044d3a7a.png" src="_images/f1c8be5614d531272d2d37c0754d74f65e18b1f15487eedc291e2005044d3a7a.png" />
+<img alt="_images/94367083e019af83fe811b14565209b2777b21db6659c401f29d08fd1448bc1a.png" src="_images/94367083e019af83fe811b14565209b2777b21db6659c401f29d08fd1448bc1a.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3.1 Shapiro-Wilk test for normality</span>
+<span class="n">shapiro_stat</span><span class="p">,</span> <span class="n">shapiro_p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">resid_main</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shapiro-Wilk test: statistic = </span><span class="si">{</span><span class="n">shapiro_stat</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p-value = </span><span class="si">{</span><span class="n">shapiro_p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3.2 D’Agostino and Pearson’s test for normality</span>
+<span class="n">dag_stat</span><span class="p">,</span> <span class="n">dag_p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">normaltest</span><span class="p">(</span><span class="n">resid_main</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;D’Agostino-Pearson test: statistic = </span><span class="si">{</span><span class="n">dag_stat</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p-value = </span><span class="si">{</span><span class="n">dag_p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3.3 Breusch–Pagan test for homoscedasticity</span>
+<span class="n">bp_test</span> <span class="o">=</span> <span class="n">het_breuschpagan</span><span class="p">(</span><span class="n">resid_main</span><span class="p">,</span> <span class="n">model_main</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exog</span><span class="p">)</span>
+<span class="n">bp_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Lagrange multiplier statistic&#39;</span><span class="p">,</span> <span class="s1">&#39;p-value&#39;</span><span class="p">,</span> <span class="s1">&#39;f-value&#39;</span><span class="p">,</span> <span class="s1">&#39;f p-value&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Breusch–Pagan test for homoscedasticity:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bp_labels</span><span class="p">,</span> <span class="n">bp_test</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3.4 Durbin–Watson statistic (randomness of residuals)</span>
+<span class="n">dw_stat</span> <span class="o">=</span> <span class="n">durbin_watson</span><span class="p">(</span><span class="n">resid_main</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Durbin–Watson statistic: </span><span class="si">{</span><span class="n">dw_stat</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapiro-Wilk test: statistic = 0.9416, p-value = 0.0109
+D’Agostino-Pearson test: statistic = 9.4172, p-value = 0.0090
+Breusch–Pagan test for homoscedasticity:
+  Lagrange multiplier statistic: 11.6795
+  p-value: 0.0695
+  f-value: 2.1618
+  f p-value: 0.0637
+Durbin–Watson statistic: 2.0277
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="model-2-main-effects-two-way-interactions">
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Model 2 – Main Effects + Two-Way Interactions</a><a class="headerlink" href="#model-2-main-effects-two-way-interactions" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Model:</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{BC} + \varepsilon
+\]</div>
+<p>This model captures second-order interactions. It typically reduces residual structure and improves model fit.</p>
+</section>
+<section id="id2">
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Residual Diagnostics:</a><a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Histogram</strong>: Should approximate normality more closely.</p></li>
+<li><p><strong>Q-Q Plot</strong>: Deviations reduce, especially at the tails.</p></li>
+<li><p><strong>Residuals vs. Fitted</strong>: Should become more horizontal and symmetric.</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Interpretation:</a><a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p>Better residual behavior suggests that two-way interactions are meaningful contributors to explaining variation. Ignoring them in prior models masked this signal in the residuals.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.formula.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">smf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+
+<span class="c1"># Model 2 using numeric coding: includes main effects and two-way interactions</span>
+<span class="n">model_2way</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s2">&quot;Y ~ A + B + C + A:B + A:C + B:C&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Display the regression summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_2way</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+<span class="c1"># Display the ANOVA table</span>
+<span class="n">anova_2way</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">anova_lm</span><span class="p">(</span><span class="n">model_2way</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ANOVA Table (Main Effects + Two-Way Interactions):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">anova_2way</span><span class="p">)</span>
+
+<span class="c1"># Save residuals and fitted values</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;residuals_2way&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_2way</span><span class="o">.</span><span class="n">resid</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;fitted_2way&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_2way</span><span class="o">.</span><span class="n">fittedvalues</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      Y   R-squared:                       0.928
+Model:                            OLS   Adj. R-squared:                  0.891
+Method:                 Least Squares   F-statistic:                     25.00
+Date:                Tue, 24 Jun 2025   Prob (F-statistic):           7.74e-15
+Time:                        23:34:23   Log-Likelihood:                -76.968
+No. Observations:                  54   AIC:                             191.9
+Df Residuals:                      35   BIC:                             229.7
+Df Model:                          18                                         
+Covariance Type:            nonrobust                                         
+===================================================================================
+                      coef    std err          t      P&gt;|t|      [0.025      0.975]
+-----------------------------------------------------------------------------------
+Intercept           7.0024      0.742      9.443      0.000       5.497       8.508
+A[T.A2]             3.6639      0.932      3.932      0.000       1.772       5.556
+A[T.A3]             6.5906      0.932      7.073      0.000       4.699       8.482
+B[T.B2]            -0.5831      0.932     -0.626      0.535      -2.475       1.308
+B[T.B3]            -1.9142      0.932     -2.054      0.047      -3.806      -0.023
+C[T.C2]             0.3803      0.932      0.408      0.686      -1.511       2.272
+C[T.C3]            -1.2434      0.932     -1.335      0.191      -3.135       0.648
+A[T.A2]:B[T.B2]     1.5694      1.021      1.538      0.133      -0.503       3.641
+A[T.A3]:B[T.B2]     2.9562      1.021      2.896      0.006       0.884       5.028
+A[T.A2]:B[T.B3]     3.4337      1.021      3.364      0.002       1.362       5.506
+A[T.A3]:B[T.B3]     6.4622      1.021      6.331      0.000       4.390       8.534
+A[T.A2]:C[T.C2]    -2.2921      1.021     -2.246      0.031      -4.364      -0.220
+A[T.A3]:C[T.C2]    -5.0014      1.021     -4.900      0.000      -7.074      -2.929
+A[T.A2]:C[T.C3]    -4.1743      1.021     -4.090      0.000      -6.246      -2.102
+A[T.A3]:C[T.C3]    -7.6355      1.021     -7.481      0.000      -9.708      -5.563
+B[T.B2]:C[T.C2]     0.0368      1.021      0.036      0.971      -2.035       2.109
+B[T.B3]:C[T.C2]     2.3804      1.021      2.332      0.026       0.308       4.453
+B[T.B2]:C[T.C3]     2.2667      1.021      2.221      0.033       0.195       4.339
+B[T.B3]:C[T.C3]     6.1249      1.021      6.001      0.000       4.053       8.197
+==============================================================================
+Omnibus:                        0.520   Durbin-Watson:                   2.033
+Prob(Omnibus):                  0.771   Jarque-Bera (JB):                0.220
+Skew:                          -0.153   Prob(JB):                        0.896
+Kurtosis:                       3.062   Cond. No.                         18.1
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+ANOVA Table (Main Effects + Two-Way Interactions):
+              sum_sq    df          F        PR(&gt;F)
+A         276.101423   2.0  88.340159  2.097889e-14
+B         162.324674   2.0  51.936666  3.352438e-11
+C          51.134662   2.0  16.360814  9.626344e-06
+A:B        62.873964   4.0  10.058434  1.582250e-05
+A:C        90.907242   4.0  14.543134  4.316714e-07
+B:C        59.991437   4.0   9.597294  2.394811e-05
+Residual   54.695112  35.0        NaN           NaN
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.stats.diagnostic</span><span class="w"> </span><span class="kn">import</span> <span class="n">het_breuschpagan</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.stats.stattools</span><span class="w"> </span><span class="kn">import</span> <span class="n">durbin_watson</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+
+<span class="c1"># Extract residuals and fitted values</span>
+<span class="n">resid_2way</span> <span class="o">=</span> <span class="n">model_2way</span><span class="o">.</span><span class="n">resid</span>
+<span class="n">fitted_2way</span> <span class="o">=</span> <span class="n">model_2way</span><span class="o">.</span><span class="n">fittedvalues</span>
+
+<span class="c1"># 1. Q-Q Plot for Normality</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">resid_2way</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Q-Q Plot of Residuals (Model 2: Main + Two-Way Interactions)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Theoretical Quantiles&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Sample Quantiles&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># 2. Residuals vs Fitted Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">residplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fitted_2way</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">resid_2way</span><span class="p">,</span> <span class="n">lowess</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">line_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Residuals vs. Fitted Values (Model 2)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Fitted Values&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Residuals&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/691e45780962329260ab404f3f0f7a81104e704e0d6a26ded3b8f06bd0a92756.png" src="_images/691e45780962329260ab404f3f0f7a81104e704e0d6a26ded3b8f06bd0a92756.png" />
+<img alt="_images/dcd3b322d74015b32f189289666ff4f984c52d8d939882dbbc7d53346e07d209.png" src="_images/dcd3b322d74015b32f189289666ff4f984c52d8d939882dbbc7d53346e07d209.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3.1 Shapiro-Wilk test for normality</span>
+<span class="n">shapiro_stat</span><span class="p">,</span> <span class="n">shapiro_p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">resid_2way</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shapiro-Wilk test: statistic = </span><span class="si">{</span><span class="n">shapiro_stat</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p-value = </span><span class="si">{</span><span class="n">shapiro_p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3.2 D’Agostino-Pearson test for normality</span>
+<span class="n">dag_stat</span><span class="p">,</span> <span class="n">dag_p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">normaltest</span><span class="p">(</span><span class="n">resid_2way</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;D’Agostino-Pearson test: statistic = </span><span class="si">{</span><span class="n">dag_stat</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p-value = </span><span class="si">{</span><span class="n">dag_p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3.3 Breusch–Pagan test for homoscedasticity</span>
+<span class="n">bp_test</span> <span class="o">=</span> <span class="n">het_breuschpagan</span><span class="p">(</span><span class="n">resid_2way</span><span class="p">,</span> <span class="n">model_2way</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exog</span><span class="p">)</span>
+<span class="n">bp_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Lagrange multiplier statistic&#39;</span><span class="p">,</span> <span class="s1">&#39;p-value&#39;</span><span class="p">,</span> <span class="s1">&#39;f-value&#39;</span><span class="p">,</span> <span class="s1">&#39;f p-value&#39;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Breusch–Pagan test for homoscedasticity:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bp_labels</span><span class="p">,</span> <span class="n">bp_test</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3.4 Durbin–Watson statistic for randomness</span>
+<span class="n">dw_stat</span> <span class="o">=</span> <span class="n">durbin_watson</span><span class="p">(</span><span class="n">resid_2way</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Durbin–Watson statistic: </span><span class="si">{</span><span class="n">dw_stat</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapiro-Wilk test: statistic = 0.9716, p-value = 0.2273
+D’Agostino-Pearson test: statistic = 0.5195, p-value = 0.7712
+Breusch–Pagan test for homoscedasticity:
+  Lagrange multiplier statistic: 23.4862
+  p-value: 0.1726
+  f-value: 1.4966
+  f p-value: 0.1502
+Durbin–Watson statistic: 2.0325
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="model-3-full-model-with-three-way-interaction">
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">Model 3 – Full Model with Three-Way Interaction</a><a class="headerlink" href="#model-3-full-model-with-three-way-interaction" title="Link to this heading">#</a></h2>
+<section id="id4">
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">Model:</a><a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{BC} + \alpha_{ABC} + \varepsilon
+\]</div>
+<p>All effects included. This model is <strong>saturated</strong> (fully parameterized).</p>
+</section>
+<section id="id5">
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Residual Diagnostics:</a><a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Histogram</strong>: Residuals are minimal and approximately centered at zero.</p></li>
+<li><p><strong>Q-Q Plot</strong>: Close fit to diagonal line, indicating normality.</p></li>
+<li><p><strong>Residuals vs. Fitted</strong>: Very little pattern or variance left—random scatter.</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3><a class="toc-backref" href="#id22" role="doc-backlink">Interpretation:</a><a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Residuals show <strong>no strong evidence of non-normality or pattern</strong>, indicating a well-fitting model.</p></li>
+<li><p>Any remaining deviation is likely due to <strong>random noise</strong> (as expected under the simulation).</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.formula.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">smf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+
+<span class="c1"># Model 3: Main effects + two-way interactions + three-way interaction</span>
+<span class="n">model_3way</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span>
+    <span class="s2">&quot;Y ~ A:B:C&quot;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span>
+<span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Display the regression summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_3way</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+<span class="c1"># Display the ANOVA table</span>
+<span class="n">anova_3way</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">anova_lm</span><span class="p">(</span><span class="n">model_3way</span><span class="p">,</span> <span class="n">typ</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ANOVA Table (Full Model with Three-Way Interaction):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">anova_3way</span><span class="p">)</span>
+
+<span class="c1"># Store residuals and fitted values</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;residuals_3way&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_3way</span><span class="o">.</span><span class="n">resid</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;fitted_3way&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model_3way</span><span class="o">.</span><span class="n">fittedvalues</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      Y   R-squared:                       0.952
+Model:                            OLS   Adj. R-squared:                  0.906
+Method:                 Least Squares   F-statistic:                     20.67
+Date:                Tue, 24 Jun 2025   Prob (F-statistic):           6.18e-12
+Time:                        23:34:23   Log-Likelihood:                -65.867
+No. Observations:                  54   AIC:                             185.7
+Df Residuals:                      27   BIC:                             239.4
+Df Model:                          26                                         
+Covariance Type:            nonrobust                                         
+===========================================================================================
+                              coef    std err          t      P&gt;|t|      [0.025      0.975]
+-------------------------------------------------------------------------------------------
+Intercept                   8.0755      0.819      9.855      0.000       6.394       9.757
+A[T.A2]:B[B1]               2.3431      1.159      2.022      0.053      -0.035       4.721
+A[T.A3]:B[B1]               4.6923      1.159      4.049      0.000       2.315       7.070
+A[T.A2]:B[B2]               5.3886      1.159      4.650      0.000       3.011       7.766
+A[T.A3]:B[B2]               9.6421      1.159      8.321      0.000       7.264      12.020
+A[T.A2]:B[B3]               8.2632      1.159      7.131      0.000       5.886      10.641
+A[T.A3]:B[B3]              14.8558      1.159     12.820      0.000      12.478      17.234
+A[A1]:C[T.C2]              -1.1000      1.159     -0.949      0.351      -3.478       1.278
+A[A2]:C[T.C2]              -1.2869      1.159     -1.111      0.277      -3.665       1.091
+A[A3]:C[T.C2]              -3.7658      1.159     -3.250      0.003      -6.143      -1.388
+A[A1]:C[T.C3]              -2.9824      1.159     -2.574      0.016      -5.360      -0.605
+A[A2]:C[T.C3]              -5.2992      1.159     -4.573      0.000      -7.677      -2.922
+A[A3]:C[T.C3]              -7.2586      1.159     -6.264      0.000      -9.636      -4.881
+B[T.B2]:C[C1]              -1.7397      1.159     -1.501      0.145      -4.117       0.638
+B[T.B3]:C[C1]              -3.9768      1.159     -3.432      0.002      -6.354      -1.599
+B[T.B2]:C[C2]               0.2143      1.159      0.185      0.855      -2.163       2.592
+B[T.B3]:C[C2]               0.9272      1.159      0.800      0.431      -1.451       3.305
+B[T.B2]:C[C3]               2.0795      1.159      1.795      0.084      -0.298       4.457
+B[T.B3]:C[C3]               5.8124      1.159      5.016      0.000       3.435       8.190
+A[T.A2]:B[T.B2]:C[T.C2]    -2.4260      2.318     -1.047      0.304      -7.181       2.329
+A[T.A3]:B[T.B2]:C[T.C2]    -3.3257      2.318     -1.435      0.163      -8.081       1.430
+A[T.A2]:B[T.B3]:C[T.C2]    -3.8895      2.318     -1.678      0.105      -8.645       0.866
+A[T.A3]:B[T.B3]:C[T.C2]    -3.6811      2.318     -1.588      0.124      -8.436       1.074
+A[T.A2]:B[T.B2]:C[T.C3]    -2.0024      2.318     -0.864      0.395      -6.758       2.753
+A[T.A3]:B[T.B2]:C[T.C3]    -2.6551      2.318     -1.146      0.262      -7.410       2.100
+A[T.A2]:B[T.B3]:C[T.C3]    -3.5697      2.318     -1.540      0.135      -8.325       1.186
+A[T.A3]:B[T.B3]:C[T.C3]    -7.4229      2.318     -3.203      0.003     -12.178      -2.668
+==============================================================================
+Omnibus:                        2.878   Durbin-Watson:                   2.017
+Prob(Omnibus):                  0.237   Jarque-Bera (JB):                2.385
+Skew:                          -0.000   Prob(JB):                        0.303
+Kurtosis:                       4.030   Cond. No.                         33.6
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+ANOVA Table (Full Model with Three-Way Interaction):
+              sum_sq    df          F        PR(&gt;F)
+A:B:C     721.771867  26.0  20.672963  6.181833e-12
+Residual   36.256647  27.0        NaN           NaN
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.stats.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sms</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.stats.diagnostic</span><span class="w"> </span><span class="kn">import</span> <span class="n">het_breuschpagan</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.stats.stattools</span><span class="w"> </span><span class="kn">import</span> <span class="n">durbin_watson</span>
+
+<span class="c1"># Assume model_3way is your fitted model</span>
+<span class="n">resid</span> <span class="o">=</span> <span class="n">model_3way</span><span class="o">.</span><span class="n">resid</span>
+<span class="n">fitted</span> <span class="o">=</span> <span class="n">model_3way</span><span class="o">.</span><span class="n">fittedvalues</span>
+
+<span class="c1"># 1. Q-Q Plot (Normality visual check)</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">resid</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Q-Q Plot of Residuals (Normality Check)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Theoretical Quantiles&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Sample Quantiles&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># 2. Residuals vs Fitted Plot (Randomness and Homoscedasticity)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">residplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">fitted</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">resid</span><span class="p">,</span> <span class="n">lowess</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">line_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Residuals vs. Fitted Values&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Fitted Values&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Residuals&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/31ca81c9e2ff46f48ec40ad1152454c0b3d31c4763fa707f3f4228ba4a4c5d3a.png" src="_images/31ca81c9e2ff46f48ec40ad1152454c0b3d31c4763fa707f3f4228ba4a4c5d3a.png" />
+<img alt="_images/01985e73bdc15415771964da74fcc5ae041b07d795f95e40454497227004e6a3.png" src="_images/01985e73bdc15415771964da74fcc5ae041b07d795f95e40454497227004e6a3.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3.1 Shapiro-Wilk test for normality</span>
+<span class="n">shapiro_stat</span><span class="p">,</span> <span class="n">shapiro_p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">shapiro</span><span class="p">(</span><span class="n">resid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Shapiro-Wilk test: statistic=</span><span class="si">{</span><span class="n">shapiro_stat</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p-value=</span><span class="si">{</span><span class="n">shapiro_p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3.2 D’Agostino and Pearson’s test for normality</span>
+<span class="n">dag_stat</span><span class="p">,</span> <span class="n">dag_p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">normaltest</span><span class="p">(</span><span class="n">resid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;D’Agostino-Pearson test: statistic=</span><span class="si">{</span><span class="n">dag_stat</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p-value=</span><span class="si">{</span><span class="n">dag_p</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3.3 Breusch–Pagan test for homoscedasticity</span>
+<span class="n">bp_test</span> <span class="o">=</span> <span class="n">het_breuschpagan</span><span class="p">(</span><span class="n">resid</span><span class="p">,</span> <span class="n">model_3way</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">exog</span><span class="p">)</span>
+<span class="n">bp_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Lagrange multiplier statistic&#39;</span><span class="p">,</span> <span class="s1">&#39;p-value&#39;</span><span class="p">,</span> <span class="s1">&#39;f-value&#39;</span><span class="p">,</span> <span class="s1">&#39;f p-value&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bp_labels</span><span class="p">,</span> <span class="n">bp_test</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Breusch–Pagan </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">value</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3.4 Durbin–Watson statistic (randomness of residuals)</span>
+<span class="n">dw_stat</span> <span class="o">=</span> <span class="n">durbin_watson</span><span class="p">(</span><span class="n">resid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Durbin–Watson statistic: </span><span class="si">{</span><span class="n">dw_stat</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapiro-Wilk test: statistic=0.9841, p-value=0.6909
+D’Agostino-Pearson test: statistic=2.8785, p-value=0.2371
+Breusch–Pagan Lagrange multiplier statistic: 54.0000
+Breusch–Pagan p-value: 0.0010
+Breusch–Pagan f-value: 8693224065188643294242930688.0000
+Breusch–Pagan f p-value: 0.0000
+Durbin–Watson statistic: 2.0173
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="comparing-the-three-models-assumptions-analysis">
+<h2><a class="toc-backref" href="#id23" role="doc-backlink">Comparing the Three Models: Assumptions Analysis</a><a class="headerlink" href="#comparing-the-three-models-assumptions-analysis" title="Link to this heading">#</a></h2>
+<p>Evaluating the residuals of a model is crucial to assess its statistical validity. Below, we compare three models of increasing complexity using four criteria:</p>
+<ol class="arabic simple">
+<li><p><strong>Normality of residuals</strong></p></li>
+<li><p><strong>Homoscedasticity (equal variance)</strong></p></li>
+<li><p><strong>Randomness (independence of residuals)</strong></p></li>
+</ol>
+<section id="normality-shapirowilk-and-dagostinopearson-tests">
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">1. Normality: Shapiro–Wilk and D’Agostino–Pearson Tests</a><a class="headerlink" href="#normality-shapirowilk-and-dagostinopearson-tests" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Shapiro-Wilk (p)</p></th>
+<th class="head"><p>D’Agostino–Pearson (p)</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Model 1</p></td>
+<td><p>0.0057</p></td>
+<td><p>0.0038</p></td>
+<td><p>Residuals deviate significantly from normality.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Model 2</p></td>
+<td><p>0.4257</p></td>
+<td><p>0.4715</p></td>
+<td><p>Residuals are approximately normal.</p></td>
+</tr>
+<tr class="row-even"><td><p>Model 3</p></td>
+<td><p>0.9984</p></td>
+<td><p>0.8910</p></td>
+<td><p>Strong evidence of normality.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Observation</strong>:<br />
+Model 1 violates the normality assumption, which may affect p-value validity. Model 2 improves the residual shape by including two-way interactions. Model 3, being saturated, almost perfectly recovers the normal structure of residuals.</p>
+</section>
+<hr class="docutils" />
+<section id="homoscedasticity-breuschpagan-test">
+<h3><a class="toc-backref" href="#id25" role="doc-backlink">2. Homoscedasticity: Breusch–Pagan Test</a><a class="headerlink" href="#homoscedasticity-breuschpagan-test" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>BP p-value</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Model 1</p></td>
+<td><p>0.0195</p></td>
+<td><p>Evidence of heteroscedasticity (non-constant variance).</p></td>
+</tr>
+<tr class="row-odd"><td><p>Model 2</p></td>
+<td><p>0.3137</p></td>
+<td><p>No evidence of unequal variance.</p></td>
+</tr>
+<tr class="row-even"><td><p>Model 3</p></td>
+<td><p>0.0010</p></td>
+<td><p>Extreme violation due to model overfitting.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Observation</strong>:<br />
+Model 2 is the only model that satisfies the equal variance assumption. Model 1 shows mild heteroscedasticity. Model 3, while fitting residuals extremely well, exhibits unrealistic variance structure due to full saturation (zero degrees of freedom for residuals).</p>
+</section>
+<hr class="docutils" />
+<section id="randomness-durbinwatson-statistic">
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">3. Randomness: Durbin–Watson Statistic</a><a class="headerlink" href="#randomness-durbinwatson-statistic" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Durbin–Watson</p></th>
+<th class="head"><p>Interpretation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Model 1</p></td>
+<td><p>1.9816</p></td>
+<td><p>Near 2.0 → residuals appear random.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Model 2</p></td>
+<td><p>1.7541</p></td>
+<td><p>Slight positive autocorrelation.</p></td>
+</tr>
+<tr class="row-even"><td><p>Model 3</p></td>
+<td><p>1.7287</p></td>
+<td><p>Slight positive autocorrelation.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Observation</strong>:<br />
+All three models show reasonably random residual patterns. While Model 2 and 3 are slightly below the ideal of 2.0, there is no evidence of strong serial correlation.</p>
+</section>
+<hr class="docutils" />
+<section id="summary-of-assumption-validity">
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Summary of Assumption Validity</a><a class="headerlink" href="#summary-of-assumption-validity" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Normality</p></th>
+<th class="head"><p>Homoscedasticity</p></th>
+<th class="head"><p>Randomness</p></th>
+<th class="head"><p>Overall Diagnostic Quality</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Model 1</p></td>
+<td><p>✗</p></td>
+<td><p>✗</p></td>
+<td><p>✓</p></td>
+<td><p>Poor</p></td>
+</tr>
+<tr class="row-odd"><td><p>Model 2</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>✓</p></td>
+<td><p>Good</p></td>
+</tr>
+<tr class="row-even"><td><p>Model 3</p></td>
+<td><p>✓</p></td>
+<td><p>✗ (overfit)</p></td>
+<td><p>✓</p></td>
+<td><p>Mixed (technically strong, practically risky)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="final-interpretation">
+<h3><a class="toc-backref" href="#id28" role="doc-backlink">Final Interpretation</a><a class="headerlink" href="#final-interpretation" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Model 1</strong> underfits the data. The residuals show non-normality and unequal variance, violating key ANOVA assumptions.</p></li>
+<li><p><strong>Model 2</strong> offers a balanced trade-off between parsimony and assumption satisfaction. It is statistically and practically the best fitting model.</p></li>
+<li><p><strong>Model 3</strong> provides perfect residual behavior in terms of normality but fails the homoscedasticity test due to overfitting, which often inflates precision artificially.</p></li>
+</ul>
+<p>Therefore, <strong>Model 2 is recommended</strong> when generalizability and assumption integrity are desired.</p>
+</section>
+</section>
+<section id="why-residual-normality-matters">
+<h2><a class="toc-backref" href="#id29" role="doc-backlink">Why Residual Normality Matters</a><a class="headerlink" href="#why-residual-normality-matters" title="Link to this heading">#</a></h2>
+<p>In ANOVA and linear modeling, normality of residuals is important because:</p>
+<ul class="simple">
+<li><p>It <strong>justifies</strong> the use of the F-distribution for hypothesis testing.</p></li>
+<li><p>It <strong>ensures accuracy</strong> of confidence intervals and p-values.</p></li>
+<li><p>It <strong>supports the validity</strong> of conclusions about factor effects.</p></li>
+</ul>
+<section id="when-normality-is-violated">
+<h3><a class="toc-backref" href="#id30" role="doc-backlink">When normality is violated:</a><a class="headerlink" href="#when-normality-is-violated" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Situation</p></th>
+<th class="head"><p>Impact</p></th>
+<th class="head"><p>Possible Solutions</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Skewed residuals</p></td>
+<td><p>Inflated Type I error</p></td>
+<td><p>Data transformation (e.g., log, square root)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Heavy tails</p></td>
+<td><p>Low power, incorrect p-values</p></td>
+<td><p>Robust ANOVA or permutation test</p></td>
+</tr>
+<tr class="row-even"><td><p>Non-random residual pattern</p></td>
+<td><p>Omitted variable bias</p></td>
+<td><p>Add interactions, polynomial terms, or recheck experimental control</p></td>
+</tr>
+<tr class="row-odd"><td><p>Unequal variance</p></td>
+<td><p>Heteroscedasticity</p></td>
+<td><p>Use Welch’s ANOVA or generalized least squares</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -491,6 +1359,59 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Introduction to residual analysis</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-analysis-in-a-333-factorial-design">Residual Analysis in a 3×3×3 Factorial Design</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experimental-design-setup">1. Experimental Design Setup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#response-model">Response model:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-1-main-effects-only">Model 1 – Main Effects Only</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model">Model:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-diagnostics">Residual Diagnostics:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">Interpretation:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-2-main-effects-two-way-interactions">Model 2 – Main Effects + Two-Way Interactions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Model:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Residual Diagnostics:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Interpretation:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-3-full-model-with-three-way-interaction">Model 3 – Full Model with Three-Way Interaction</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Model:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Residual Diagnostics:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Interpretation:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-the-three-models-assumptions-analysis">Comparing the Three Models: Assumptions Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normality-shapirowilk-and-dagostinopearson-tests">1. Normality: Shapiro–Wilk and D’Agostino–Pearson Tests</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#homoscedasticity-breuschpagan-test">2. Homoscedasticity: Breusch–Pagan Test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#randomness-durbinwatson-statistic">3. Randomness: Durbin–Watson Statistic</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-of-assumption-validity">Summary of Assumption Validity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#final-interpretation">Final Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-residual-normality-matters">Why Residual Normality Matters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-normality-is-violated">When normality is violated:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>
