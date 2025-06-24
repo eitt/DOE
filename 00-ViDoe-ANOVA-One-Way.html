@@ -183,7 +183,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Using ViDoE to Understand One-Way ANOVA</a></li>
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Anova One-way using ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Exploring Two-Level Factorial Designs with ViDoE</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
 <ul class="nav bd-sidenav">
@@ -414,12 +414,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">2.1. Educational Utilities in ViDoE</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-1-boxplot-of-y-across-factor-levels">2.2.1. 📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-2-regression-equation-visualization">2.2.2. 📈 <strong>Figure 2.2 - Regression Equation Visualization</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-3-sum-of-squares-decomposition">2.2.3. 🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">2.3. Suggested Classroom Activity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">2.4. Interpretation Support</a></li>
 </ul>
@@ -452,32 +447,30 @@ document.write(`
 </section>
 <section id="key-figures">
 <h2><span class="section-number">2.2. </span>Key Figures<a class="headerlink" href="#key-figures" title="Link to this heading">#</a></h2>
-<section id="figure-2-1-boxplot-of-y-across-factor-levels">
-<h3><span class="section-number">2.2.1. </span>📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong><a class="headerlink" href="#figure-2-1-boxplot-of-y-across-factor-levels" title="Link to this heading">#</a></h3>
-<p><img alt="Fig2.1 - Boxplot of Y across Levels" src="workspaces/DOE/e-book/book/Fig2_1_Boxplot_Y_by_Level.png" /></p>
-<ul class="simple">
-<li><p><strong>Description</strong>: This figure shows the distribution of the response variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> for each factor level. It helps visualize differences in central tendency and variation among groups.</p></li>
-</ul>
-</section>
-<section id="figure-2-2-regression-equation-visualization">
-<h3><span class="section-number">2.2.2. </span>📈 <strong>Figure 2.2 - Regression Equation Visualization</strong><a class="headerlink" href="#figure-2-2-regression-equation-visualization" title="Link to this heading">#</a></h3>
-<p><img alt="Fig2.2 - Regression Equation" src="workspaces/DOE/e-book/book/Fig2_2_Regression_Equation.png" /></p>
-<ul class="simple">
-<li><p><strong>Description</strong>: Displays the linear regression model derived from the data using indicator variables. This aids in understanding how treatment effects modify the outcome.</p></li>
-</ul>
-</section>
-<section id="figure-2-3-sum-of-squares-decomposition">
-<h3><span class="section-number">2.2.3. </span>🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong><a class="headerlink" href="#figure-2-3-sum-of-squares-decomposition" title="Link to this heading">#</a></h3>
-<p><img alt="Fig2.3 - Sum of Squares Pie" src="workspaces/DOE/e-book/book/Fig2_3_Sum_of_Squares_Pie.png" /></p>
-<ul class="simple">
-<li><p><strong>Description</strong>: Two pie charts showing:</p>
+<figure class="align-default" id="fig2-1">
+<img alt="Boxplot of Y across Factor Levels" src="_images/Fig2_1_Boxplot_Y_by_Level.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 2.1 </span><span class="caption-text">This figure shows the distribution of the response variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> for each factor level. It helps visualize differences in central tendency and variation among groups.</span><a class="headerlink" href="#fig2-1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig2-2">
+<img alt="Regression Equation Visualization" src="_images/Fig2_2_Regression_Equation.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 2.2 </span><span class="caption-text">Displays the linear regression model derived from the data using indicator variables. This aids in understanding how treatment effects modify the outcome.</span><a class="headerlink" href="#fig2-2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig2-3">
+<img alt="Sum of Squares Decomposition Pie Charts" src="_images/Fig2_3_Sum_of_Squares_Pie.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 2.3 </span><span class="caption-text">Two pie charts showing:</span><a class="headerlink" href="#fig2-3" title="Link to this image">#</a></p>
+<div class="legend">
 <ol class="arabic simple">
 <li><p>Total Sum of Squares (SST)</p></li>
 <li><p>Partitioning of SST into Treatment (SSTr) and Error (SSE)</p></li>
 </ol>
-</li>
-</ul>
-</section>
+</div>
+</figcaption>
+</figure>
 </section>
 <section id="suggested-classroom-activity">
 <h2><span class="section-number">2.3. </span>Suggested Classroom Activity<a class="headerlink" href="#suggested-classroom-activity" title="Link to this heading">#</a></h2>
@@ -568,12 +561,7 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">2.1. Educational Utilities in ViDoE</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-1-boxplot-of-y-across-factor-levels">2.2.1. 📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-2-regression-equation-visualization">2.2.2. 📈 <strong>Figure 2.2 - Regression Equation Visualization</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-3-sum-of-squares-decomposition">2.2.3. 🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">2.3. Suggested Classroom Activity</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">2.4. Interpretation Support</a></li>
 </ul>

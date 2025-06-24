@@ -16,24 +16,34 @@ The ViDoE platform allows learners to:
 - Visualize the results with a **boxplot**, an **ANOVA table**, and a **linear regression summary**.
 - See a clear representation of the **regression equation** and the **components of variation** using pie charts.
 
+
 ## Key Figures
 
-### 📊 **Figure 2.1 - Boxplot of Y across Factor Levels**
-![Fig2.1 - Boxplot of Y across Levels](/workspaces/DOE/e-book/book/Fig2_1_Boxplot_Y_by_Level.png)
+```{figure} images/Fig2_1_Boxplot_Y_by_Level.png
+---
+name: Fig2.1
+alt: Boxplot of Y across Factor Levels
+---
+This figure shows the distribution of the response variable `Y` for each factor level. It helps visualize differences in central tendency and variation among groups.
+````
 
-- **Description**: This figure shows the distribution of the response variable `Y` for each factor level. It helps visualize differences in central tendency and variation among groups.
+```{figure} images/Fig2_2_Regression_Equation.png
+---
+name: Fig2.2
+alt: Regression Equation Visualization
+---
+Displays the linear regression model derived from the data using indicator variables. This aids in understanding how treatment effects modify the outcome.
+```
 
-### 📈 **Figure 2.2 - Regression Equation Visualization**
-![Fig2.2 - Regression Equation](/workspaces/DOE/e-book/book/Fig2_2_Regression_Equation.png)
-
-- **Description**: Displays the linear regression model derived from the data using indicator variables. This aids in understanding how treatment effects modify the outcome.
-
-### 🧮 **Figure 2.3 - Sum of Squares Decomposition**
-![Fig2.3 - Sum of Squares Pie](/workspaces/DOE/e-book/book/Fig2_3_Sum_of_Squares_Pie.png)
-
-- **Description**: Two pie charts showing:
-  1. Total Sum of Squares (SST)
-  2. Partitioning of SST into Treatment (SSTr) and Error (SSE)
+```{figure} images/Fig2_3_Sum_of_Squares_Pie.png
+---
+name: Fig2.3
+alt: Sum of Squares Decomposition Pie Charts
+---
+Two pie charts showing:
+1. Total Sum of Squares (SST)  
+2. Partitioning of SST into Treatment (SSTr) and Error (SSE)
+```
 
 ## Suggested Classroom Activity
 
@@ -50,8 +60,8 @@ Students can follow these steps directly within the ViDoE app:
 
 The module provides both **statistical tables** and **visual guidance** to support interpretation:
 
-- The **ANOVA table** displays degrees of freedom, sum of squares, F-statistic, and p-value.
-- The **regression summary** (OLS model) shows estimates and confidence intervals.
-- The **LaTeX-style equation** reinforces symbolic thinking.
-- The **boxplot and pie charts** simplify abstract variance decomposition.
+* The **ANOVA table** displays degrees of freedom, sum of squares, F-statistic, and p-value.
+* The **regression summary** (OLS model) shows estimates and confidence intervals.
+* The **LaTeX-style equation** reinforces symbolic thinking.
+* The **boxplot and pie charts** simplify abstract variance decomposition.
 
