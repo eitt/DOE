@@ -7,6 +7,8 @@
 # 4. python3 -m ghp_import -n -p -f e-book/book/_build/html
 # 5. export PATH="$HOME/.local/bin:$PATH"
 
+# export PATH=$PATH:/home/codespace/.local/lib/python3.12/site-packages/ghp-import
+
 
 format: jb-book
 root: intro
@@ -20,7 +22,9 @@ parts:
         title: Using ViDoE to Understand One-Way ANOVA
       - file: 00-ViDoe-Introduction-Factorial.md 
         title: Exploring Two-Level Factorial Designs with ViDoE
+        title: Anova One-way using ViDoe
       
+    - caption: Anova Analysis
       numbered: true
       chapters:
       - file: 01-anova-oneway.md

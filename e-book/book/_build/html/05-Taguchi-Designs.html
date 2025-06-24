@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>8. Taguchi Designs &#8212; ViDoe - Visualizing Design of Experiments</title>
+    <title>11. Taguchi Designs &#8212; ViDoe - Visualizing Design of Experiments</title>
   
   
   
@@ -62,8 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '05-Taguchi-Designs';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="9. Block Designs" href="04-block-designs.html" />
-    <link rel="prev" title="7. Factorial Analysis and Sensibility" href="00-ViDoe-Factorial-Designs.html" />
+    <link rel="next" title="12. Block Designs" href="04-block-designs.html" />
+    <link rel="prev" title="10. Factorial Analysis and Sensibility" href="00-ViDoe-Factorial-Designs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -183,24 +183,30 @@
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">1. Anova One-way Foundations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">2. Explaining the Python Code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">3. ANOVA One-way: An Illustrative example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Anova One-way using ViDoe</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
 
 
 
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">7. Principles of 2^k and Fractional Factorial Designs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">10. Principles of 2^k and Fractional Factorial Designs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">8. Taguchi Methods and Robust Design</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">11. Taguchi Methods and Robust Design</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">9. Block Designs Explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">12. Block Designs Explained</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
 <ul class="nav bd-sidenav">
@@ -409,25 +415,25 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-taguchi-methods">8.1. 1. Introduction to Taguchi Methods</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#philosophy-robust-design-minimizing-variation">8.1.1. Philosophy: Robust Design, Minimizing Variation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-contributions-by-genichi-taguchi">8.1.2. Key Contributions by Genichi Taguchi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-taguchi-methods">11.1. 1. Introduction to Taguchi Methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#philosophy-robust-design-minimizing-variation">11.1.1. Philosophy: Robust Design, Minimizing Variation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-contributions-by-genichi-taguchi">11.1.2. Key Contributions by Genichi Taguchi</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-arrays-oas">8.2. 2. Orthogonal Arrays (OAs)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#concept-and-purpose">8.2.1. Concept and Purpose</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-select-an-appropriate-oa">8.2.2. How to Select an Appropriate OA</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-of-a-simple-oa-structure-l4">8.2.3. Example of a Simple OA Structure (L4)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-arrays-oas">11.2. 2. Orthogonal Arrays (OAs)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#concept-and-purpose">11.2.1. Concept and Purpose</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-select-an-appropriate-oa">11.2.2. How to Select an Appropriate OA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-of-a-simple-oa-structure-l4">11.2.3. Example of a Simple OA Structure (L4)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-to-noise-s-n-ratios">8.3. 3. Signal-to-Noise (S/N) Ratios</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-s-n-ratios-as-performance-metrics">8.3.1. Explanation of S/N Ratios as Performance Metrics</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-types">8.3.2. Common Types</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-they-are-used-to-identify-optimal-factor-levels">8.3.3. How They Are Used to Identify Optimal Factor Levels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-to-noise-s-n-ratios">11.3. 3. Signal-to-Noise (S/N) Ratios</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-s-n-ratios-as-performance-metrics">11.3.1. Explanation of S/N Ratios as Performance Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-types">11.3.2. Common Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-they-are-used-to-identify-optimal-factor-levels">11.3.3. How They Are Used to Identify Optimal Factor Levels</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#steps-in-a-taguchi-experiment">8.4. 4. Steps in a Taguchi Experiment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">8.5. 5. Simple Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#steps-in-a-taguchi-experiment">11.4. 4. Steps in a Taguchi Experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">11.5. 5. Simple Example</a></li>
 </ul>
             </nav>
         </div>
@@ -441,7 +447,7 @@ document.write(`
                   
   <p><a name="05-Taguchi-Designs"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="taguchi-designs">
-<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">8. </span>Taguchi Designs</a><a class="headerlink" href="#taguchi-designs" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">11. </span>Taguchi Designs</a><a class="headerlink" href="#taguchi-designs" title="Link to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
@@ -474,10 +480,10 @@ document.write(`
 </ul>
 </nav>
 <section id="introduction-to-taguchi-methods">
-<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">8.1. </span>1. Introduction to Taguchi Methods</a><a class="headerlink" href="#introduction-to-taguchi-methods" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">11.1. </span>1. Introduction to Taguchi Methods</a><a class="headerlink" href="#introduction-to-taguchi-methods" title="Link to this heading">#</a></h2>
 <p>Taguchi Methods, developed by Dr. Genichi Taguchi, are statistical methods, or more broadly, a quality engineering philosophy, aimed at improving the quality of manufactured goods and, more recently, also applied to engineering, biotechnology, marketing, and advertising. The core idea is to design products and processes that are robust to various uncontrollable noise factors.</p>
 <section id="philosophy-robust-design-minimizing-variation">
-<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">8.1.1. </span>Philosophy: Robust Design, Minimizing Variation</a><a class="headerlink" href="#philosophy-robust-design-minimizing-variation" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">11.1.1. </span>Philosophy: Robust Design, Minimizing Variation</a><a class="headerlink" href="#philosophy-robust-design-minimizing-variation" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Robust Design:</strong> The primary goal of Taguchi methods is to create “robust” products and processes. A robust design is one that performs consistently and reliably, even when exposed to uncontrollable variations (noise factors) in the manufacturing environment, component materials, or operating conditions. Instead of trying to eliminate all sources of variation (which can be expensive or impossible), Taguchi focuses on making the design insensitive to these variations.</p></li>
 <li><p><strong>Minimizing Variation:</strong> Taguchi emphasized that quality is related to the “loss imparted by the product to society from the time the product is shipped.” This loss includes not only manufacturing costs but also costs associated with poor performance, customer dissatisfaction, and environmental impact. He defined quality as the consistency of performance and aimed to minimize variation around a target value. The less variation a product exhibits from its target performance, the higher its quality.</p></li>
@@ -485,7 +491,7 @@ document.write(`
 </ul>
 </section>
 <section id="key-contributions-by-genichi-taguchi">
-<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">8.1.2. </span>Key Contributions by Genichi Taguchi</a><a class="headerlink" href="#key-contributions-by-genichi-taguchi" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">11.1.2. </span>Key Contributions by Genichi Taguchi</a><a class="headerlink" href="#key-contributions-by-genichi-taguchi" title="Link to this heading">#</a></h3>
 <p>Dr. Genichi Taguchi (1924-2012) was a Japanese engineer and statistician who made significant contributions to industrial quality control.</p>
 <ul class="simple">
 <li><p><strong>Robust Parameter Design:</strong> His most notable contribution is the development of “parameter design,” which aims to find the optimal settings of design parameters (control factors) such that the product or process is least sensitive to noise factors.</p></li>
@@ -496,10 +502,10 @@ document.write(`
 </section>
 </section>
 <section id="orthogonal-arrays-oas">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">8.2. </span>2. Orthogonal Arrays (OAs)</a><a class="headerlink" href="#orthogonal-arrays-oas" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">11.2. </span>2. Orthogonal Arrays (OAs)</a><a class="headerlink" href="#orthogonal-arrays-oas" title="Link to this heading">#</a></h2>
 <p>Orthogonal Arrays are a special type of fractional factorial experimental design that allows for a balanced and efficient study of multiple factors and their main effects. They are a cornerstone of Taguchi’s parameter design methodology.</p>
 <section id="concept-and-purpose">
-<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">8.2.1. </span>Concept and Purpose</a><a class="headerlink" href="#concept-and-purpose" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">11.2.1. </span>Concept and Purpose</a><a class="headerlink" href="#concept-and-purpose" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Balance and Orthogonality:</strong> OAs are balanced in the sense that each level of a factor occurs an equal number of times. They are orthogonal because the estimate of the effect of one factor is not influenced (confounded) by the estimates of the effects of other factors, at least for main effects. This property simplifies the analysis as it allows main effects to be assessed independently.</p></li>
 <li><p><strong>Efficiency:</strong> OAs allow for the simultaneous study of several factors with a minimal number of experimental runs. For example, an L8 array can study up to 7 factors, each at 2 levels, in just 8 runs. A full factorial design would require <span class="math notranslate nohighlight">\(2^7 = 128\)</span> runs.</p></li>
@@ -507,7 +513,7 @@ document.write(`
 </ul>
 </section>
 <section id="how-to-select-an-appropriate-oa">
-<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">8.2.2. </span>How to Select an Appropriate OA</a><a class="headerlink" href="#how-to-select-an-appropriate-oa" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">11.2.2. </span>How to Select an Appropriate OA</a><a class="headerlink" href="#how-to-select-an-appropriate-oa" title="Link to this heading">#</a></h3>
 <p>The selection of an OA depends on:</p>
 <ol class="arabic simple">
 <li><p><strong>Number of factors</strong> to be investigated.</p></li>
@@ -545,7 +551,7 @@ document.write(`
 </ol>
 </section>
 <section id="example-of-a-simple-oa-structure-l4">
-<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">8.2.3. </span>Example of a Simple OA Structure (L4)</a><a class="headerlink" href="#example-of-a-simple-oa-structure-l4" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">11.2.3. </span>Example of a Simple OA Structure (L4)</a><a class="headerlink" href="#example-of-a-simple-oa-structure-l4" title="Link to this heading">#</a></h3>
 <p>An L4 array is used to study up to three 2-level factors (A, B, C). The levels are typically coded as 1 (low) and 2 (high).</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -593,10 +599,10 @@ document.write(`
 </section>
 </section>
 <section id="signal-to-noise-s-n-ratios">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">8.3. </span>3. Signal-to-Noise (S/N) Ratios</a><a class="headerlink" href="#signal-to-noise-s-n-ratios" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">11.3. </span>3. Signal-to-Noise (S/N) Ratios</a><a class="headerlink" href="#signal-to-noise-s-n-ratios" title="Link to this heading">#</a></h2>
 <p>A key element of Taguchi’s methodology is the use of Signal-to-Noise (S/N) ratios to measure quality. The S/N ratio is a performance metric that consolidates several repetitions (or noise conditions) into a single value representing both the average performance (signal) and the variation (noise). The goal is to choose factor levels that maximize the S/N ratio, leading to a design that is robust against noise.</p>
 <section id="explanation-of-s-n-ratios-as-performance-metrics">
-<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">8.3.1. </span>Explanation of S/N Ratios as Performance Metrics</a><a class="headerlink" href="#explanation-of-s-n-ratios-as-performance-metrics" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">11.3.1. </span>Explanation of S/N Ratios as Performance Metrics</a><a class="headerlink" href="#explanation-of-s-n-ratios-as-performance-metrics" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Signal:</strong> Represents the desired target value or the intended output of the system (mean response).</p></li>
 <li><p><strong>Noise:</strong> Represents the undesirable variation in the output due to uncontrollable factors (variance or standard deviation).</p></li>
@@ -605,7 +611,7 @@ document.write(`
 <p>The objective in parameter design is to select factor levels that maximize the appropriate S/N ratio.</p>
 </section>
 <section id="common-types">
-<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">8.3.2. </span>Common Types</a><a class="headerlink" href="#common-types" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">11.3.2. </span>Common Types</a><a class="headerlink" href="#common-types" title="Link to this heading">#</a></h3>
 <p>Taguchi proposed different S/N ratios depending on the desired characteristic of the performance:</p>
 <ol class="arabic simple">
 <li><p><strong>Larger-the-Better (LTB):</strong> Used for characteristics where the ideal value is as large as possible (e.g., strength, yield, efficiency).
@@ -629,7 +635,7 @@ If the target is <span class="math notranslate nohighlight">\(m\)</span>, then <
 </ol>
 </section>
 <section id="how-they-are-used-to-identify-optimal-factor-levels">
-<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">8.3.3. </span>How They Are Used to Identify Optimal Factor Levels</a><a class="headerlink" href="#how-they-are-used-to-identify-optimal-factor-levels" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">11.3.3. </span>How They Are Used to Identify Optimal Factor Levels</a><a class="headerlink" href="#how-they-are-used-to-identify-optimal-factor-levels" title="Link to this heading">#</a></h3>
 <ol class="arabic simple">
 <li><p><strong>Calculate S/N for Each Run:</strong> For each experimental run in the OA, conduct multiple repetitions (if noise factors are being simulated) or use the single observed value (if noise is inherent). Calculate the appropriate S/N ratio for that run.</p></li>
 <li><p><strong>Average S/N for Each Factor Level:</strong> For each factor, calculate the average S/N ratio for each of its levels. For example, for factor A at level 1, average the S/N ratios from all runs where A was at level 1.</p></li>
@@ -639,7 +645,7 @@ If the target is <span class="math notranslate nohighlight">\(m\)</span>, then <
 </section>
 </section>
 <section id="steps-in-a-taguchi-experiment">
-<h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">8.4. </span>4. Steps in a Taguchi Experiment</a><a class="headerlink" href="#steps-in-a-taguchi-experiment" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">11.4. </span>4. Steps in a Taguchi Experiment</a><a class="headerlink" href="#steps-in-a-taguchi-experiment" title="Link to this heading">#</a></h2>
 <p>A typical Taguchi experiment follows a structured approach:</p>
 <ol class="arabic simple">
 <li><p><strong>Define the Problem and Objective:</strong> Clearly state the problem and what needs to be optimized (e.g., improve yield, reduce defects, increase product life). Identify the response variable to be measured.</p></li>
@@ -666,7 +672,7 @@ If the target is <span class="math notranslate nohighlight">\(m\)</span>, then <
 </ol>
 </section>
 <section id="simple-example">
-<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">8.5. </span>5. Simple Example</a><a class="headerlink" href="#simple-example" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">11.5. </span>5. Simple Example</a><a class="headerlink" href="#simple-example" title="Link to this heading">#</a></h2>
 <p>Let’s consider a simplified example: <strong>Optimizing Cake Baking</strong> to achieve a consistent height (Nominal-the-Best, assuming a target height).</p>
 <ol class="arabic">
 <li><p><strong>Objective:</strong> Bake a cake with a consistent height of 5 cm.</p></li>
@@ -811,7 +817,7 @@ If the target is <span class="math notranslate nohighlight">\(m\)</span>, then <
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">7. </span>Factorial Analysis and Sensibility</p>
+        <p class="prev-next-title"><span class="section-number">10. </span>Factorial Analysis and Sensibility</p>
       </div>
     </a>
     <a class="right-next"
@@ -819,7 +825,7 @@ If the target is <span class="math notranslate nohighlight">\(m\)</span>, then <
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">9. </span>Block Designs</p>
+        <p class="prev-next-title"><span class="section-number">12. </span>Block Designs</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -839,25 +845,25 @@ If the target is <span class="math notranslate nohighlight">\(m\)</span>, then <
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-taguchi-methods">8.1. 1. Introduction to Taguchi Methods</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#philosophy-robust-design-minimizing-variation">8.1.1. Philosophy: Robust Design, Minimizing Variation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-contributions-by-genichi-taguchi">8.1.2. Key Contributions by Genichi Taguchi</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-taguchi-methods">11.1. 1. Introduction to Taguchi Methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#philosophy-robust-design-minimizing-variation">11.1.1. Philosophy: Robust Design, Minimizing Variation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-contributions-by-genichi-taguchi">11.1.2. Key Contributions by Genichi Taguchi</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-arrays-oas">8.2. 2. Orthogonal Arrays (OAs)</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#concept-and-purpose">8.2.1. Concept and Purpose</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-select-an-appropriate-oa">8.2.2. How to Select an Appropriate OA</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-of-a-simple-oa-structure-l4">8.2.3. Example of a Simple OA Structure (L4)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#orthogonal-arrays-oas">11.2. 2. Orthogonal Arrays (OAs)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#concept-and-purpose">11.2.1. Concept and Purpose</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-select-an-appropriate-oa">11.2.2. How to Select an Appropriate OA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-of-a-simple-oa-structure-l4">11.2.3. Example of a Simple OA Structure (L4)</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-to-noise-s-n-ratios">8.3. 3. Signal-to-Noise (S/N) Ratios</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-s-n-ratios-as-performance-metrics">8.3.1. Explanation of S/N Ratios as Performance Metrics</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-types">8.3.2. Common Types</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-they-are-used-to-identify-optimal-factor-levels">8.3.3. How They Are Used to Identify Optimal Factor Levels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#signal-to-noise-s-n-ratios">11.3. 3. Signal-to-Noise (S/N) Ratios</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanation-of-s-n-ratios-as-performance-metrics">11.3.1. Explanation of S/N Ratios as Performance Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-types">11.3.2. Common Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-they-are-used-to-identify-optimal-factor-levels">11.3.3. How They Are Used to Identify Optimal Factor Levels</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#steps-in-a-taguchi-experiment">8.4. 4. Steps in a Taguchi Experiment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">8.5. 5. Simple Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#steps-in-a-taguchi-experiment">11.4. 4. Steps in a Taguchi Experiment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-example">11.5. 5. Simple Example</a></li>
 </ul>
   </nav></div>
 

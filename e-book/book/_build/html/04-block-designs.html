@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>9. Block Designs &#8212; ViDoe - Visualizing Design of Experiments</title>
+    <title>12. Block Designs &#8212; ViDoe - Visualizing Design of Experiments</title>
   
   
   
@@ -61,7 +61,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The Usefulness of Boxplots by Group in Data Analysis" href="03-Boxplot-by-group.html" />
-    <link rel="prev" title="8. Taguchi Designs" href="05-Taguchi-Designs.html" />
+    <link rel="prev" title="11. Taguchi Designs" href="05-Taguchi-Designs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -181,24 +181,30 @@
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">1. Anova One-way Foundations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">2. Explaining the Python Code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">3. ANOVA One-way: An Illustrative example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Anova One-way using ViDoe</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
 
 
 
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">7. Principles of 2^k and Fractional Factorial Designs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">10. Principles of 2^k and Fractional Factorial Designs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">8. Taguchi Methods and Robust Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">11. Taguchi Methods and Robust Design</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">9. Block Designs Explained</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">12. Block Designs Explained</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
 <ul class="nav bd-sidenav">
@@ -407,9 +413,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#completely-randomized-block-designs-crbd">9.1. Completely Randomized Block Designs (CRBD)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latin-squares-designs">9.2. Latin Squares Designs</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graeco-latin-squares-designs">9.3. Graeco-Latin Squares Designs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#completely-randomized-block-designs-crbd">12.1. Completely Randomized Block Designs (CRBD)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latin-squares-designs">12.2. Latin Squares Designs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graeco-latin-squares-designs">12.3. Graeco-Latin Squares Designs</a></li>
 </ul>
             </nav>
         </div>
@@ -422,10 +428,10 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="block-designs">
-<h1><span class="section-number">9. </span>Block Designs<a class="headerlink" href="#block-designs" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">12. </span>Block Designs<a class="headerlink" href="#block-designs" title="Link to this heading">#</a></h1>
 <p>Block designs are a class of experimental designs used to reduce the variability in experimental results by accounting for known sources of variation. By grouping experimental units into blocks, where units within a block are more homogeneous than units in different blocks, we can isolate the effect of the treatment from the block effect. This leads to more precise estimates of treatment effects.</p>
 <section id="completely-randomized-block-designs-crbd">
-<h2><span class="section-number">9.1. </span>Completely Randomized Block Designs (CRBD)<a class="headerlink" href="#completely-randomized-block-designs-crbd" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">12.1. </span>Completely Randomized Block Designs (CRBD)<a class="headerlink" href="#completely-randomized-block-designs-crbd" title="Link to this heading">#</a></h2>
 <p>In a Completely Randomized Block Design (CRBD), experimental units are first divided into homogeneous blocks. Then, within each block, treatments are assigned randomly to the experimental units. This design is appropriate when there is one primary source of variation that can be blocked.</p>
 <p>Key characteristics of CRBD:</p>
 <ul class="simple">
@@ -437,7 +443,7 @@ document.write(`
 <p>CRBD helps in controlling for one source of nuisance variability, thereby increasing the precision of treatment comparisons.</p>
 </section>
 <section id="latin-squares-designs">
-<h2><span class="section-number">9.2. </span>Latin Squares Designs<a class="headerlink" href="#latin-squares-designs" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">12.2. </span>Latin Squares Designs<a class="headerlink" href="#latin-squares-designs" title="Link to this heading">#</a></h2>
 <p>Latin Square Designs are used when there are two sources of nuisance variation (blocking factors) to control. The design is structured such_that treatments are arranged in a square grid where each treatment appears exactly once in each row and each column. The rows and columns of the square represent the levels of the two blocking factors.</p>
 <p>Let ‘k’ be the number of treatments. A Latin Square is a k x k grid where each of the k treatments appears exactly once in each row and each column.</p>
 <p>Key characteristics of Latin Squares:</p>
@@ -450,7 +456,7 @@ document.write(`
 <p>Latin Squares are efficient for studying the effect of k treatments while controlling for two k-level nuisance factors using only k² experimental units.</p>
 </section>
 <section id="graeco-latin-squares-designs">
-<h2><span class="section-number">9.3. </span>Graeco-Latin Squares Designs<a class="headerlink" href="#graeco-latin-squares-designs" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">12.3. </span>Graeco-Latin Squares Designs<a class="headerlink" href="#graeco-latin-squares-designs" title="Link to this heading">#</a></h2>
 <p>Graeco-Latin Square Designs extend the concept of Latin Squares to control for three sources of nuisance variation. This design superimposes two Latin Squares, one using Latin letters and the other using Greek letters (hence the name), such that each pair of a Latin letter and a Greek letter appears exactly once.</p>
 <p>A Graeco-Latin Square is a k x k grid where:</p>
 <ol class="arabic simple">
@@ -505,7 +511,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">8. </span>Taguchi Designs</p>
+        <p class="prev-next-title"><span class="section-number">11. </span>Taguchi Designs</p>
       </div>
     </a>
     <a class="right-next"
@@ -533,9 +539,9 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#completely-randomized-block-designs-crbd">9.1. Completely Randomized Block Designs (CRBD)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latin-squares-designs">9.2. Latin Squares Designs</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graeco-latin-squares-designs">9.3. Graeco-Latin Squares Designs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#completely-randomized-block-designs-crbd">12.1. Completely Randomized Block Designs (CRBD)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#latin-squares-designs">12.2. Latin Squares Designs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graeco-latin-squares-designs">12.3. Graeco-Latin Squares Designs</a></li>
 </ul>
   </nav></div>
 
