@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>2. Anova One-way in ViDoe &#8212; ViDoe - Visualizing Design of Experiments</title>
+    <title>2. Using ViDoE to Understand One-Way ANOVA &#8212; ViDoe - Visualizing Design of Experiments</title>
   
   
   
@@ -61,7 +61,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="3. One-way Analysis of Variance (ANOVA): A Historical and Practical Overview" href="01-anova-oneway.html" />
-    <link rel="prev" title="1. Title" href="00-ViDoe-Introduction.html" />
+    <link rel="prev" title="1. Introduction and Justification" href="00-ViDoe-Introduction.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -181,7 +181,7 @@
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. An overview of ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Anova One-way using ViDoe</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova One-Way</span></p>
@@ -389,7 +389,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -400,11 +402,27 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Anova One-way in ViDoe</h1>
+    <h1>Using ViDoE to Understand One-Way ANOVA</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">2.1. Educational Utilities in ViDoE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-1-boxplot-of-y-across-factor-levels">2.2.1. 📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-2-regression-equation-visualization">2.2.2. 📈 <strong>Figure 2.2 - Regression Equation Visualization</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-3-sum-of-squares-decomposition">2.2.3. 🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">2.3. Suggested Classroom Activity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">2.4. Interpretation Support</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -415,8 +433,73 @@ document.write(`
                 <article class="bd-article">
                   
   <p><a name="00-ViDoe-ANOVA-One-Way"></a></p>
-<section class="tex2jax_ignore mathjax_ignore" id="anova-one-way-in-vidoe">
-<h1><span class="section-number">2. </span>Anova One-way in ViDoe<a class="headerlink" href="#anova-one-way-in-vidoe" title="Link to this heading">#</a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="using-vidoe-to-understand-one-way-anova">
+<h1><span class="section-number">2. </span>Using ViDoE to Understand One-Way ANOVA<a class="headerlink" href="#using-vidoe-to-understand-one-way-anova" title="Link to this heading">#</a></h1>
+<p>One-Way ANOVA (Analysis of Variance) is one of the most fundamental tools in experimental design. It is used when we want to compare the means of three or more independent groups (or levels of a factor) to determine if the observed differences in sample means are statistically significant. In practice, this method is key when analyzing how different conditions (treatments, materials, times, etc.) affect a given outcome.</p>
+<p>However, interpreting ANOVA results from purely numerical outputs—such as F-values, p-values, and sum of squares—can be challenging for students. That is why <strong>ViDoE</strong> includes a dedicated, interactive module for One-Way ANOVA that helps users understand how treatment effects and residuals contribute to variation in the data.</p>
+<section id="educational-utilities-in-vidoe">
+<h2><span class="section-number">2.1. </span>Educational Utilities in ViDoE<a class="headerlink" href="#educational-utilities-in-vidoe" title="Link to this heading">#</a></h2>
+<p>The ViDoE platform allows learners to:</p>
+<ul class="simple">
+<li><p>Customize the <strong>name of the factor</strong> and its <strong>three levels</strong> (e.g., Temperature: Low, Medium, High).</p></li>
+<li><p>Modify the <strong>treatment effects</strong> using sliders, which dynamically update the dataset and visualizations.</p></li>
+<li><p>Observe how random noise influences the outcome variable (<code class="docutils literal notranslate"><span class="pre">Y</span></code>).</p></li>
+<li><p>Generate and download the experimental dataset in <code class="docutils literal notranslate"><span class="pre">.csv</span></code> format for offline analysis.</p></li>
+<li><p>Visualize the results with a <strong>boxplot</strong>, an <strong>ANOVA table</strong>, and a <strong>linear regression summary</strong>.</p></li>
+<li><p>See a clear representation of the <strong>regression equation</strong> and the <strong>components of variation</strong> using pie charts.</p></li>
+</ul>
+</section>
+<section id="key-figures">
+<h2><span class="section-number">2.2. </span>Key Figures<a class="headerlink" href="#key-figures" title="Link to this heading">#</a></h2>
+<section id="figure-2-1-boxplot-of-y-across-factor-levels">
+<h3><span class="section-number">2.2.1. </span>📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong><a class="headerlink" href="#figure-2-1-boxplot-of-y-across-factor-levels" title="Link to this heading">#</a></h3>
+<p><img alt="Fig2.1 - Boxplot of Y across Levels" src="workspaces/DOE/e-book/book/Fig2_1_Boxplot_Y_by_Level.png" /></p>
+<ul class="simple">
+<li><p><strong>Description</strong>: This figure shows the distribution of the response variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> for each factor level. It helps visualize differences in central tendency and variation among groups.</p></li>
+</ul>
+</section>
+<section id="figure-2-2-regression-equation-visualization">
+<h3><span class="section-number">2.2.2. </span>📈 <strong>Figure 2.2 - Regression Equation Visualization</strong><a class="headerlink" href="#figure-2-2-regression-equation-visualization" title="Link to this heading">#</a></h3>
+<p><img alt="Fig2.2 - Regression Equation" src="workspaces/DOE/e-book/book/Fig2_2_Regression_Equation.png" /></p>
+<ul class="simple">
+<li><p><strong>Description</strong>: Displays the linear regression model derived from the data using indicator variables. This aids in understanding how treatment effects modify the outcome.</p></li>
+</ul>
+</section>
+<section id="figure-2-3-sum-of-squares-decomposition">
+<h3><span class="section-number">2.2.3. </span>🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong><a class="headerlink" href="#figure-2-3-sum-of-squares-decomposition" title="Link to this heading">#</a></h3>
+<p><img alt="Fig2.3 - Sum of Squares Pie" src="workspaces/DOE/e-book/book/Fig2_3_Sum_of_Squares_Pie.png" /></p>
+<ul class="simple">
+<li><p><strong>Description</strong>: Two pie charts showing:</p>
+<ol class="arabic simple">
+<li><p>Total Sum of Squares (SST)</p></li>
+<li><p>Partitioning of SST into Treatment (SSTr) and Error (SSE)</p></li>
+</ol>
+</li>
+</ul>
+</section>
+</section>
+<section id="suggested-classroom-activity">
+<h2><span class="section-number">2.3. </span>Suggested Classroom Activity<a class="headerlink" href="#suggested-classroom-activity" title="Link to this heading">#</a></h2>
+<p>Students can follow these steps directly within the ViDoE app:</p>
+<ol class="arabic simple">
+<li><p>Rename the factor (e.g., “Method”) and assign new level names (e.g., “A”, “B”, “C”).</p></li>
+<li><p>Use sliders to assign meaningful treatment effects for Levels B and C.</p></li>
+<li><p>Download the dataset and perform a manual ANOVA in R or Python for comparison.</p></li>
+<li><p>Interpret the results: p-value, F-statistic, and regression coefficients.</p></li>
+<li><p>Visualize the decomposition of variation (SST, SSTr, SSE) using the pie charts.</p></li>
+<li><p>Formulate conclusions: Is the effect of the factor statistically significant?</p></li>
+</ol>
+</section>
+<section id="interpretation-support">
+<h2><span class="section-number">2.4. </span>Interpretation Support<a class="headerlink" href="#interpretation-support" title="Link to this heading">#</a></h2>
+<p>The module provides both <strong>statistical tables</strong> and <strong>visual guidance</strong> to support interpretation:</p>
+<ul class="simple">
+<li><p>The <strong>ANOVA table</strong> displays degrees of freedom, sum of squares, F-statistic, and p-value.</p></li>
+<li><p>The <strong>regression summary</strong> (OLS model) shows estimates and confidence intervals.</p></li>
+<li><p>The <strong>LaTeX-style equation</strong> reinforces symbolic thinking.</p></li>
+<li><p>The <strong>boxplot and pie charts</strong> simplify abstract variance decomposition.</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -455,7 +538,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Title</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Introduction and Justification</p>
       </div>
     </a>
     <a class="right-next"
@@ -473,6 +556,29 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">2.1. Educational Utilities in ViDoE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-1-boxplot-of-y-across-factor-levels">2.2.1. 📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-2-regression-equation-visualization">2.2.2. 📈 <strong>Figure 2.2 - Regression Equation Visualization</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-3-sum-of-squares-decomposition">2.2.3. 🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">2.3. Suggested Classroom Activity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">2.4. Interpretation Support</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
