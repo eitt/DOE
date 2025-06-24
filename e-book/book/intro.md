@@ -66,7 +66,7 @@ Whether you are just beginning to explore the world of experimental design or lo
 
 ---
 
-```{figure} INGENIERÍA-INDUSTRIAL_LOGO.png
+```{figure} images/INGENIERÍA-INDUSTRIAL_LOGO.png
 ---
 alt: Industrial Engineering Program – Universidad Autónoma de Bucaramanga
 ---
