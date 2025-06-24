@@ -430,17 +430,17 @@ document.write(`
                   
   <p><a name="03-Boxplot-by-group"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="the-usefulness-of-boxplots-by-group-in-data-analysis">
-<h1><a class="toc-backref" href="#id21" role="doc-backlink">The Usefulness of Boxplots by Group in Data Analysis</a><a class="headerlink" href="#the-usefulness-of-boxplots-by-group-in-data-analysis" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id26" role="doc-backlink">The Usefulness of Boxplots by Group in Data Analysis</a><a class="headerlink" href="#the-usefulness-of-boxplots-by-group-in-data-analysis" title="Link to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#the-usefulness-of-boxplots-by-group-in-data-analysis" id="id21">The Usefulness of Boxplots by Group in Data Analysis</a></p>
+<li><p><a class="reference internal" href="#the-usefulness-of-boxplots-by-group-in-data-analysis" id="id26">The Usefulness of Boxplots by Group in Data Analysis</a></p>
 <ul>
-<li><p><a class="reference internal" href="#comparison-of-distributions" id="id22">Comparison of Distributions</a></p></li>
-<li><p><a class="reference internal" href="#identifying-outliers" id="id23">Identifying Outliers</a></p></li>
-<li><p><a class="reference internal" href="#assessing-skewness-and-symmetry" id="id24">Assessing Skewness and Symmetry</a></p></li>
-<li><p><a class="reference internal" href="#detecting-shifts-or-changes" id="id25">Detecting Shifts or Changes</a></p></li>
-<li><p><a class="reference internal" href="#exploring-relationships-between-variables" id="id26">Exploring Relationships between Variables</a></p></li>
+<li><p><a class="reference internal" href="#comparison-of-distributions" id="id27">Comparison of Distributions</a></p></li>
+<li><p><a class="reference internal" href="#identifying-outliers" id="id28">Identifying Outliers</a></p></li>
+<li><p><a class="reference internal" href="#assessing-skewness-and-symmetry" id="id29">Assessing Skewness and Symmetry</a></p></li>
+<li><p><a class="reference internal" href="#detecting-shifts-or-changes" id="id30">Detecting Shifts or Changes</a></p></li>
+<li><p><a class="reference internal" href="#exploring-relationships-between-variables" id="id31">Exploring Relationships between Variables</a></p></li>
 </ul>
 </li>
 </ul>
@@ -461,7 +461,7 @@ document.write(`
 </div>
 </div>
 <section id="comparison-of-distributions">
-<h2><a class="toc-backref" href="#id22" role="doc-backlink">Comparison of Distributions</a><a class="headerlink" href="#comparison-of-distributions" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id27" role="doc-backlink">Comparison of Distributions</a><a class="headerlink" href="#comparison-of-distributions" title="Link to this heading">#</a></h2>
 <p>By grouping the data and creating boxplots for each group, you can easily compare the distributions of the variable across different categories. This comparison allows you to identify data similarities, differences, or variations between groups. For example, you can determine if there are differences in income distributions between different occupations or variations in customer satisfaction scores across different regions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -483,7 +483,7 @@ document.write(`
 </div>
 </section>
 <section id="identifying-outliers">
-<h2><a class="toc-backref" href="#id23" role="doc-backlink">Identifying Outliers</a><a class="headerlink" href="#identifying-outliers" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id28" role="doc-backlink">Identifying Outliers</a><a class="headerlink" href="#identifying-outliers" title="Link to this heading">#</a></h2>
 <p>Boxplots display outliers as individual data points beyond the whiskers, representing the typical values range. Outliers can indicate anomalies or extreme values that deviate significantly from the rest of the data. By creating boxplots by group, you can quickly identify if certain categories have more outliers or if specific groups exhibit extreme values. This information can help uncover interesting patterns or potential data quality issues <span id="id1">[<a class="reference internal" href="Bibliography.html#id7" title="Duraj Agnieszka and Ludwicka Magdalena. Detection of outliers in the financial time series using arima models. 2018 Applications of Electromagnetics in Modern Techniques and Medicine (PTZE), pages 49-52, 2018.">AM18</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -506,7 +506,7 @@ document.write(`
 </div>
 </section>
 <section id="assessing-skewness-and-symmetry">
-<h2><a class="toc-backref" href="#id24" role="doc-backlink">Assessing Skewness and Symmetry</a><a class="headerlink" href="#assessing-skewness-and-symmetry" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id29" role="doc-backlink">Assessing Skewness and Symmetry</a><a class="headerlink" href="#assessing-skewness-and-symmetry" title="Link to this heading">#</a></h2>
 <p>The boxplot’s visual representation allows you to assess the symmetry and skewness of the distribution within each group. By examining the relative positions of the median, lower quartile (25th percentile), and upper quartile (75th percentile), you can gain insights into the shape of the distribution. For instance, if the median is closer to the lower or upper quartile, it indicates skewness in that group’s data, suggesting a non-normal distribution.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -528,7 +528,7 @@ document.write(`
 </div>
 </section>
 <section id="detecting-shifts-or-changes">
-<h2><a class="toc-backref" href="#id25" role="doc-backlink">Detecting Shifts or Changes</a><a class="headerlink" href="#detecting-shifts-or-changes" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id30" role="doc-backlink">Detecting Shifts or Changes</a><a class="headerlink" href="#detecting-shifts-or-changes" title="Link to this heading">#</a></h2>
 <p>Comparing boxplots across different groups or categories can help you identify shifts or changes in the distribution of a variable. If the medians or quartiles vary noticeably between groups, it suggests differences in the central tendency or spread of the data. This insight can be particularly valuable when analyzing trends over time, geographic regions, or different experimental conditions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -550,7 +550,7 @@ document.write(`
 </div>
 </section>
 <section id="exploring-relationships-between-variables">
-<h2><a class="toc-backref" href="#id26" role="doc-backlink">Exploring Relationships between Variables</a><a class="headerlink" href="#exploring-relationships-between-variables" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id31" role="doc-backlink">Exploring Relationships between Variables</a><a class="headerlink" href="#exploring-relationships-between-variables" title="Link to this heading">#</a></h2>
 <p>Boxplots can be employed to explore relationships between a continuous variable and one or more categorical variables. By creating boxplots for different categories or groups, you can examine how the distribution of the continuous variable varies across the categorical variables. This analysis can provide initial insights into potential relationships and guide further investigations, such as conducting statistical tests or developing predictive models.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
