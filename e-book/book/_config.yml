@@ -6,7 +6,6 @@ author: Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
 logo: INGENIERÍA-INDUSTRIAL_LOGO.png
 
 # Force re-execution of notebooks on each build.
-# See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
 
@@ -15,18 +14,26 @@ latex:
   latex_documents:
     targetname: book.tex
 
-# Add a bibtex file so that we can create citations
+# Sphinx/BibTeX configuration: numeric, unsorted bibliography + author-year inline
+sphinx:
+  config:
+    # choose one of: alpha, plain, unsrt, unsrtalpha
+    bibtex_default_style: unsrt
+
+    # choose one of: label, super, author_year
+    bibtex_reference_style: author_year
+
+# Your BibTeX file
 bibtex_bibfiles:
   - references.bib
 
 # Information about where the book exists on the web
 repository:
-  url: https://eitt.github.io/DOE/intro.html #https://github.com/executablebooks/jupyter-book  # Online location of your book
-  path_to_book: docs  # Optional path to your book, relative to the repository root
-  branch: master  # Which branch of the repository should be used when creating links (optional)
+  url: https://eitt.github.io/DOE/intro.html
+  path_to_book: docs
+  branch: master
 
 # Add GitHub buttons to your book
-# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
 html:
   use_issues_button: true
   use_repository_button: true
