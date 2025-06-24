@@ -446,30 +446,30 @@ document.write(`
                   
   <p><a name="01-anova-oneway"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="one-way-analysis-of-variance-anova-a-historical-and-practical-overview">
-<h1><a class="toc-backref" href="#id24" role="doc-backlink"><span class="section-number">4. </span>One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</a><a class="headerlink" href="#one-way-analysis-of-variance-anova-a-historical-and-practical-overview" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id36" role="doc-backlink"><span class="section-number">4. </span>One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</a><a class="headerlink" href="#one-way-analysis-of-variance-anova-a-historical-and-practical-overview" title="Link to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#one-way-analysis-of-variance-anova-a-historical-and-practical-overview" id="id24">One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</a></p>
+<li><p><a class="reference internal" href="#one-way-analysis-of-variance-anova-a-historical-and-practical-overview" id="id36">One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</a></p>
 <ul>
-<li><p><a class="reference internal" href="#historical-background" id="id25">Historical Background</a></p></li>
-<li><p><a class="reference internal" href="#utility-and-applications" id="id26">Utility and Applications</a></p></li>
-<li><p><a class="reference internal" href="#mathematical-foundations-of-one-way-anova" id="id27">Mathematical Foundations of One-Way ANOVA</a></p>
+<li><p><a class="reference internal" href="#historical-background" id="id37">Historical Background</a></p></li>
+<li><p><a class="reference internal" href="#utility-and-applications" id="id38">Utility and Applications</a></p></li>
+<li><p><a class="reference internal" href="#mathematical-foundations-of-one-way-anova" id="id39">Mathematical Foundations of One-Way ANOVA</a></p>
 <ul>
-<li><p><a class="reference internal" href="#model-specification" id="id28">Model Specification</a></p></li>
-<li><p><a class="reference internal" href="#hypotheses" id="id29">Hypotheses</a></p></li>
-<li><p><a class="reference internal" href="#decomposition-of-variance" id="id30">Decomposition of Variance</a></p></li>
-<li><p><a class="reference internal" href="#f-statistic" id="id31">F-Statistic</a></p></li>
+<li><p><a class="reference internal" href="#model-specification" id="id40">Model Specification</a></p></li>
+<li><p><a class="reference internal" href="#hypotheses" id="id41">Hypotheses</a></p></li>
+<li><p><a class="reference internal" href="#decomposition-of-variance" id="id42">Decomposition of Variance</a></p></li>
+<li><p><a class="reference internal" href="#f-statistic" id="id43">F-Statistic</a></p></li>
 </ul>
 </li>
-<li><p><a class="reference internal" href="#practical-implications" id="id32">Practical Implications</a></p></li>
-<li><p><a class="reference internal" href="#examples-from-practice-and-scientific-fields" id="id33">Examples from Practice and Scientific Fields</a></p></li>
-<li><p><a class="reference internal" href="#software-applications" id="id34">Software Applications</a></p></li>
-<li><p><a class="reference internal" href="#assumptions-and-limitations" id="id35">Assumptions and Limitations</a></p>
+<li><p><a class="reference internal" href="#practical-implications" id="id44">Practical Implications</a></p></li>
+<li><p><a class="reference internal" href="#examples-from-practice-and-scientific-fields" id="id45">Examples from Practice and Scientific Fields</a></p></li>
+<li><p><a class="reference internal" href="#software-applications" id="id46">Software Applications</a></p></li>
+<li><p><a class="reference internal" href="#assumptions-and-limitations" id="id47">Assumptions and Limitations</a></p>
 <ul>
-<li><p><a class="reference internal" href="#normality-of-residuals" id="id36">Normality of Residuals</a></p></li>
-<li><p><a class="reference internal" href="#homogeneity-of-variances-homoscedasticity" id="id37">Homogeneity of Variances (Homoscedasticity)</a></p></li>
-<li><p><a class="reference internal" href="#independence-of-observations" id="id38">Independence of Observations</a></p></li>
+<li><p><a class="reference internal" href="#normality-of-residuals" id="id48">Normality of Residuals</a></p></li>
+<li><p><a class="reference internal" href="#homogeneity-of-variances-homoscedasticity" id="id49">Homogeneity of Variances (Homoscedasticity)</a></p></li>
+<li><p><a class="reference internal" href="#independence-of-observations" id="id50">Independence of Observations</a></p></li>
 </ul>
 </li>
 </ul>
@@ -477,17 +477,17 @@ document.write(`
 </ul>
 </nav>
 <section id="historical-background">
-<h2><a class="toc-backref" href="#id25" role="doc-backlink"><span class="section-number">4.1. </span>Historical Background</a><a class="headerlink" href="#historical-background" title="Link to this heading">#</a></h2>
-<p>The One-Way Analysis of Variance (ANOVA) is a foundational statistical method introduced by Ronald A. Fisher in the early 1920s. Fisher sought a formal procedure to compare means across multiple groups within agricultural experiments. His innovation allowed for simultaneous testing of multiple group means while controlling for overall error rate—unifying experimental design and inferential statistics {cite:p}<code class="docutils literal notranslate"><span class="pre">Fisher1992</span></code>.</p>
+<h2><a class="toc-backref" href="#id37" role="doc-backlink"><span class="section-number">4.1. </span>Historical Background</a><a class="headerlink" href="#historical-background" title="Link to this heading">#</a></h2>
+<p>The One-Way Analysis of Variance (ANOVA) is a foundational statistical method introduced by Ronald A. Fisher in the early 1920s. Fisher sought a formal procedure to compare means across multiple groups within agricultural experiments. His innovation allowed for simultaneous testing of multiple group means while controlling for overall error rate—unifying experimental design and inferential statistics <span id="id1">[<a class="reference internal" href="#id20" title="R. A. Fisher. Statistical Methods for Research Workers, pages 66–70. Springer New York, New York, NY, 1992. URL: https://doi.org/10.1007/978-1-4612-4380-9_6, doi:10.1007/978-1-4612-4380-9_6.">Fisher, 1992</a>]</span>.</p>
 </section>
 <section id="utility-and-applications">
-<h2><a class="toc-backref" href="#id26" role="doc-backlink"><span class="section-number">4.2. </span>Utility and Applications</a><a class="headerlink" href="#utility-and-applications" title="Link to this heading">#</a></h2>
-<p>The primary function of ANOVA is to test whether the means of several groups are equal. It allows researchers to determine whether any observed differences are statistically significant or likely due to random variation. While ANOVA is often used in experimental research, its applications extend to observational studies, product testing, medical trials, psychology, education, and beyond {cite:p}<code class="docutils literal notranslate"><span class="pre">kutner2005applied</span></code>.</p>
+<h2><a class="toc-backref" href="#id38" role="doc-backlink"><span class="section-number">4.2. </span>Utility and Applications</a><a class="headerlink" href="#utility-and-applications" title="Link to this heading">#</a></h2>
+<p>The primary function of ANOVA is to test whether the means of several groups are equal. It allows researchers to determine whether any observed differences are statistically significant or likely due to random variation. While ANOVA is often used in experimental research, its applications extend to observational studies, product testing, medical trials, psychology, education, and beyond <span id="id2">[<a class="reference internal" href="#id21" title="M.H. Kutner. Applied Linear Statistical Models. McGrwa-Hill international edition. McGraw-Hill Irwin, 2005. ISBN 9780071122214. URL: https://books.google.com.co/books?id=0xqCAAAACAAJ.">Kutner, 2005</a>]</span>.</p>
 </section>
 <section id="mathematical-foundations-of-one-way-anova">
-<h2><a class="toc-backref" href="#id27" role="doc-backlink"><span class="section-number">4.3. </span>Mathematical Foundations of One-Way ANOVA</a><a class="headerlink" href="#mathematical-foundations-of-one-way-anova" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id39" role="doc-backlink"><span class="section-number">4.3. </span>Mathematical Foundations of One-Way ANOVA</a><a class="headerlink" href="#mathematical-foundations-of-one-way-anova" title="Link to this heading">#</a></h2>
 <section id="model-specification">
-<h3><a class="toc-backref" href="#id28" role="doc-backlink"><span class="section-number">4.3.1. </span>Model Specification</a><a class="headerlink" href="#model-specification" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id40" role="doc-backlink"><span class="section-number">4.3.1. </span>Model Specification</a><a class="headerlink" href="#model-specification" title="Link to this heading">#</a></h3>
 <p>In a one-way ANOVA with <span class="math notranslate nohighlight">\(a\)</span> groups and <span class="math notranslate nohighlight">\(n_i\)</span> observations in group <span class="math notranslate nohighlight">\(i\)</span>, the model is expressed as:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -502,7 +502,7 @@ Y_{ij} = \mu + \tau_i + \varepsilon_{ij}
 </ul>
 </section>
 <section id="hypotheses">
-<h3><a class="toc-backref" href="#id29" role="doc-backlink"><span class="section-number">4.3.2. </span>Hypotheses</a><a class="headerlink" href="#hypotheses" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id41" role="doc-backlink"><span class="section-number">4.3.2. </span>Hypotheses</a><a class="headerlink" href="#hypotheses" title="Link to this heading">#</a></h3>
 <p>The hypotheses tested in one-way ANOVA are:</p>
 <ul>
 <li><p>Null hypothesis (<span class="math notranslate nohighlight">\(H_0\)</span>): All group means are equal</p>
@@ -520,7 +520,7 @@ Y_{ij} = \mu + \tau_i + \varepsilon_{ij}
 </ul>
 </section>
 <section id="decomposition-of-variance">
-<h3><a class="toc-backref" href="#id30" role="doc-backlink"><span class="section-number">4.3.3. </span>Decomposition of Variance</a><a class="headerlink" href="#decomposition-of-variance" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id42" role="doc-backlink"><span class="section-number">4.3.3. </span>Decomposition of Variance</a><a class="headerlink" href="#decomposition-of-variance" title="Link to this heading">#</a></h3>
 <p>ANOVA partitions the total variability in the data into two components: variability <strong>between groups</strong> and <strong>within groups</strong>. The total sum of squares is:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -551,7 +551,7 @@ Y_{ij} = \mu + \tau_i + \varepsilon_{ij}
 </ul>
 </section>
 <section id="f-statistic">
-<h3><a class="toc-backref" href="#id31" role="doc-backlink"><span class="section-number">4.3.4. </span>F-Statistic</a><a class="headerlink" href="#f-statistic" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id43" role="doc-backlink"><span class="section-number">4.3.4. </span>F-Statistic</a><a class="headerlink" href="#f-statistic" title="Link to this heading">#</a></h3>
 <p>To test <span class="math notranslate nohighlight">\(H_0\)</span>, we compute the F-statistic:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -567,29 +567,29 @@ F = \frac{\text{MSTr}}{\text{MSE}} = \frac{\text{SSTr}/(a - 1)}{\text{SSE}/(N - 
 </section>
 </section>
 <section id="practical-implications">
-<h2><a class="toc-backref" href="#id32" role="doc-backlink"><span class="section-number">4.4. </span>Practical Implications</a><a class="headerlink" href="#practical-implications" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id44" role="doc-backlink"><span class="section-number">4.4. </span>Practical Implications</a><a class="headerlink" href="#practical-implications" title="Link to this heading">#</a></h2>
 <p>One-way ANOVA is particularly useful when comparing the performance or effect of different methods, materials, or interventions. For example, it can be applied to:</p>
 <ul class="simple">
 <li><p>Evaluate the efficacy of different training programs</p></li>
 <li><p>Compare productivity across manufacturing shifts</p></li>
 <li><p>Measure academic performance across instructional styles</p></li>
 </ul>
-<p>Its capacity to reveal both statistically and practically significant differences makes ANOVA a cornerstone of inferential statistics {cite:p}<code class="docutils literal notranslate"><span class="pre">kirk2013experimental</span></code>.</p>
+<p>Its capacity to reveal both statistically and practically significant differences makes ANOVA a cornerstone of inferential statistics <span id="id3">[<a class="reference internal" href="#id22" title="Roger E. Kirk. Experimental design: Procedures for the behavioral sciences. SAGE Publications, Inc., 4 edition, 2013. ISBN 9781412974455. doi:10.4135/9781483384733.">Kirk, 2013</a>]</span>.</p>
 </section>
 <section id="examples-from-practice-and-scientific-fields">
-<h2><a class="toc-backref" href="#id33" role="doc-backlink"><span class="section-number">4.5. </span>Examples from Practice and Scientific Fields</a><a class="headerlink" href="#examples-from-practice-and-scientific-fields" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id45" role="doc-backlink"><span class="section-number">4.5. </span>Examples from Practice and Scientific Fields</a><a class="headerlink" href="#examples-from-practice-and-scientific-fields" title="Link to this heading">#</a></h2>
 <p>ANOVA’s flexibility makes it useful across domains:</p>
 <ul class="simple">
-<li><p><strong>Forestry</strong>: Evaluating environmental effects on clonal propagation success in <em>Populus</em> hybrids {cite:p}<code class="docutils literal notranslate"><span class="pre">Gudynaitė</span></code>.</p></li>
-<li><p><strong>Thermal Systems</strong>: Comparing phase-change materials for energy optimization in poultry housing {cite:p}<code class="docutils literal notranslate"><span class="pre">Aleksandrova2023</span></code>.</p></li>
-<li><p><strong>Technology Acceptance</strong>: Examining user attitudes toward utilitarian vs. hedonic technologies {cite:p}<code class="docutils literal notranslate"><span class="pre">Krnung2011ThreeCO</span></code>.</p></li>
-<li><p><strong>Health</strong>: Investigating how obesity and depression interact, comparing ANOVA with regression and SEM {cite:p}<code class="docutils literal notranslate"><span class="pre">mohamed2023evaluation</span></code>.</p></li>
-<li><p><strong>Engineering</strong>: Assessing flotation properties in coal processing using ANOVA {cite:p}<code class="docutils literal notranslate"><span class="pre">Niedoba2016ApplicationsOA</span></code>.</p></li>
-<li><p><strong>E-commerce</strong>: Measuring differences in service quality perception across customer groups on Shopee {cite:p}<code class="docutils literal notranslate"><span class="pre">Sheu2022RelationshipOS</span></code>.</p></li>
+<li><p><strong>Forestry</strong>: Evaluating environmental effects on clonal propagation success in <em>Populus</em> hybrids <span id="id4">[<a class="reference internal" href="#id23" title="Valda Gudynaitė-Franckevičienė and Alfas Pliūra. The impact of different environmental conditions during vegetative propagation on growth, survival, and biochemical characteristics in populus hybrids in clonal field trial. Forests, 2021. URL: https://www.mdpi.com/1999-4907/12/7/892, doi:10.3390/f12070892.">Gudynaitė-Franckevičienė and Pliūra, 2021</a>]</span>.</p></li>
+<li><p><strong>Thermal Systems</strong>: Comparing phase-change materials for energy optimization in poultry housing <span id="id5">[<a class="reference internal" href="#id24" title="Olha Aleksandrova, Tetiana Zhmykhova, Rando Värnik, and Ants-Hannes Viira. The one-way analysis of variance of heat-storage materials used in building of poultry houses. Processes, 2023. URL: https://www.mdpi.com/2227-9717/11/1/104, doi:10.3390/pr11010104.">Aleksandrova <em>et al.</em>, 2023</a>]</span>.</p></li>
+<li><p><strong>Technology Acceptance</strong>: Examining user attitudes toward utilitarian vs. hedonic technologies <span id="id6">[<a class="reference internal" href="#id25" title="Julia Krönung and Andreas Eckhardt. Three classes of attitude and their implications for is research. In International Conference on Interaction Sciences. 2011.">Krönung and Eckhardt, 2011</a>]</span>.</p></li>
+<li><p><strong>Health</strong>: Investigating how obesity and depression interact, comparing ANOVA with regression and SEM <span id="id7">[<a class="reference internal" href="#id26" title="N. A. Mohamed, A. R. A. Alanzi, N. A. Azizan, S. A. Azizan, N. Samsudin, and H. S. Jenatabadi. Evaluation of depression and obesity indices based on applications of ANOVA, regression, structural equation modeling and taguchi algorithm process. Frontiers in psychology, 14:1060963, 2023. doi:10.3389/fpsyg.2023.1060963.">Mohamed <em>et al.</em>, 2023</a>]</span>.</p></li>
+<li><p><strong>Engineering</strong>: Assessing flotation properties in coal processing using ANOVA <span id="id8">[<a class="reference internal" href="#id27" title="Tomasz Niedoba and Paulina Pięta. Applications of anova in mineral processing. Mining Science, 2016.">Niedoba and Pięta, 2016</a>]</span>.</p></li>
+<li><p><strong>E-commerce</strong>: Measuring differences in service quality perception across customer groups on Shopee <span id="id9">[<a class="reference internal" href="#id28" title="Pei-Ling Sheu and Shu-Chun Chang. Relationship of service quality dimensions, customer satisfaction and loyalty in e-commerce: a case study of the shopee app. Applied Economics, 54:4597 - 4607, 2022.">Sheu and Chang, 2022</a>]</span>.</p></li>
 </ul>
 </section>
 <section id="software-applications">
-<h2><a class="toc-backref" href="#id34" role="doc-backlink"><span class="section-number">4.6. </span>Software Applications</a><a class="headerlink" href="#software-applications" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id46" role="doc-backlink"><span class="section-number">4.6. </span>Software Applications</a><a class="headerlink" href="#software-applications" title="Link to this heading">#</a></h2>
 <p>One-way ANOVA is widely accessible through statistical software:</p>
 <ul class="simple">
 <li><p><strong>R</strong>: <code class="docutils literal notranslate"><span class="pre">aov()</span></code>, <code class="docutils literal notranslate"><span class="pre">lm()</span></code> + <code class="docutils literal notranslate"><span class="pre">anova()</span></code> functions</p></li>
@@ -597,13 +597,13 @@ F = \frac{\text{MSTr}}{\text{MSE}} = \frac{\text{SSTr}/(a - 1)}{\text{SSE}/(N - 
 <li><p><strong>SPSS</strong>, <strong>Minitab</strong>, <strong>Stata</strong>: GUI-based workflows</p></li>
 <li><p><strong>Excel</strong>: Data Analysis Toolpak</p></li>
 </ul>
-<p>These tools simplify ANOVA implementation, even for users without programming backgrounds {cite:p}<code class="docutils literal notranslate"><span class="pre">Alter2022</span></code>, {cite:p}<code class="docutils literal notranslate"><span class="pre">Aliyu_Sani_Ingles_Tsiga-Ahmed_Musa_Dongarwar_Salihu_Wester_2022</span></code>.</p>
+<p>These tools simplify ANOVA implementation, even for users without programming backgrounds <span id="id10">[<a class="reference internal" href="#id29" title="George Charles Alter, Jack Gager, Pascal Heus, Carson Hunter, Sanda Ionescu, Jeremy Iverson, H.V. Jagadish, Jared Lyle, Alexander Mueller, Sigve Nordgaard, Ornulf Risnes, Dan Smith, and Jie Song. Capturing data provenance from statistical software. International Journal of Digital Curation, 2022. doi:10.2218/ijdc.v16i1.763.">Alter <em>et al.</em>, 2022</a>]</span>, <span id="id11">[<a class="reference internal" href="#id30" title="Muktar H. Aliyu, Mahmoud Sani, Donna Ingles, Fatima Tsiga-Ahmed, Baba Musa, Deepa Dongarwar, Hamisu Salihu, and William Wester. Building physician-scientist skills in r programming: a short workshop report. International Journal of Translational Medical Research and Public Health, May 2022. URL: https://ijtmrph.org/index.php/IJTMRPH/article/view/418, doi:10.21106/ijtmrph.418.">Aliyu <em>et al.</em>, 2022</a>]</span>.</p>
 </section>
 <section id="assumptions-and-limitations">
-<h2><a class="toc-backref" href="#id35" role="doc-backlink"><span class="section-number">4.7. </span>Assumptions and Limitations</a><a class="headerlink" href="#assumptions-and-limitations" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id47" role="doc-backlink"><span class="section-number">4.7. </span>Assumptions and Limitations</a><a class="headerlink" href="#assumptions-and-limitations" title="Link to this heading">#</a></h2>
 <p>For the results of a one-way ANOVA to be valid and interpretable, several statistical assumptions must be satisfied. These assumptions underpin the mathematical derivation of the F-distribution used to test the null hypothesis. Violating them can lead to incorrect conclusions, such as inflated Type I error rates or reduced power.</p>
 <section id="normality-of-residuals">
-<h3><a class="toc-backref" href="#id36" role="doc-backlink"><span class="section-number">4.7.1. </span>Normality of Residuals</a><a class="headerlink" href="#normality-of-residuals" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id48" role="doc-backlink"><span class="section-number">4.7.1. </span>Normality of Residuals</a><a class="headerlink" href="#normality-of-residuals" title="Link to this heading">#</a></h3>
 <p><strong>Assumption</strong>: The residuals (errors) within each group should follow a normal distribution.</p>
 <p><strong>Why it matters</strong>: ANOVA relies on the sampling distribution of the test statistic being approximately normal. If the residuals are not normally distributed, especially in small samples, the validity of p-values and confidence intervals may be compromised.</p>
 <p><strong>What to do if violated</strong>:</p>
@@ -618,7 +618,7 @@ F = \frac{\text{MSTr}}{\text{MSE}} = \frac{\text{SSTr}/(a - 1)}{\text{SSE}/(N - 
 </ul>
 </section>
 <section id="homogeneity-of-variances-homoscedasticity">
-<h3><a class="toc-backref" href="#id37" role="doc-backlink"><span class="section-number">4.7.2. </span>Homogeneity of Variances (Homoscedasticity)</a><a class="headerlink" href="#homogeneity-of-variances-homoscedasticity" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id49" role="doc-backlink"><span class="section-number">4.7.2. </span>Homogeneity of Variances (Homoscedasticity)</a><a class="headerlink" href="#homogeneity-of-variances-homoscedasticity" title="Link to this heading">#</a></h3>
 <p><strong>Assumption</strong>: The variance of the dependent variable should be approximately equal across all groups.</p>
 <p><strong>Why it matters</strong>: Unequal variances can distort the F-ratio, especially when group sizes differ, leading to unreliable significance tests.</p>
 <p><strong>What to do if violated</strong>:</p>
@@ -633,7 +633,7 @@ F = \frac{\text{MSTr}}{\text{MSE}} = \frac{\text{SSTr}/(a - 1)}{\text{SSE}/(N - 
 </ul>
 </section>
 <section id="independence-of-observations">
-<h3><a class="toc-backref" href="#id38" role="doc-backlink"><span class="section-number">4.7.3. </span>Independence of Observations</a><a class="headerlink" href="#independence-of-observations" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id50" role="doc-backlink"><span class="section-number">4.7.3. </span>Independence of Observations</a><a class="headerlink" href="#independence-of-observations" title="Link to this heading">#</a></h3>
 <p><strong>Assumption</strong>: Each observation must be independent of all others. That is, the value of one observation should not influence or be influenced by another.</p>
 <p><strong>Why it matters</strong>: ANOVA models the total variance as a sum of independent components. If observations are correlated (e.g., repeated measures or hierarchical data), the computed F-statistic will be biased, and the test may overstate statistical significance.</p>
 <p><strong>What to do if violated</strong>:</p>
@@ -641,9 +641,61 @@ F = \frac{\text{MSTr}}{\text{MSE}} = \frac{\text{SSTr}/(a - 1)}{\text{SSE}/(N - 
 <li><p>For <strong>repeated measures</strong> or <strong>nested designs</strong>, use a <strong>repeated-measures ANOVA</strong> or <strong>mixed-effects model</strong>.</p></li>
 <li><p>Ensure proper <strong>randomization</strong> and <strong>experimental design</strong> during data collection.</p></li>
 </ul>
-<p>In practice, these assumptions should be <strong>checked before interpreting ANOVA results</strong>. Visual diagnostics such as residual histograms, Q–Q plots, and residuals vs. fitted value plots are useful tools to assess assumption validity. When assumptions are not met, robust or non-parametric methods can preserve the integrity of the analysis while offering more appropriate inference. {cite:p}<code class="docutils literal notranslate"><span class="pre">Gene1972</span></code>.</p>
+<p>In practice, these assumptions should be <strong>checked before interpreting ANOVA results</strong>. Visual diagnostics such as residual histograms, Q–Q plots, and residuals vs. fitted value plots are useful tools to assess assumption validity. When assumptions are not met, robust or non-parametric methods can preserve the integrity of the analysis while offering more appropriate inference. <span id="id12">[<a class="reference internal" href="#id31" title="Gene V Glass, Percy D. Peckham, and James R. Sanders. Consequences of failure to meet assumptions underlying the fixed effects analyses of variance and covariance. Review of Educational Research, 42(3):237-288, 1972. URL: https://doi.org/10.3102/00346543042003237, arXiv:https://doi.org/10.3102/00346543042003237, doi:10.3102/00346543042003237.">Glass <em>et al.</em>, 1972</a>]</span>.</p>
 <hr class="docutils" />
-<span class="target" id="id1"></span></section>
+<div class="docutils container" id="id13">
+<div role="list" class="citation-list">
+<div class="citation" id="id20" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>R. A. Fisher. <em>Statistical Methods for Research Workers</em>, pages 66–70. Springer New York, New York, NY, 1992. URL: <a class="reference external" href="https://doi.org/10.1007/978-1-4612-4380-9_6">https://doi.org/10.1007/978-1-4612-4380-9_6</a>, <a class="reference external" href="https://doi.org/10.1007/978-1-4612-4380-9_6">doi:10.1007/978-1-4612-4380-9_6</a>.</p>
+</div>
+<div class="citation" id="id21" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>M.H. Kutner. <em>Applied Linear Statistical Models</em>. McGrwa-Hill international edition. McGraw-Hill Irwin, 2005. ISBN 9780071122214. URL: <a class="reference external" href="https://books.google.com.co/books?id=0xqCAAAACAAJ">https://books.google.com.co/books?id=0xqCAAAACAAJ</a>.</p>
+</div>
+<div class="citation" id="id22" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>Roger E. Kirk. <em>Experimental design: Procedures for the behavioral sciences</em>. SAGE Publications, Inc., 4 edition, 2013. ISBN 9781412974455. <a class="reference external" href="https://doi.org/10.4135/9781483384733">doi:10.4135/9781483384733</a>.</p>
+</div>
+<div class="citation" id="id23" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<p>Valda Gudynaitė-Franckevičienė and Alfas Pliūra. The impact of different environmental conditions during vegetative propagation on growth, survival, and biochemical characteristics in populus hybrids in clonal field trial. <em>Forests</em>, 2021. URL: <a class="reference external" href="https://www.mdpi.com/1999-4907/12/7/892">https://www.mdpi.com/1999-4907/12/7/892</a>, <a class="reference external" href="https://doi.org/10.3390/f12070892">doi:10.3390/f12070892</a>.</p>
+</div>
+<div class="citation" id="id24" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">5</a><span class="fn-bracket">]</span></span>
+<p>Olha Aleksandrova, Tetiana Zhmykhova, Rando Värnik, and Ants-Hannes Viira. The one-way analysis of variance of heat-storage materials used in building of poultry houses. <em>Processes</em>, 2023. URL: <a class="reference external" href="https://www.mdpi.com/2227-9717/11/1/104">https://www.mdpi.com/2227-9717/11/1/104</a>, <a class="reference external" href="https://doi.org/10.3390/pr11010104">doi:10.3390/pr11010104</a>.</p>
+</div>
+<div class="citation" id="id25" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id6">6</a><span class="fn-bracket">]</span></span>
+<p>Julia Krönung and Andreas Eckhardt. Three classes of attitude and their implications for is research. In <em>International Conference on Interaction Sciences</em>. 2011.</p>
+</div>
+<div class="citation" id="id26" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id7">7</a><span class="fn-bracket">]</span></span>
+<p>N. A. Mohamed, A. R. A. Alanzi, N. A. Azizan, S. A. Azizan, N. Samsudin, and H. S. Jenatabadi. Evaluation of depression and obesity indices based on applications of ANOVA, regression, structural equation modeling and taguchi algorithm process. <em>Frontiers in psychology</em>, 14:1060963, 2023. <a class="reference external" href="https://doi.org/10.3389/fpsyg.2023.1060963">doi:10.3389/fpsyg.2023.1060963</a>.</p>
+</div>
+<div class="citation" id="id27" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id8">8</a><span class="fn-bracket">]</span></span>
+<p>Tomasz Niedoba and Paulina Pięta. Applications of anova in mineral processing. <em>Mining Science</em>, 2016.</p>
+</div>
+<div class="citation" id="id28" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id9">9</a><span class="fn-bracket">]</span></span>
+<p>Pei-Ling Sheu and Shu-Chun Chang. Relationship of service quality dimensions, customer satisfaction and loyalty in e-commerce: a case study of the shopee app. <em>Applied Economics</em>, 54:4597 – 4607, 2022.</p>
+</div>
+<div class="citation" id="id29" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id10">10</a><span class="fn-bracket">]</span></span>
+<p>George Charles Alter, Jack Gager, Pascal Heus, Carson Hunter, Sanda Ionescu, Jeremy Iverson, H.V. Jagadish, Jared Lyle, Alexander Mueller, Sigve Nordgaard, Ornulf Risnes, Dan Smith, and Jie Song. Capturing data provenance from statistical software. <em>International Journal of Digital Curation</em>, 2022. <a class="reference external" href="https://doi.org/10.2218/ijdc.v16i1.763">doi:10.2218/ijdc.v16i1.763</a>.</p>
+</div>
+<div class="citation" id="id30" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id11">11</a><span class="fn-bracket">]</span></span>
+<p>Muktar H. Aliyu, Mahmoud Sani, Donna Ingles, Fatima Tsiga-Ahmed, Baba Musa, Deepa Dongarwar, Hamisu Salihu, and William Wester. Building physician-scientist skills in r programming: a short workshop report. <em>International Journal of Translational Medical Research and Public Health</em>, May 2022. URL: <a class="reference external" href="https://ijtmrph.org/index.php/IJTMRPH/article/view/418">https://ijtmrph.org/index.php/IJTMRPH/article/view/418</a>, <a class="reference external" href="https://doi.org/10.21106/ijtmrph.418">doi:10.21106/ijtmrph.418</a>.</p>
+</div>
+<div class="citation" id="id31" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id12">12</a><span class="fn-bracket">]</span></span>
+<p>Gene V Glass, Percy D. Peckham, and James R. Sanders. Consequences of failure to meet assumptions underlying the fixed effects analyses of variance and covariance. <em>Review of Educational Research</em>, 42(3):237–288, 1972. URL: <a class="reference external" href="https://doi.org/10.3102/00346543042003237">https://doi.org/10.3102/00346543042003237</a>, <a class="reference external" href="https://arxiv.org/abs/https://doi.org/10.3102/00346543042003237">arXiv:https://doi.org/10.3102/00346543042003237</a>, <a class="reference external" href="https://doi.org/10.3102/00346543042003237">doi:10.3102/00346543042003237</a>.</p>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 
