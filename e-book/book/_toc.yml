@@ -17,9 +17,10 @@ parts:
       - file: 00-ViDoe-Introduction.md
         title: Introduction and Justification
       - file: 00-ViDoe-ANOVA-One-Way.md
-        title: Anova One-way using ViDoe
+        title: Using ViDoE to Understand One-Way ANOVA
+      - file: 00-ViDoe-Introduction-Factorial.md 
+        title: Exploring Two-Level Factorial Designs with ViDoE
       
-    - caption: Anova One-Way
       numbered: true
       chapters:
       - file: 01-anova-oneway.md
