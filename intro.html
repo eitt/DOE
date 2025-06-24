@@ -14,39 +14,39 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
     <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -57,6 +57,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -70,27 +72,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -112,8 +110,13 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
     </header>
   
 
@@ -139,6 +142,8 @@
         <div class="sidebar-primary-item">
 
   
+    
+  
 
 <a class="navbar-brand logo" href="#">
   
@@ -160,7 +165,7 @@
 
  <script>
  document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
     <span class="search-button__default-text">Search</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -181,20 +186,27 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. An overview of ViDoe</a></li>
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Anova One-way using ViDoe</a></li>
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">3. Factorial Design using ViDoe</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova One-Way</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">3. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">4. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">5. ANOVA One-way: An Illustrative example</a></li>
 
 
 
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Full-Factorial designs</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="02-markdown.html">10. Markdown Files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">9. Principles of 2^k and Fractional Factorial Designs</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">10. Taguchi Methods and Robust Design</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">11. Block Designs Explained</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
 <ul class="nav bd-sidenav">
@@ -223,7 +235,7 @@
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -232,14 +244,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -364,10 +376,10 @@
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script>
@@ -375,14 +387,14 @@ document.write(`
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</label>
+</button>
 </div></div>
       
     </div>
@@ -404,7 +416,11 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biography">Short biography</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biographies">Short Biographies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#note">Note:</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-cite-this-work">How to cite this work</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -418,40 +434,91 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="visualizing-design-of-experiments-with-vidoe-an-interactive-approach">
 <h1>Visualizing Design of Experiments with ViDoe: An Interactive Approach<a class="headerlink" href="#visualizing-design-of-experiments-with-vidoe-an-interactive-approach" title="Link to this heading">#</a></h1>
-<p>Data is the driving force behind critical decision-making; comprehending and effectively utilizing this wealth of information becomes paramount. This e-book covers the foundations of a web app developed by Professor Leonardo H. Talero-Sarmiento, Professor Henry Lamos-Diaz, and Researcher Juan D. Marquez Gonzalez. <strong>ViDoe</strong>, or <em>Visualizing Design of Experiments</em>, is an innovative web app that serves as an online tool for understanding the intricacies of data models and statistical testing within the framework of experimental design.</p>
-<p>ViDoe’s intuitive interface offers users a convenient platform to analyze design experiments results, generate data, and visualize results dynamically, all while unraveling the complexities of statistical concepts. The app’s central aim is to provide a user-friendly environment where both beginners and practitioners can explore and comprehend the dynamics of data models and statistical testing without being ensnared by mathematical intricacies. Nevertheless, this web app no covers the whole taxonomy of the design of experiments nor tries to develop a compendium of theorems but illustrates the foundations of the design of experiments to facilitate the data abstraction process.</p>
-<p>Accompanying this web app is our comprehensive e-book. It is designed not only as a tutorial for navigating the <strong>ViDoe</strong> platform but also as a handbook elucidating the principles and techniques inherent to the design of experiments and data analysis. This unique resource serves as a theoretical grounding that supplements the practical, hands-on experience provided by the ViDoe web app.</p>
-<p>Whether you are a student venturing into the realm of experimental design, a researcher seeking to streamline your experimental processes, or a data enthusiast eager to demystify complex data models, ‘Visualizing Design of Experiments with <strong>ViDoe</strong>: An Interactive Approach’ combines the theoretical with the practical, transforming data exploration into an accessible and enjoyable journey.</p>
-<p>We invite you to embark on this exciting voyage of discovery - immerse yourself in the experiment analysis with the <strong>ViDoe</strong> platform, and unlock the story your data has to tell.</p>
+<p>Data is a central asset in decision-making processes, especially when reliability and efficiency are key. Understanding how to design experiments and analyze their results is a practical skill that helps students, researchers, and professionals translate questions into structured insights. This e-book presents the foundations of a web application called <strong>ViDoe</strong>—<em>Visualizing Design of Experiments</em>—developed by Professors Leonardo H. Talero-Sarmiento, Henry Lamos-Díaz, and engineer David Márquez-González.</p>
+<p><strong>ViDoe</strong> is a user-friendly web platform created to support the learning and teaching of design of experiments (DoE). Through interactive tools, it allows users to generate datasets, apply experimental designs, and visualize results dynamically. It is intended for those who want to explore core ideas behind statistical modeling and hypothesis testing, without needing advanced knowledge in mathematics or programming.</p>
+<p>This e-book does not aim to cover the entire theory or taxonomy of DoE, nor does it provide a detailed compendium of theorems. Instead, it introduces the main principles and structures that support practical experimentation. Its focus is on using <strong>ViDoe</strong> as an applied tool to foster understanding and experimentation. While the theoretical depth required for advanced study is beyond the scope of this material, readers looking for a more rigorous foundation are encouraged to consult <strong>Montgomery’s “Design and Analysis of Experiments”</strong>, a standard reference in the field.</p>
+<p>We recognize that this quantitative approach is not commonly emphasized in many undergraduate programs. In fact, it is often sought after by graduate students working on process improvement or experimental design in engineering and related fields. With this in mind, the handbook offers a bridge between basic concepts and interactive practice, helping users gain confidence in structuring and analyzing experiments.</p>
+<p>Whether you are just beginning to explore the world of experimental design or looking for a practical companion to complement your theoretical learning, <strong>ViDoe</strong> and this handbook are designed to support your journey in a clear, structured, and hands-on way.</p>
+<hr class="docutils" />
 <section id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
-<p>Section 1. <strong>ViDoe</strong></p>
-<p><a class="reference internal" href="00-ViDoe-Introduction.html"><span class="doc std std-doc">00-ViDoe: Introduction</span></a></p>
-<p><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html"><span class="doc std std-doc">00-ViDoe-ANOVA-One-Way</span></a></p>
-<p><a class="reference internal" href="00-ViDoe-Factorial-Designs.html"><span class="doc std std-doc">00-ViDoe-Factorial-Designs</span></a></p>
-<p>Section 2. <strong>Anova One Way</strong></p>
-<p><a class="reference internal" href="01-anova-oneway.html"><span class="doc std std-doc">01-anova-oneway.md</span></a></p>
-<p><a class="reference internal" href="01-one-way-anova.html"><span class="doc std std-doc">01-one-way-anova.ipynb</span></a></p>
-<p><a class="reference internal" href="01-one-way-example.html"><span class="doc std std-doc">01-one-way-example.ipynb</span></a></p>
-<p>Section 3. <strong>Full-Factorial designs</strong></p>
-<p><a class="reference internal" href="#markdown"><span class="xref myst">markdown.md</span></a></p>
-<p>Section 4. <strong>Outputs Analysis</strong></p>
-<p><a class="reference internal" href="03-Boxplot-by-group.html"><span class="doc std std-doc">03-Boxplot-by-group</span></a></p>
-<p><a class="reference internal" href="03-Surface-plot.html"><span class="doc std std-doc">03-Surface-plot</span></a></p>
-<p><a class="reference internal" href="03-regression-model.html"><span class="doc std std-doc">03-regression-model</span></a></p>
-<p><a class="reference internal" href="03-residual-analysis.html"><span class="doc std std-doc">03-residual-analysis</span></a></p>
-<p><strong>Extras</strong></p>
-<p>Bibliography</p>
-</section>
-<section id="short-biography">
-<h2>Short biography<a class="headerlink" href="#short-biography" title="Link to this heading">#</a></h2>
+<p><strong>Section 1. Introduction to ViDoe</strong></p>
 <ul class="simple">
-<li><p><strong>Leonardo H. Talero-Samiento</strong> is a Ph.D. candidate in Engineering at Universidad Autonoma de Bucaramanga. He specializes in mathematical modeling, data analytics, operational research and manufacturing, process improvement, and technology adoption. His work emphasizes decision-making and production planning. He has contributed to multiple scholarly articles in various fields. He has published articles in Digital Policy, Regulation and Governance, Heliyon, Revista Colombiana de Computacion, Suma de Negocios, IngeCUC, Apuntes del Cenes, Estudios Gerenciales, and Contaduría y Administración. <a class="reference external" href="mailto:ltalero&#37;&#52;&#48;unab&#46;edu&#46;co">ltalero<span>&#64;</span>unab<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-<li><p><strong>Henry Lamos-Díaz</strong> is a highly accomplished Full Professor with a Ph.D. in Mathematical Physics from the esteemed State University of Moscow. His academic journey includes a Master’s degree in Computer Science from the Industrial University of Santander and a Master’s degree in Mathematics from the Patricio Lumumba University. Prior to that, he successfully completed his undergraduate studies in Mathematics at the Patricio Lumumba University. His research interests include  Modeling, Simulation, and Optimization of Production and Logistics Systems, as well as Data Analytics. He exhibits a particular passion for the field of Humanitarian Logistics within his research endeavors. <a class="reference external" href="mailto:hlamos&#37;&#52;&#48;uis&#46;edu&#46;co">hlamos<span>&#64;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
-<li><p><strong>Juan D. Márquez-González</strong> is a holds a candidature for Master’s degree in Industrial Engineering at Universidad Industrial de Santander.  His research interests cover Modeling, Simulation, and Optimization of Production and Logistics Systems. He delves into the intricate processes involved in improving agricultural systems, seeking ways to enhance and streamline them. He also has expertise as a consultant for production optimization. <a class="reference external" href="mailto:juan2208424&#37;&#52;&#48;correo&#46;uis&#46;edu&#46;co">juan2208424<span>&#64;</span>correo<span>&#46;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a></p></li>
+<li><p><a class="reference internal" href="00-ViDoe-Introduction.html"><span class="doc std std-doc">Overview of ViDoe</span></a></p></li>
+<li><p><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html"><span class="doc std std-doc">One-Way ANOVA using ViDoe</span></a></p></li>
+<li><p><a class="reference internal" href="00-ViDoe-Factorial-Designs.html"><span class="doc std std-doc">Factorial Designs in ViDoe</span></a></p></li>
 </ul>
+<p><strong>Section 2. One-Way ANOVA</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="01-anova-oneway.html"><span class="doc std std-doc">Foundations of One-Way ANOVA</span></a></p></li>
+<li><p><a class="reference internal" href="01-one-way-anova.html"><span class="doc std std-doc">Notebook: 01-one-way-anova.ipynb</span></a></p></li>
+<li><p><a class="reference internal" href="01-one-way-example.html"><span class="doc std std-doc">Notebook: 01-one-way-example.ipynb</span></a></p></li>
+</ul>
+<p><strong>Section 3. Factorial Experimental Designs</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="00-ViDoe-Factorial-Designs.html"><span class="doc std std-doc">Principles of (2^k) and Fractional Factorial Designs</span></a></p></li>
+</ul>
+<p><strong>Section 4. Taguchi Designs</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="05-Taguchi-Designs.html"><span class="doc std std-doc">Taguchi Methods and Robust Design</span></a></p></li>
+</ul>
+<p><strong>Section 5. Block Designs</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="04-block-designs.html"><span class="doc std std-doc">Explanation of Block Designs</span></a></p></li>
+</ul>
+<p><strong>Section 6. Output Analysis</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="03-Boxplot-by-group.html"><span class="doc std std-doc">Boxplot by Group</span></a></p></li>
+<li><p><a class="reference internal" href="03-Surface-plot.html"><span class="doc std std-doc">Surface Plot</span></a></p></li>
+<li><p><a class="reference internal" href="03-regression-model.html"><span class="doc std std-doc">Regression Model</span></a></p></li>
+<li><p><a class="reference internal" href="03-residual-analysis.html"><span class="doc std std-doc">Residual Analysis</span></a></p></li>
+</ul>
+<p><strong>Extras</strong></p>
+<ul class="simple">
+<li><p><a class="reference internal" href="Bibliography.html"><span class="doc std std-doc">Bibliography</span></a></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="short-biographies">
+<h2>Short Biographies<a class="headerlink" href="#short-biographies" title="Link to this heading">#</a></h2>
+<p><strong>Leonardo H. Talero-Sarmiento</strong> holds a Ph.D. in Engineering from Universidad Autónoma de Bucaramanga. His academic focus includes mathematical modeling, data analytics, operations research, process improvement, and technology adoption. He has authored scientific articles in journals such as <em>Digital Policy, Regulation and Governance</em>, <em>Heliyon</em>, <em>Revista Colombiana de Computación</em>, <em>Suma de Negocios</em>, <em>IngeCUC</em>, <em>Apuntes del Cenes</em>, <em>Estudios Gerenciales</em>, and <em>Contaduría y Administración</em>.<br />
+📧 <a class="reference external" href="mailto:ltalero&#37;&#52;&#48;unab&#46;edu&#46;co">ltalero<span>&#64;</span>unab<span>&#46;</span>edu<span>&#46;</span>co</a><br />
+🔗 <a class="reference external" href="https://www.researchgate.net/profile/Leonardo-Talero?ev=hdr_xprf">ResearchGate Profile</a><br />
+🔗 <a class="reference external" href="https://apolo.unab.edu.co/en/persons/leonardo-hernan-talero-sarmiento-3">Institutional Profile</a></p>
+<p><strong>Henry Lamos-Díaz</strong> is a Full Professor with a Ph.D. in Mathematical Physics from the State University of Moscow. He also holds Master’s degrees in Computer Science from Universidad Industrial de Santander and in Mathematics from Patricio Lumumba University, where he completed his undergraduate studies. His research focuses on modeling, simulation, and optimization of production and logistics systems, with particular interest in humanitarian logistics.<br />
+📧 <a class="reference external" href="mailto:hlamos&#37;&#52;&#48;uis&#46;edu&#46;co">hlamos<span>&#64;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a></p>
+<p><strong>David Márquez-González</strong> holds a Master’s degree in Industrial Engineering from Universidad Industrial de Santander. His work focuses on modeling and optimizing production and logistics systems, with a strong emphasis on improving agricultural systems. He also works as a consultant in production optimization.<br />
+📧 <a class="reference external" href="mailto:juan2208424&#37;&#52;&#48;correo&#46;uis&#46;edu&#46;co">juan2208424<span>&#64;</span>correo<span>&#46;</span>uis<span>&#46;</span>edu<span>&#46;</span>co</a></p>
+<hr class="docutils" />
 <p><img alt="Industrial Engineering Program - Universidad Autónoma de Bucaramanga" src="e-book/book/INGENIER%C3%8DA-INDUSTRIAL_LOGO.png" /></p>
 </section>
+<section id="note">
+<h2>Note:<a class="headerlink" href="#note" title="Link to this heading">#</a></h2>
+<p>The ViDoe platform and its conceptual framework were originally presented at the <strong>INNODOCT 2023 International Conference on Innovation, Documentation, Education and Teaching Technologies</strong>, held in Bucaramanga. The paper details the motivation, technical approach, and educational goals behind the development of the tool. Readers may cite this work as follows:</p>
+<blockquote>
+<div><p>Talero-Sarmiento, L. H., Lamos-Díaz, H., &amp; Márquez-González, J. D. (2024). <em>ViDoe: A novel tool for visualizing Design of Experiments</em>. In <strong>INNODOCT 2023: Proceedings of the International Conference on Innovation, Documentation, Education and Teaching Technologies</strong> (Vol. 11, pp. 88–95). Bucaramanga, Colombia.<br />
+<a class="reference external" href="https://www.researchgate.net/publication/378149141_ViDoe_A_novel_tool_for_visualizing_Design_of_Experiments">https://www.researchgate.net/publication/378149141_ViDoe_A_novel_tool_for_visualizing_Design_of_Experiments</a></p>
+</div></blockquote>
+<section id="how-to-cite-this-work">
+<h3>How to cite this work<a class="headerlink" href="#how-to-cite-this-work" title="Link to this heading">#</a></h3>
+<div class="highlight-bibtex notranslate"><div class="highlight"><pre><span></span><span class="nc">@inproceedings</span><span class="p">{</span><span class="nl">Talero2024ViDoe</span><span class="p">,</span>
+<span class="w">  </span><span class="na">author</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{Leonardo H. Talero-Sarmiento and Henry Lamos-Díaz and Juan David Márquez-González}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">title</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{{ViDoe: A novel tool for visualizing Design of Experiments}}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">booktitle</span><span class="w">    </span><span class="p">=</span><span class="w"> </span><span class="s">{Proceedings of the International Conference on Innovation, Documentation, Education and Teaching Technologies (INNODOCT 2023)}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">year</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="s">{2024}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">volume</span><span class="w">       </span><span class="p">=</span><span class="w"> </span><span class="s">{11}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">pages</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="s">{88--95}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">address</span><span class="w">      </span><span class="p">=</span><span class="w"> </span><span class="s">{Bucaramanga, Colombia}</span><span class="p">,</span>
+<span class="w">  </span><span class="na">url</span><span class="w">          </span><span class="p">=</span><span class="w"> </span><span class="s">{https://www.researchgate.net/publication/378149141_ViDoe_A_novel_tool_for_visualizing_Design_of_Experiments}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="toctree-wrapper compound">
@@ -491,7 +558,7 @@ document.write(`
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
     <a class="right-next"
@@ -520,7 +587,11 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biography">Short biography</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#short-biographies">Short Biographies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#note">Note:</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-cite-this-work">How to cite this work</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
@@ -569,8 +640,8 @@ By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>
