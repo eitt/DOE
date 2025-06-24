@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>1. One-way Analysis of Variance (ANOVA): A Historical and Practical Overview &#8212; ViDoe - Visualizing Design of Experiments</title>
+    <title>4. One-way Analysis of Variance (ANOVA): A Historical and Practical Overview &#8212; ViDoe - Visualizing Design of Experiments</title>
   
   
   
@@ -60,8 +60,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '01-anova-oneway';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="2. Explaining the Python Code" href="01-one-way-anova.html" />
-    <link rel="prev" title="Visualizing Design of Experiments with ViDoe: An Interactive Approach" href="intro.html" />
+    <link rel="next" title="5. Explaining the Python Code" href="01-one-way-anova.html" />
+    <link rel="prev" title="3. Exploring Two-Level Factorial Designs with ViDoE" href="00-ViDoe-Introduction-Factorial.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -180,25 +180,31 @@
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Anova One-way using ViDoe</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Anova One-way Foundations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">2. Explaining the Python Code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">3. ANOVA One-way: An Illustrative example</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
 
 
 
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">7. Principles of 2^k and Fractional Factorial Designs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">10. Principles of 2^k and Fractional Factorial Designs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">8. Taguchi Methods and Robust Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">11. Taguchi Methods and Robust Design</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">9. Block Designs Explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">12. Block Designs Explained</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
 <ul class="nav bd-sidenav">
@@ -407,12 +413,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-background">1.1. Historical Background</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-and-applications">1.2. Utility and Applications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implications">1.3. Practical Implications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-phenomena-examples">1.4. Physical Phenomena Examples</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software-applications">1.5. Software Applications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foundations-of-one-way-anova">1.6. Foundations of One-way ANOVA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-background">4.1. Historical Background</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-and-applications">4.2. Utility and Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implications">4.3. Practical Implications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-phenomena-examples">4.4. Physical Phenomena Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software-applications">4.5. Software Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foundations-of-one-way-anova">4.6. Foundations of One-way ANOVA</a></li>
 </ul>
             </nav>
         </div>
@@ -426,7 +432,7 @@ document.write(`
                   
   <p><a name="01-anova-oneway"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="one-way-analysis-of-variance-anova-a-historical-and-practical-overview">
-<h1><a class="toc-backref" href="#id36" role="doc-backlink"><span class="section-number">1. </span>One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</a><a class="headerlink" href="#one-way-analysis-of-variance-anova-a-historical-and-practical-overview" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id36" role="doc-backlink"><span class="section-number">4. </span>One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</a><a class="headerlink" href="#one-way-analysis-of-variance-anova-a-historical-and-practical-overview" title="Link to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
@@ -443,27 +449,27 @@ document.write(`
 </ul>
 </nav>
 <section id="historical-background">
-<h2><a class="toc-backref" href="#id37" role="doc-backlink"><span class="section-number">1.1. </span>Historical Background</a><a class="headerlink" href="#historical-background" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id37" role="doc-backlink"><span class="section-number">4.1. </span>Historical Background</a><a class="headerlink" href="#historical-background" title="Link to this heading">#</a></h2>
 <p>The one-way Analysis of Variance (ANOVA), a robust statistical test, was first conceived by the eminent statistician Ronald Fisher in the early 1920s. Fisher’s primary objective was to devise a method that could facilitate the comparison of means across multiple groups. His innovative solution was the ANOVA, a tool that has since become a cornerstone in the field of statistics <span id="id1">[<a class="reference internal" href="Bibliography.html#id8" title="R. A. Fisher. Statistical Methods for Research Workers, pages 66–70. Springer New York, New York, NY, 1992. URL: https://doi.org/10.1007/978-1-4612-4380-9_6, doi:10.1007/978-1-4612-4380-9_6.">Fisher, 1992</a>]</span>.</p>
 </section>
 <section id="utility-and-applications">
-<h2><a class="toc-backref" href="#id38" role="doc-backlink"><span class="section-number">1.2. </span>Utility and Applications</a><a class="headerlink" href="#utility-and-applications" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id38" role="doc-backlink"><span class="section-number">4.2. </span>Utility and Applications</a><a class="headerlink" href="#utility-and-applications" title="Link to this heading">#</a></h2>
 <p>The versatility of the ANOVA is evident in its wide-ranging applicability across diverse research settings. Its primary function is to compare the means of two or more groups, but it also serves as a tool for testing interactions between variables. The ANOVA’s power lies in its capacity to enable researchers to draw significant inferences from their data. For instance, it can be employed to ascertain the effectiveness of a novel treatment or to discern differences in average IQ scores between distinct groups of individuals <span id="id2">[<a class="reference internal" href="Bibliography.html#id9" title="M.H. Kutner. Applied Linear Statistical Models. McGrwa-Hill international edition. McGraw-Hill Irwin, 2005. ISBN 9780071122214. URL: https://books.google.com.co/books?id=0xqCAAAACAAJ.">Kutner, 2005</a>]</span>.</p>
 </section>
 <section id="practical-implications">
-<h2><a class="toc-backref" href="#id39" role="doc-backlink"><span class="section-number">1.3. </span>Practical Implications</a><a class="headerlink" href="#practical-implications" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id39" role="doc-backlink"><span class="section-number">4.3. </span>Practical Implications</a><a class="headerlink" href="#practical-implications" title="Link to this heading">#</a></h2>
 <p>The practical implications of the ANOVA are manifold. It can be utilized to compare the effectiveness of different treatments, test for disparities in average scores between groups, and identify factors associated with varying outcomes. As such, the ANOVA is an invaluable tool that significantly enhances our understanding of the world around us <span id="id3">[<a class="reference internal" href="Bibliography.html#id10" title="Roger E. Kirk. Experimental design: Procedures for the behavioral sciences. SAGE Publications, Inc., 4 edition, 2013. ISBN 9781412974455. doi:10.4135/9781483384733.">Kirk, 2013</a>]</span>.</p>
 </section>
 <section id="physical-phenomena-examples">
-<h2><a class="toc-backref" href="#id40" role="doc-backlink"><span class="section-number">1.4. </span>Physical Phenomena Examples</a><a class="headerlink" href="#physical-phenomena-examples" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id40" role="doc-backlink"><span class="section-number">4.4. </span>Physical Phenomena Examples</a><a class="headerlink" href="#physical-phenomena-examples" title="Link to this heading">#</a></h2>
 <p>In the realm of physical phenomena, ANOVA has been applied in various contexts. For example, the Impact of different environmental conditions during vegetative propagation on growth, survival, and biochemical characteristics in populus hybrids in clonal field trial <span id="id4">[<a class="reference internal" href="Bibliography.html#id11" title="Valda Gudynaitė-Franckevičienė and Alfas Pliūra. The impact of different environmental conditions during vegetative propagation on growth, survival, and biochemical characteristics in populus hybrids in clonal field trial. Forests, 2021. URL: https://www.mdpi.com/1999-4907/12/7/892, doi:10.3390/f12070892.">Gudynaitė-Franckevičienė and Pliūra, 2021</a>]</span>.  In another study, ANOVA was employed for selecting the optimal heat-accumulating material based on phase transitions for the economical maintenance of poultry farms <span id="id5">[<a class="reference internal" href="Bibliography.html#id12" title="Olha Aleksandrova, Tetiana Zhmykhova, Rando Värnik, and Ants-Hannes Viira. The one-way analysis of variance of heat-storage materials used in building of poultry houses. Processes, 2023. URL: https://www.mdpi.com/2227-9717/11/1/104, doi:10.3390/pr11010104.">Aleksandrova <em>et al.</em>, 2023</a>]</span>. In information systems research, ANOVA has been used to study attitudes toward technology adoption. A study found that the adjustment of attitudinal scales according to the characteristics of the regarded attitude object (in IS: hedonic and utilitarian technologies) does influence the impact of attitude on behavior <span id="id6">[<a class="reference internal" href="Bibliography.html#id13" title="Julia Krönung and Andreas Eckhardt. Three classes of attitude and their implications for is research. In International Conference on Interaction Sciences. 2011.">Krönung and Eckhardt, 2011</a>]</span>. ANOVA has been used in psychology studies to evaluate depression and obesity indices. A study compared ANOVA with other statistical methods, such as regression, structural equation modeling, and Taguchi algorithm process, to measure and estimate obesity and depression <span id="id7">[<a class="reference internal" href="Bibliography.html#id14" title="N. A. Mohamed, A. R. A. Alanzi, N. A. Azizan, S. A. Azizan, N. Samsudin, and H. S. Jenatabadi. Evaluation of depression and obesity indices based on applications of ANOVA, regression, structural equation modeling and taguchi algorithm process. Frontiers in psychology, 14:1060963, 2023. doi:10.3389/fpsyg.2023.1060963.">Mohamed <em>et al.</em>, 2023</a>]</span>. Another example is mineral processing to study the flotation process and properties of different types of coal. A study presented a scheme of conducting ANOVA, which can be a statistical method used for the analysis of various complex phenomena in different fields of science <span id="id8">[<a class="reference internal" href="Bibliography.html#id15" title="Tomasz Niedoba and Paulina Pięta. Applications of anova in mineral processing. Mining Science, 2016.">Niedoba and Pięta, 2016</a>]</span>. As a final illsutrative example, ANOVA has been used in e-commerce to assess the difference in service quality dimensions and to examine the relationship between service quality dimensions towards customers’ satisfaction and loyalty on Shopee App <span id="id9">[<a class="reference internal" href="Bibliography.html#id16" title="Pei-Ling Sheu and Shu-Chun Chang. Relationship of service quality dimensions, customer satisfaction and loyalty in e-commerce: a case study of the shopee app. Applied Economics, 54:4597 - 4607, 2022.">Sheu and Chang, 2022</a>]</span>.</p>
 </section>
 <section id="software-applications">
-<h2><a class="toc-backref" href="#id41" role="doc-backlink"><span class="section-number">1.5. </span>Software Applications</a><a class="headerlink" href="#software-applications" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id41" role="doc-backlink"><span class="section-number">4.5. </span>Software Applications</a><a class="headerlink" href="#software-applications" title="Link to this heading">#</a></h2>
 <p>Several software tools, including Minitab, SPSS, Stata, R, and Python, offer functionalities for conducting ANOVA. These tools have been instrumental in making ANOVA accessible to researchers across various disciplines, including those without extensive programming skills <span id="id10">[<a class="reference internal" href="Bibliography.html#id17" title="George Charles Alter, Jack Gager, Pascal Heus, Carson Hunter, Sanda Ionescu, Jeremy Iverson, H.V. Jagadish, Jared Lyle, Alexander Mueller, Sigve Nordgaard, Ornulf Risnes, Dan Smith, and Jie Song. Capturing data provenance from statistical software. International Journal of Digital Curation, 2022. doi:10.2218/ijdc.v16i1.763.">Alter <em>et al.</em>, 2022</a>]</span> <span id="id11">[<a class="reference internal" href="Bibliography.html#id18" title="Muktar H. Aliyu, Mahmoud Sani, Donna Ingles, Fatima Tsiga-Ahmed, Baba Musa, Deepa Dongarwar, Hamisu Salihu, and William Wester. Building physician-scientist skills in r programming: a short workshop report. International Journal of Translational Medical Research and Public Health, May 2022. URL: https://ijtmrph.org/index.php/IJTMRPH/article/view/418, doi:10.21106/ijtmrph.418.">Aliyu <em>et al.</em>, 2022</a>]</span>.</p>
 </section>
 <section id="foundations-of-one-way-anova">
-<h2><a class="toc-backref" href="#id42" role="doc-backlink"><span class="section-number">1.6. </span>Foundations of One-way ANOVA</a><a class="headerlink" href="#foundations-of-one-way-anova" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id42" role="doc-backlink"><span class="section-number">4.6. </span>Foundations of One-way ANOVA</a><a class="headerlink" href="#foundations-of-one-way-anova" title="Link to this heading">#</a></h2>
 <p>The ANOVA is a parametric test, implying that it makes certain assumptions about the data’s distribution. The most critical assumption is that the data is normally distributed. Furthermore, the ANOVA is a hypothesis test used to test a hypothesis about the population. The null hypothesis posits that there is no difference between the means of the groups, while the alternative hypothesis suggests a difference between the group means. Despite its power, the ANOVA can be sensitive to violations of these assumptions, potentially leading to unreliable results if the assumptions are not met <span id="id12">[<a class="reference internal" href="Bibliography.html#id19" title="Gene V Glass, Percy D. Peckham, and James R. Sanders. Consequences of failure to meet assumptions underlying the fixed effects analyses of variance and covariance. Review of Educational Research, 42(3):237-288, 1972. URL: https://doi.org/10.3102/00346543042003237, arXiv:https://doi.org/10.3102/00346543042003237, doi:10.3102/00346543042003237.">Glass <em>et al.</em>, 1972</a>]</span>.</p>
 <div class="docutils container" id="id13">
 <div role="list" class="citation-list">
@@ -551,12 +557,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="intro.html"
+       href="00-ViDoe-Introduction-Factorial.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Visualizing Design of Experiments with ViDoe: An Interactive Approach</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Exploring Two-Level Factorial Designs with ViDoE</p>
       </div>
     </a>
     <a class="right-next"
@@ -564,7 +570,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">2. </span>Explaining the Python Code</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>Explaining the Python Code</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -584,12 +590,12 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-background">1.1. Historical Background</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-and-applications">1.2. Utility and Applications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implications">1.3. Practical Implications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-phenomena-examples">1.4. Physical Phenomena Examples</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software-applications">1.5. Software Applications</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foundations-of-one-way-anova">1.6. Foundations of One-way ANOVA</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#historical-background">4.1. Historical Background</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-and-applications">4.2. Utility and Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-implications">4.3. Practical Implications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#physical-phenomena-examples">4.4. Physical Phenomena Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#software-applications">4.5. Software Applications</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#foundations-of-one-way-anova">4.6. Foundations of One-way ANOVA</a></li>
 </ul>
   </nav></div>
 

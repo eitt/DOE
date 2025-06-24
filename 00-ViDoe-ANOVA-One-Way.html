@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Using ViDoE to Understand One-Way ANOVA &#8212; ViDoe - Visualizing Design of Experiments</title>
+    <title>2. Using ViDoE to Understand One-Way ANOVA &#8212; ViDoe - Visualizing Design of Experiments</title>
   
   
   
@@ -60,6 +60,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '00-ViDoe-ANOVA-One-Way';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Exploring Two-Level Factorial Designs with ViDoE" href="00-ViDoe-Introduction-Factorial.html" />
+    <link rel="prev" title="1. Introduction and Justification" href="00-ViDoe-Introduction.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -122,8 +124,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -180,25 +180,31 @@
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Using ViDoE to Understand One-Way ANOVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Anova One-way using ViDoe</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">1. Anova One-way Foundations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">2. Explaining the Python Code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">3. ANOVA One-way: An Illustrative example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
 
 
 
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">7. Principles of 2^k and Fractional Factorial Designs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">10. Principles of 2^k and Fractional Factorial Designs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">8. Taguchi Methods and Robust Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">11. Taguchi Methods and Robust Design</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">9. Block Designs Explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">12. Block Designs Explained</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
 <ul class="nav bd-sidenav">
@@ -407,15 +413,15 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">Educational Utilities in ViDoE</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">Key Figures</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-1-boxplot-of-y-across-factor-levels">📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-2-regression-equation-visualization">📈 <strong>Figure 2.2 - Regression Equation Visualization</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-3-sum-of-squares-decomposition">🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">2.1. Educational Utilities in ViDoE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-1-boxplot-of-y-across-factor-levels">2.2.1. 📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-2-regression-equation-visualization">2.2.2. 📈 <strong>Figure 2.2 - Regression Equation Visualization</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-3-sum-of-squares-decomposition">2.2.3. 🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">Suggested Classroom Activity</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">Interpretation Support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">2.3. Suggested Classroom Activity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">2.4. Interpretation Support</a></li>
 </ul>
             </nav>
         </div>
@@ -429,11 +435,11 @@ document.write(`
                   
   <p><a name="00-ViDoe-ANOVA-One-Way"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="using-vidoe-to-understand-one-way-anova">
-<h1>Using ViDoE to Understand One-Way ANOVA<a class="headerlink" href="#using-vidoe-to-understand-one-way-anova" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">2. </span>Using ViDoE to Understand One-Way ANOVA<a class="headerlink" href="#using-vidoe-to-understand-one-way-anova" title="Link to this heading">#</a></h1>
 <p>One-Way ANOVA (Analysis of Variance) is one of the most fundamental tools in experimental design. It is used when we want to compare the means of three or more independent groups (or levels of a factor) to determine if the observed differences in sample means are statistically significant. In practice, this method is key when analyzing how different conditions (treatments, materials, times, etc.) affect a given outcome.</p>
 <p>However, interpreting ANOVA results from purely numerical outputs—such as F-values, p-values, and sum of squares—can be challenging for students. That is why <strong>ViDoE</strong> includes a dedicated, interactive module for One-Way ANOVA that helps users understand how treatment effects and residuals contribute to variation in the data.</p>
 <section id="educational-utilities-in-vidoe">
-<h2>Educational Utilities in ViDoE<a class="headerlink" href="#educational-utilities-in-vidoe" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.1. </span>Educational Utilities in ViDoE<a class="headerlink" href="#educational-utilities-in-vidoe" title="Link to this heading">#</a></h2>
 <p>The ViDoE platform allows learners to:</p>
 <ul class="simple">
 <li><p>Customize the <strong>name of the factor</strong> and its <strong>three levels</strong> (e.g., Temperature: Low, Medium, High).</p></li>
@@ -445,23 +451,23 @@ document.write(`
 </ul>
 </section>
 <section id="key-figures">
-<h2>Key Figures<a class="headerlink" href="#key-figures" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.2. </span>Key Figures<a class="headerlink" href="#key-figures" title="Link to this heading">#</a></h2>
 <section id="figure-2-1-boxplot-of-y-across-factor-levels">
-<h3>📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong><a class="headerlink" href="#figure-2-1-boxplot-of-y-across-factor-levels" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.2.1. </span>📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong><a class="headerlink" href="#figure-2-1-boxplot-of-y-across-factor-levels" title="Link to this heading">#</a></h3>
 <p><img alt="Fig2.1 - Boxplot of Y across Levels" src="workspaces/DOE/e-book/book/Fig2_1_Boxplot_Y_by_Level.png" /></p>
 <ul class="simple">
 <li><p><strong>Description</strong>: This figure shows the distribution of the response variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> for each factor level. It helps visualize differences in central tendency and variation among groups.</p></li>
 </ul>
 </section>
 <section id="figure-2-2-regression-equation-visualization">
-<h3>📈 <strong>Figure 2.2 - Regression Equation Visualization</strong><a class="headerlink" href="#figure-2-2-regression-equation-visualization" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.2.2. </span>📈 <strong>Figure 2.2 - Regression Equation Visualization</strong><a class="headerlink" href="#figure-2-2-regression-equation-visualization" title="Link to this heading">#</a></h3>
 <p><img alt="Fig2.2 - Regression Equation" src="workspaces/DOE/e-book/book/Fig2_2_Regression_Equation.png" /></p>
 <ul class="simple">
 <li><p><strong>Description</strong>: Displays the linear regression model derived from the data using indicator variables. This aids in understanding how treatment effects modify the outcome.</p></li>
 </ul>
 </section>
 <section id="figure-2-3-sum-of-squares-decomposition">
-<h3>🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong><a class="headerlink" href="#figure-2-3-sum-of-squares-decomposition" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">2.2.3. </span>🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong><a class="headerlink" href="#figure-2-3-sum-of-squares-decomposition" title="Link to this heading">#</a></h3>
 <p><img alt="Fig2.3 - Sum of Squares Pie" src="workspaces/DOE/e-book/book/Fig2_3_Sum_of_Squares_Pie.png" /></p>
 <ul class="simple">
 <li><p><strong>Description</strong>: Two pie charts showing:</p>
@@ -474,7 +480,7 @@ document.write(`
 </section>
 </section>
 <section id="suggested-classroom-activity">
-<h2>Suggested Classroom Activity<a class="headerlink" href="#suggested-classroom-activity" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.3. </span>Suggested Classroom Activity<a class="headerlink" href="#suggested-classroom-activity" title="Link to this heading">#</a></h2>
 <p>Students can follow these steps directly within the ViDoE app:</p>
 <ol class="arabic simple">
 <li><p>Rename the factor (e.g., “Method”) and assign new level names (e.g., “A”, “B”, “C”).</p></li>
@@ -486,7 +492,7 @@ document.write(`
 </ol>
 </section>
 <section id="interpretation-support">
-<h2>Interpretation Support<a class="headerlink" href="#interpretation-support" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.4. </span>Interpretation Support<a class="headerlink" href="#interpretation-support" title="Link to this heading">#</a></h2>
 <p>The module provides both <strong>statistical tables</strong> and <strong>visual guidance</strong> to support interpretation:</p>
 <ul class="simple">
 <li><p>The <strong>ANOVA table</strong> displays degrees of freedom, sum of squares, F-statistic, and p-value.</p></li>
@@ -527,6 +533,24 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="00-ViDoe-Introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Introduction and Justification</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="00-ViDoe-Introduction-Factorial.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Exploring Two-Level Factorial Designs with ViDoE</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -543,15 +567,15 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">Educational Utilities in ViDoE</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">Key Figures</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-1-boxplot-of-y-across-factor-levels">📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-2-regression-equation-visualization">📈 <strong>Figure 2.2 - Regression Equation Visualization</strong></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-3-sum-of-squares-decomposition">🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">2.1. Educational Utilities in ViDoE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-1-boxplot-of-y-across-factor-levels">2.2.1. 📊 <strong>Figure 2.1 - Boxplot of Y across Factor Levels</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-2-regression-equation-visualization">2.2.2. 📈 <strong>Figure 2.2 - Regression Equation Visualization</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-2-3-sum-of-squares-decomposition">2.2.3. 🧮 <strong>Figure 2.3 - Sum of Squares Decomposition</strong></a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">Suggested Classroom Activity</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">Interpretation Support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">2.3. Suggested Classroom Activity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">2.4. Interpretation Support</a></li>
 </ul>
   </nav></div>
 
