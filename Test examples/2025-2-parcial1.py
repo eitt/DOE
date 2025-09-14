@@ -354,7 +354,7 @@ def generate_case_pdf(
     # Encabezado por defecto
     if course_header_lines is None:
         course_header_lines = [
-            "Primer parcial de Estadística III. 2025-2",
+            "Primer parcial de Diseño de Experimentos 2025-2",
             "Leonardo H. Talero-Sarmiento, Ph.D.",
             "Ingeniería Industrial, Escuela de Estudios Industriales y Empresariales, Universidad Industrial de Santander",
         ]
