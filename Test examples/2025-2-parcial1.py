@@ -281,7 +281,7 @@ def build_rubric() -> pd.DataFrame:
         {"Componente": "EDA", "Puntos": 1.0, "Criterios": "Boxplots por grupo, estadísticas descriptivas, interpretación inicial."},
         {"Componente": "ANOVA", "Puntos": 1.25, "Criterios": "Modelo correcto, tabla ANOVA, interpretación de F y p-valor."},
         {"Componente": "Post Hoc", "Puntos": 0.75, "Criterios": "Tukey HSD (si aplica), pares significativos, conclusiones."},
-        {"Componente": "Normalidad de residuos", "Puntos": 0.5, "Criterios": "Q-Q plot, Shapiro-Wilk y discusión de supuestos."},
+        {"Componente": "Normalidad de residuos", "Puntos": 0.5, "Criterios": "Q-Q plot, Aleatoriedad, Homocedasticidad y discusión de supuestos."},
         {"Componente": "Análisis de sensibilidad", "Puntos": 0.5, "Criterios": "Cambio propuesto, comparación de resultados y discusión."},
         {"Componente": "Chequeo de diseño", "Puntos": 0.5, "Criterios": "Factores, réplicas, número de datos, datos perdidos, variable respuesta."},
     ]
@@ -341,7 +341,7 @@ def generate_case_pdf(
     # Encabezado por defecto (texto provisto por el usuario)
     if course_header_lines is None:
         course_header_lines = [
-            "Primer parcial de Diseño de Esperimentos 2025-2",
+            "Primer parcial de Estadística III. 2025-2",
             "Leonardo H. Talero-Sarmiento, Ph.D.",
             "Ingeniería Industrial, Escuela de Estudios Industriales y Empresariales, Universidad Industrial de Santander",
         ]
@@ -392,13 +392,15 @@ def generate_case_pdf(
 
     # Páginas PDF (compact = 2 páginas)
     with PdfPages(out_path) as pdf:
-        # Página 1: Encabezado + Scenario + Dataset (compacto)
+        # Página 1: Encabezado + Scenario + Dataset (datos del examen)
         page1 = f"{scenario}\n\n{dataset_summary}"
-        _add_text_page(pdf, "Parcial – Instrucciones", page1, fontsize=10)
+        _add_text_page(pdf, "Datos del examen", page1, fontsize=10)
 
-        # Página 2: Tareas + Demostración + Rúbrica + Chequeo
-        page2 = f"{tasks}\n\n{demo_title}\n{demo_body}\n\n{rubric_txt}\n\n{design_check}"
-        _add_text_page(pdf, "Tareas, Demostración y Rúbrica", page2, fontsize=10)
+
+        # Página 2: Tareas → Demostración → Preguntas sobre diseño → Rúbrica
+        page2 = f"{tasks}\n\n{demo_title}\n{demo_body}\n\n{design_check}\n\n{rubric_txt}"
+        _add_text_page(pdf, "Tareas, Demostración, Diseño y Rúbrica", page2, fontsize=10)
+
 
     return out_path
 
