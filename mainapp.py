@@ -34,7 +34,7 @@ def create_factorial_dataframe(levels, numeric_mapping, replications=2, random_s
     Generates a factorial design dataframe with numeric mappings for any number of factors.
     `levels` is a dict: {factor_key: [level_str, ...]}
     """
-    _ = np.random.default_rng(seed=random_state)  # kept for future use
+    _ = np.random.default_rng(seed=random_state)  # reserved for future stochastic use
     grid = list(itertools.product(*levels.values()))
     df = pd.DataFrame(grid * replications, columns=levels.keys())
     # numeric maps
@@ -42,7 +42,7 @@ def create_factorial_dataframe(levels, numeric_mapping, replications=2, random_s
         if set(df[col].unique()).issubset(set(numeric_mapping.keys())):
             df[f'{col}_num'] = df[col].map(numeric_mapping)
         else:
-            # If custom labels are used, map by position
+            # If custom labels are used, map by position (fallback)
             lvl_list = list(levels[col])
             pos_map = {lvl: numeric_mapping[lvl] for lvl in lvl_list if lvl in numeric_mapping}
             df[f'{col}_num'] = df[col].map(pos_map)
@@ -67,7 +67,8 @@ def compute_response(df, coefficients, factor_name_map, noise_sd=0.5, random_sta
     # Build y from coefficients
     needed = 1 + len(keys) + len(list(combinations(keys, 2)))
     if len(coefficients) != needed:
-        st.warning(f"Coefficient count mismatch: expected {needed}, got {len(coefficients)}. Truncating/Extending with zeros.")
+        st.warning(f"Coefficient count mismatch: expected {needed}, got {len(coefficients)}. "
+                   f"Truncating/Extending with zeros.")
         if len(coefficients) < needed:
             coefficients = coefficients + [0.0] * (needed - len(coefficients))
         else:
@@ -137,11 +138,14 @@ def plot_2d(df, factor_name_map):
     try:
         xname = list(factor_name_map.values())[0]
         yname = list(factor_name_map.values())[1]
+        x_vals = list(np.asarray(df[f'{xname}_num']).ravel())
+        y_vals = list(np.asarray(df[f'{yname}_num']).ravel())
+        y_color = list(np.asarray(df['Y']).ravel())
         fig = go.Figure(data=go.Scatter(
-            x=df[f'{xname}_num'],
-            y=df[f'{yname}_num'],
+            x=x_vals,
+            y=y_vals,
             mode='markers',
-            marker=dict(size=10, color=df['Y'], colorbar=dict(title='Y'))
+            marker=dict(size=10, color=y_color, colorbar=dict(title='Y'))
         ))
         fig.update_layout(
             xaxis_title=xname,
@@ -159,12 +163,14 @@ def plot_3d(df, factor_name_map):
     try:
         v = list(factor_name_map.values())
         x, y, z = v[0], v[1], v[2]
+        xv = list(np.asarray(df[f'{x}_num']).ravel())
+        yv = list(np.asarray(df[f'{y}_num']).ravel())
+        zv = list(np.asarray(df[f'{z}_num']).ravel())
+        cvals = list(np.asarray(df['Y']).ravel())
         fig = go.Figure(data=go.Scatter3d(
-            x=df[f'{x}_num'],
-            y=df[f'{y}_num'],
-            z=df[f'{z}_num'],
+            x=xv, y=yv, z=zv,
             mode='markers',
-            marker=dict(size=8, color=df['Y'], colorbar=dict(title='Y'), opacity=0.85)
+            marker=dict(size=8, color=cvals, colorbar=dict(title='Y'), opacity=0.85)
         ))
         fig.update_layout(
             scene=dict(xaxis_title=x, yaxis_title=y, zaxis_title=z),
@@ -221,20 +227,6 @@ def plot_surface(df, factor1_custom, factor2_custom):
     )
     st.plotly_chart(fig, use_container_width=True)
 
-    """3D surface Y over two *_num axes (requires a grid)."""
-    idx = f'{factor1_custom}_num'
-    col = f'{factor2_custom}_num'
-    if idx not in df.columns or col not in df.columns:
-        st.error("Selected factors not found for surface plot.")
-        return
-    pivot = df.pivot_table(values='Y', index=idx, columns=col, aggfunc='mean')
-    if pivot.shape[0] < 2 or pivot.shape[1] < 2:
-        st.warning("Not enough grid points to draw a surface. Increase replications/levels.")
-    fig = go.Figure(data=[go.Surface(z=pivot.values, x=pivot.index, y=pivot.columns)])
-    fig.update_layout(scene=dict(xaxis_title=factor1_custom, yaxis_title=factor2_custom, zaxis_title='Y'),
-                      title=f'Surface: {factor1_custom} vs {factor2_custom}', height=550)
-    st.plotly_chart(fig, use_container_width=True)
-
 
 def plot_boxplot(df, groupby_label, factor_name_map):
     """
@@ -289,7 +281,7 @@ def plot_boxplot(df, groupby_label, factor_name_map):
 
     # Draw boxplots for each group
     for name, group in df.groupby(group_series):
-        fig.add_trace(go.Box(y=group['Y'], name=str(name), boxmean=True))
+        fig.add_trace(go.Box(y=list(np.asarray(group['Y']).ravel()), name=str(name), boxmean=True))
 
     fig.update_layout(
         xaxis_title=groupby_label,
@@ -301,65 +293,6 @@ def plot_boxplot(df, groupby_label, factor_name_map):
     )
     st.plotly_chart(fig, use_container_width=True)
 
-    """
-    Boxplots by a factor (custom name) or interactions:
-    supports "A", "A * B", and "A * B * C" where labels are the CUSTOM factor names.
-    Groups are shown by numeric-coded levels to match your *_num columns.
-    """
-    fig = go.Figure()
-    parts = groupby_label.split(" * ")
-
-    # Build the grouping column name(s)
-    def col_from_label(lbl):
-        return f"{lbl}_num"
-
-    missing = False
-    if len(parts) == 1:
-        gcol = col_from_label(parts[0])
-        if gcol not in df.columns:
-            st.error(f"Column '{gcol}' not found.")
-            return
-        group_series = df[gcol].astype(str)
-
-    elif len(parts) == 2:
-        a_label, b_label = parts
-        a_col, b_col = col_from_label(a_label), col_from_label(b_label)
-        for c in (a_col, b_col):
-            if c not in df.columns:
-                st.error(f"Column '{c}' not found.")
-                missing = True
-        if missing:
-            return
-        inter_col = f"Interaction_{a_label}_{b_label}"
-        df[inter_col] = df[a_col].astype(str) + " * " + df[b_col].astype(str)
-        group_series = df[inter_col]
-
-    elif len(parts) == 3:
-        a_label, b_label, c_label = parts
-        a_col, b_col, c_col = col_from_label(a_label), col_from_label(b_label), col_from_label(c_label)
-        for c in (a_col, b_col, c_col):
-            if c not in df.columns:
-                st.error(f"Column '{c}' not found.")
-                missing = True
-        if missing:
-            return
-        inter_col = f"Interaction_{a_label}_{b_label}_{c_label}"
-        df[inter_col] = (
-            df[a_col].astype(str) + " * " + df[b_col].astype(str) + " * " + df[c_col].astype(str)
-        )
-        group_series = df[inter_col]
-
-    else:
-        st.error("Only up to 3-way interactions are supported.")
-        return
-
-    # Plot
-    for name, group in df.groupby(group_series):
-        fig.add_trace(go.Box(y=group['Y'], name=str(name), boxmean=True))
-
-    fig.update_layout(xaxis_title=groupby_label, yaxis_title='Y', title='Boxplot by Group', height=500)
-    st.plotly_chart(fig, use_container_width=True)
-    
 
 # -------------------------
 # Pages
@@ -414,7 +347,6 @@ def three_factorial():
     groupby_label = st.selectbox('Group by', groupby_options, index=0)
     plot_boxplot(df, groupby_label, factor_name_map)
 
-
     st.subheader('Surface Plot')
     f1 = st.selectbox('First Factor', custom_labels, index=0)
     f2 = st.selectbox('Second Factor', custom_labels, index=1)
@@ -428,7 +360,8 @@ def three_factorial():
     st.code(format_equation(results, factor_name_map))
     # >>> Print text summary (classic)
     st.text(results.summary())
-        # --- Post-hoc analysis (Tukey HSD) ---
+
+    # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
 
     # Main effects: compare 'low', 'medium', 'high' for each factor (use original factor keys, not custom labels)
@@ -451,7 +384,6 @@ def three_factorial():
     groups_3 = df[["Temperature", "Pressure", "Thinner"]].astype(str).agg(' * '.join, axis=1)
     tuk3 = pairwise_tukeyhsd(endog=df["Y"], groups=groups_3, alpha=0.05)
     st.text(tuk3.summary().as_text())
-
 
 
 def factorial_twolevels():
@@ -513,7 +445,7 @@ def factorial_twolevels():
     # >>> Print text summary (classic)
     st.text(results.summary())
 
-        # --- Post-hoc analysis (Tukey HSD) ---
+    # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
 
     # Main effects (each factor has two levels; Tukey degenerates to a t-test equivalent, still fine)
@@ -528,7 +460,6 @@ def factorial_twolevels():
     groups = df[["FactorA", "FactorB"]].astype(str).agg(' * '.join, axis=1)
     tuk_ab = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
     st.text(tuk_ab.summary().as_text())
-
 
 
 def anova_oneway():
@@ -662,7 +593,7 @@ def Analysis():
     st.subheader("Distribution by Machine (Box Plot)")
     fig_box = go.Figure()
     for m in ["A", "B", "C"]:
-        fig_box.add_trace(go.Box(y=df.loc[df["Machine"] == m, "CycleTime"],
+        fig_box.add_trace(go.Box(y=list(np.asarray(df.loc[df["Machine"] == m, "CycleTime"]).ravel()),
                                  name=f"Machine {m}",
                                  boxmean=True))
     fig_box.update_layout(xaxis_title="Machine",
@@ -686,6 +617,7 @@ def Analysis():
     st.text(anova_tbl.to_string())
 
     # Effect size (eta-squared)
+    eta_sq = np.nan
     try:
         sstr = float(anova_tbl.loc["C(Machine)", "sum_sq"])
         sse = float(anova_tbl.loc["Residual", "sum_sq"])
@@ -730,8 +662,8 @@ def Analysis():
     fitted = model.fittedvalues
     fig_rvf = go.Figure()
     fig_rvf.add_trace(go.Scatter(x=list(np.asarray(fitted).ravel()),
-                             y=list(np.asarray(resid).ravel()),
-                             mode='markers', name='Residuals'))
+                                 y=list(np.asarray(resid).ravel()),
+                                 mode='markers', name='Residuals'))
 
     # Safer horizontal baseline (works across Plotly versions)
     x_min = float(np.min(fitted))
@@ -740,7 +672,8 @@ def Analysis():
         type="line",
         x0=x_min, x1=x_max, y0=0, y1=0,
         xref="x", yref="y",
-    line=dict(dash="dash"))
+        line=dict(dash="dash")
+    )
 
     fig_rvf.update_layout(xaxis_title="Fitted values",
                           yaxis_title="Residuals",
@@ -771,7 +704,6 @@ def Analysis():
         title="Q–Q Plot of Residuals"
     )
     st.plotly_chart(fig_qq, use_container_width=True)
-
 
     # -----------------------
     # Step-by-step interpretation guide
@@ -815,13 +747,11 @@ def Analysis():
     # Exports
     # -----------------------
     st.subheader("Exports")
-    # Tukey table as text -> to CSV-like lines
     tukey_df = pd.DataFrame(data=tukey._results_table.data[1:], columns=tukey._results_table.data[0])
     st.download_button("Download Tukey HSD results (CSV)",
                        data=tukey_df.to_csv(index=False),
                        file_name="tukey_hsd_results.csv",
                        mime="text/csv")
-
 
 
 # -------------------------
