@@ -199,6 +199,70 @@ def plot_boxplot(df, groupby_label, factor_name_map):
     Groups are shown by numeric-coded levels to match your *_num columns.
     """
     fig = go.Figure()
+
+    # Allow flexible spacing around '*'
+    parts = [p.strip() for p in groupby_label.split('*') if p.strip()]
+
+    def col_from_label(lbl):
+        # lbl is a CUSTOM label (e.g., "Temperature" after user renaming)
+        return f"{lbl}_num"
+
+    # Build a single Series that contains the group label for each row
+    if len(parts) == 1:
+        gcol = col_from_label(parts[0])
+        if gcol not in df.columns:
+            st.error(f"Column '{gcol}' not found in DataFrame.")
+            return
+        group_series = df[gcol].astype(str)
+
+    elif len(parts) == 2:
+        a_label, b_label = parts
+        a_col, b_col = col_from_label(a_label), col_from_label(b_label)
+        for c in (a_col, b_col):
+            if c not in df.columns:
+                st.error(f"Column '{c}' not found in DataFrame.")
+                return
+        inter_col = f"Interaction_{a_label}_{b_label}"
+        df[inter_col] = df[a_col].astype(str) + " * " + df[b_col].astype(str)
+        group_series = df[inter_col]
+
+    elif len(parts) == 3:
+        a_label, b_label, c_label = parts
+        a_col, b_col, c_col = col_from_label(a_label), col_from_label(b_label), col_from_label(c_label)
+        for c in (a_col, b_col, c_col):
+            if c not in df.columns:
+                st.error(f"Column '{c}' not found in DataFrame.")
+                return
+        inter_col = f"Interaction_{a_label}_{b_label}_{c_label}"
+        df[inter_col] = (
+            df[a_col].astype(str) + " * " + df[b_col].astype(str) + " * " + df[c_col].astype(str)
+        )
+        group_series = df[inter_col]
+
+    else:
+        st.error("Only up to 3-way interactions are supported.")
+        return
+
+    # Draw boxplots for each group
+    for name, group in df.groupby(group_series):
+        fig.add_trace(go.Box(y=group['Y'], name=str(name), boxmean=True))
+
+    fig.update_layout(
+        xaxis_title=groupby_label,
+        yaxis_title='Y',
+        title='Boxplot by Group',
+        height=500,
+        boxmode='group',
+        xaxis=dict(categoryorder='category ascending')
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    """
+    Boxplots by a factor (custom name) or interactions:
+    supports "A", "A * B", and "A * B * C" where labels are the CUSTOM factor names.
+    Groups are shown by numeric-coded levels to match your *_num columns.
+    """
+    fig = go.Figure()
     parts = groupby_label.split(" * ")
 
     # Build the grouping column name(s)
@@ -251,33 +315,7 @@ def plot_boxplot(df, groupby_label, factor_name_map):
 
     fig.update_layout(xaxis_title=groupby_label, yaxis_title='Y', title='Boxplot by Group', height=500)
     st.plotly_chart(fig, use_container_width=True)
-    """
-    Boxplots by a factor (custom name) or an interaction "A * B".
-    """
-    fig = go.Figure()
-    # Interaction?
-    if " * " in groupby_label:
-        a_label, b_label = groupby_label.split(" * ")
-        a_col = f"{a_label}_num"
-        b_col = f"{b_label}_num"
-        if a_col not in df.columns or b_col not in df.columns:
-            st.error(f"Columns '{a_col}' or '{b_col}' not found.")
-            return
-        inter_col = f"Interaction_{a_label}_{b_label}"
-        df[inter_col] = df[a_col].astype(str) + " * " + df[b_col].astype(str)
-        gcol = inter_col
-    else:
-        gcol = f"{groupby_label}_num"
-        if gcol not in df.columns:
-            st.error(f"Column '{gcol}' not found.")
-            return
-
-    for name, group in df.groupby(gcol):
-        fig.add_trace(go.Box(y=group['Y'], name=str(name), boxmean=True))
-
-    fig.update_layout(xaxis_title=groupby_label, yaxis_title='Y', title='Boxplot by Group', height=500)
-    st.plotly_chart(fig, use_container_width=True)
-
+    
 
 # -------------------------
 # Pages
