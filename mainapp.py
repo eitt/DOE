@@ -11,6 +11,8 @@ from plotly.subplots import make_subplots
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import streamlit as st
+from scipy import stats
+from statsmodels.stats.multicomp import pairwise_tukeyhsd
 
 # -------------------------
 # Globals / constants
@@ -427,16 +429,194 @@ def Analysis():
     st.title("Tips to Analyze the Statistical Outputs")
     st.markdown("By **Leonardo H. Talero-Sarmiento** "
                 "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
-    st.subheader('Analysis of Y Based on a Source of Variability — Box Plot')
+
     st.markdown("""
-    Box plots by group provide a compact view of distributions: medians, spread, skewness, and outliers.
-    They are excellent for quickly spotting differences across categories, shifts over time, and potential anomalies.
+    This page demonstrates a **complete analysis workflow** using a realistic industrial engineering scenario:
+    balancing **cycle times** across three machines (A/B/C) to improve line balance and throughput.
+    We: (1) simulate data, (2) fit an OLS model, (3) examine ANOVA and **Tukey HSD** post-hoc,
+    (4) check assumptions (normality & homoscedasticity), and (5) guide interpretation step-by-step.
     """)
-    st.subheader('How to Read an OLS Regression Output')
-    st.markdown("""
-    Focus on **R²/Adj. R²** (fit), **F-test** (overall significance), **coefficients & p-values** (variable significance),
-    and **AIC/BIC** (model parsimony). Poor fit? Consider missing variables, transforms, interactions, or alternative models.
+
+    # -----------------------
+    # Sidebar: scenario controls
+    # -----------------------
+    st.sidebar.header("Scenario & Simulation Controls")
+    n_per_machine = st.sidebar.slider("Replications per machine", 10, 200, 40, 5)
+    mean_A = st.sidebar.number_input("Mean cycle time — Machine A (sec)", 42.0, value=45.0, step=0.5)
+    mean_B = st.sidebar.number_input("Mean cycle time — Machine B (sec)", 42.0, value=47.5, step=0.5)
+    mean_C = st.sidebar.number_input("Mean cycle time — Machine C (sec)", 42.0, value=50.0, step=0.5)
+    sd_A = st.sidebar.slider("Std. dev. — Machine A", 0.1, 10.0, 2.0, 0.1)
+    sd_B = st.sidebar.slider("Std. dev. — Machine B", 0.1, 10.0, 2.2, 0.1)
+    sd_C = st.sidebar.slider("Std. dev. — Machine C", 0.1, 10.0, 2.4, 0.1)
+    seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
+
+    # -----------------------
+    # Generate synthetic data (industrial engineering context)
+    # -----------------------
+    rng = np.random.default_rng(seed=seed or None)
+    df = pd.DataFrame({
+        "Machine": np.repeat(["A", "B", "C"], n_per_machine),
+        "CycleTime": np.concatenate([
+            rng.normal(mean_A, sd_A, n_per_machine),
+            rng.normal(mean_B, sd_B, n_per_machine),
+            rng.normal(mean_C, sd_C, n_per_machine),
+        ])
+    })
+
+    st.subheader("Generated Data (Cycle Times by Machine)")
+    st.dataframe(df.head(10))
+    st.download_button("Download simulated dataset (CSV)",
+                       data=df.to_csv(index=False),
+                       file_name="IE_cycle_times_simulated.csv",
+                       mime="text/csv")
+
+    # -----------------------
+    # Visual 1: Boxplot by group
+    # -----------------------
+    st.subheader("Distribution by Machine (Box Plot)")
+    fig_box = go.Figure()
+    for m in ["A", "B", "C"]:
+        fig_box.add_trace(go.Box(y=df.loc[df["Machine"] == m, "CycleTime"],
+                                 name=f"Machine {m}",
+                                 boxmean=True))
+    fig_box.update_layout(xaxis_title="Machine",
+                          yaxis_title="Cycle Time (seconds)",
+                          height=450,
+                          title="Cycle Time Distribution across Machines")
+    st.plotly_chart(fig_box, use_container_width=True)
+
+    # -----------------------
+    # OLS model and classic text summary
+    # -----------------------
+    st.subheader("OLS Model: CycleTime ~ C(Machine)")
+    model = smf.ols("CycleTime ~ C(Machine)", data=df).fit()
+    st.text(model.summary())
+
+    # -----------------------
+    # ANOVA (one-way)
+    # -----------------------
+    st.subheader("ANOVA (One-Way) — Text Output")
+    anova_tbl = sm.stats.anova_lm(model, typ=2)
+    st.text(anova_tbl.to_string())
+
+    # Effect size (eta-squared)
+    try:
+        sstr = float(anova_tbl.loc["C(Machine)", "sum_sq"])
+        sse = float(anova_tbl.loc["Residual", "sum_sq"])
+        sst = sstr + sse
+        eta_sq = sstr / sst if sst > 0 else np.nan
+        st.markdown(f"**Effect size (η²)**: {eta_sq:.3f}  — proportion of total variance explained by Machine.")
+    except Exception:
+        st.info("Could not compute η² from ANOVA table.")
+
+    # -----------------------
+    # Post-hoc: Tukey HSD
+    # -----------------------
+    st.subheader("Post-hoc Comparisons: Tukey HSD")
+    tukey = pairwise_tukeyhsd(endog=df["CycleTime"], groups=df["Machine"], alpha=0.05)
+    st.text(tukey.summary().as_text())
+
+    # -----------------------
+    # Assumptions: Normality & Homogeneity of variances
+    # -----------------------
+    st.subheader("Model Assumptions")
+
+    # Normality of residuals (Shapiro-Wilk)
+    resid = model.resid
+    sh_W, sh_p = stats.shapiro(resid)
+    st.markdown(f"**Shapiro–Wilk (residuals)**: W = {sh_W:.3f}, p = {sh_p:.4f} "
+                f"→ {'Fail to reject normality' if sh_p >= 0.05 else 'Potential non-normality'}")
+
+    # Homogeneity of variances (Levene across groups)
+    A_vals = df.loc[df["Machine"] == "A", "CycleTime"]
+    B_vals = df.loc[df["Machine"] == "B", "CycleTime"]
+    C_vals = df.loc[df["Machine"] == "C", "CycleTime"]
+    lev_W, lev_p = stats.levene(A_vals, B_vals, C_vals, center='median')
+    st.markdown(f"**Levene (homogeneity)**: W = {lev_W:.3f}, p = {lev_p:.4f} "
+                f"→ {'Variances appear equal' if lev_p >= 0.05 else 'Variances may differ'}")
+
+    # -----------------------
+    # Residual diagnostics (Plotly)
+    # -----------------------
+    st.subheader("Residual Diagnostics")
+
+    # Residuals vs Fitted
+    fitted = model.fittedvalues
+    fig_rvf = go.Figure()
+    fig_rvf.add_trace(go.Scatter(x=fitted, y=resid, mode='markers', name='Residuals'))
+    fig_rvf.add_hline(y=0, line_dash="dash")
+    fig_rvf.update_layout(xaxis_title="Fitted values",
+                          yaxis_title="Residuals",
+                          height=420,
+                          title="Residuals vs Fitted")
+    st.plotly_chart(fig_rvf, use_container_width=True)
+
+    # QQ plot (normality)
+    osm, osr = stats.probplot(resid, dist="norm", sparams=(), fit=False)
+    qq_x = np.array(osm)  # theoretical quantiles
+    qq_y = np.array(osr)  # ordered residuals
+    # Fit a line through the points
+    slope, intercept, _ = stats.linregress(qq_x, qq_y)
+    line_y = intercept + slope * qq_x
+
+    fig_qq = go.Figure()
+    fig_qq.add_trace(go.Scatter(x=qq_x, y=qq_y, mode='markers', name='Residuals'))
+    fig_qq.add_trace(go.Scatter(x=qq_x, y=line_y, mode='lines', name='Reference line'))
+    fig_qq.update_layout(xaxis_title="Theoretical Quantiles",
+                         yaxis_title="Ordered Residuals",
+                         height=420,
+                         title="Q–Q Plot of Residuals")
+    st.plotly_chart(fig_qq, use_container_width=True)
+
+    # -----------------------
+    # Step-by-step interpretation guide
+    # -----------------------
+    st.subheader("How to Interpret These Results (Step-by-Step)")
+    st.markdown(f"""
+1) **Context** — We compare mean **cycle times** across three machines (A/B/C). Lower and more uniform cycle times
+   support better **line balance** and throughput.
+
+2) **Visual screening (box plot)** — Look for clear differences in medians and spread. If Machine C shows higher
+   median and similar spread, it likely **bottlenecks** the line.
+
+3) **Model fit (OLS summary)** — Focus on **R²/Adj. R²** (explained variance), and the **F-statistic p-value**:
+   if p < 0.05, there is evidence that at least one machine's mean differs.
+
+4) **ANOVA** — The `C(Machine)` row tests equality of means. If the **p-value** is < 0.05, proceed with post-hoc.
+
+5) **Effect size (η²)** — Here η² ≈ {eta_sq:.3f} if computed. Values near 0.01/0.06/0.14 are often interpreted as
+   small/medium/large (rule-of-thumb), but use domain judgment.
+
+6) **Post-hoc (Tukey HSD)** — Pairs with `reject = True` differ significantly.
+   Use these to identify which machines are **statistically slower** (e.g., C slower than A, B).
+
+7) **Assumptions** — Shapiro–Wilk tests residual normality (we want p ≥ 0.05). Levene assesses equal variances
+   (we want p ≥ 0.05). If violated, consider **transformations** (e.g., log) or **robust/ Welch ANOVA**.
+
+8) **Diagnostics** — The residuals-vs-fitted plot should look **random** around zero (no patterns).
+   The Q–Q plot should be roughly linear (normal residuals).
+
+9) **Actionable conclusion** — If Machine C is significantly slower, prioritize:
+   - **SMED/Setup reduction** or **micro-motion** improvements on C
+   - **Preventive maintenance** if downtime adds to cycle time variance
+   - **Work redistribution** (balance stations upstream/downstream)
+   - **Standard work** & operator training to reduce variability
+
+10) **Monitoring** — After interventions, **re-sample** cycle times and rerun ANOVA to confirm improvement
+    and sustained homogeneity of variances.
     """)
+
+    # -----------------------
+    # Exports
+    # -----------------------
+    st.subheader("Exports")
+    # Tukey table as text -> to CSV-like lines
+    tukey_df = pd.DataFrame(data=tukey._results_table.data[1:], columns=tukey._results_table.data[0])
+    st.download_button("Download Tukey HSD results (CSV)",
+                       data=tukey_df.to_csv(index=False),
+                       file_name="tukey_hsd_results.csv",
+                       mime="text/csv")
+
 
 
 # -------------------------
