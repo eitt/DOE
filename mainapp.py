@@ -22,11 +22,28 @@ FACTOR_VALUES_2 = {'low': -1, 'high': 1}
 
 
 # -------------------------
-# Helpers
+# Helper utilities
 # -------------------------
 def _ensure_unique_ordered_keys(d):
     """Return the keys of a dict in insertion order as a list (explicit)."""
     return list(d.keys())
+
+
+def _is_finite_array(a):
+    """Return True if ndarray-like contains only finite values."""
+    try:
+        arr = np.asarray(a, dtype=float)
+        return np.isfinite(arr).all()
+    except Exception:
+        return False
+
+
+def _safe_plot(fig):
+    """Wrap st.plotly_chart with minimal guard."""
+    try:
+        st.plotly_chart(fig, use_container_width=True)
+    except Exception as e:
+        st.error(f"Plot rendering error: {e}")
 
 
 def create_factorial_dataframe(levels, numeric_mapping, replications=2, random_state=None):
@@ -141,6 +158,9 @@ def plot_2d(df, factor_name_map):
         x_vals = list(np.asarray(df[f'{xname}_num']).ravel())
         y_vals = list(np.asarray(df[f'{yname}_num']).ravel())
         y_color = list(np.asarray(df['Y']).ravel())
+        if not (_is_finite_array(x_vals) and _is_finite_array(y_vals) and _is_finite_array(y_color)):
+            st.error("Non-finite values in 2D plot.")
+            return
         fig = go.Figure(data=go.Scatter(
             x=x_vals,
             y=y_vals,
@@ -153,7 +173,7 @@ def plot_2d(df, factor_name_map):
             title='2D Factor Space (colored by Y)',
             height=500
         )
-        st.plotly_chart(fig, use_container_width=True)
+        _safe_plot(fig)
     except Exception as e:
         st.error(f"2D plot error: {e}")
 
@@ -167,6 +187,9 @@ def plot_3d(df, factor_name_map):
         yv = list(np.asarray(df[f'{y}_num']).ravel())
         zv = list(np.asarray(df[f'{z}_num']).ravel())
         cvals = list(np.asarray(df['Y']).ravel())
+        if not (_is_finite_array(xv) and _is_finite_array(yv) and _is_finite_array(zv) and _is_finite_array(cvals)):
+            st.error("Non-finite values in 3D plot.")
+            return
         fig = go.Figure(data=go.Scatter3d(
             x=xv, y=yv, z=zv,
             mode='markers',
@@ -177,7 +200,7 @@ def plot_3d(df, factor_name_map):
             title='3D Factor Space (colored by Y)',
             height=600
         )
-        st.plotly_chart(fig, use_container_width=True)
+        _safe_plot(fig)
     except Exception as e:
         st.error(f"3D plot error: {e}")
 
@@ -210,6 +233,9 @@ def plot_surface(df, factor1_custom, factor2_custom):
         x = np.asarray(pivot.index, dtype=float)
         y = np.asarray(pivot.columns, dtype=float)
         Z = np.asarray(pivot.values, dtype=float)
+        if not (_is_finite_array(x) and _is_finite_array(y) and _is_finite_array(Z)):
+            st.error("Surface contains non-finite values.")
+            return
     except Exception:
         st.error("Surface axes must be numeric. Ensure factors are coded as numbers (e.g., -1, 0, 1).")
         return
@@ -225,7 +251,7 @@ def plot_surface(df, factor1_custom, factor2_custom):
         title=f'Surface: {factor1_custom} vs {factor2_custom}',
         height=550
     )
-    st.plotly_chart(fig, use_container_width=True)
+    _safe_plot(fig)
 
 
 def plot_boxplot(df, groupby_label, factor_name_map):
@@ -281,7 +307,11 @@ def plot_boxplot(df, groupby_label, factor_name_map):
 
     # Draw boxplots for each group
     for name, group in df.groupby(group_series):
-        fig.add_trace(go.Box(y=list(np.asarray(group['Y']).ravel()), name=str(name), boxmean=True))
+        yvals = list(np.asarray(group['Y']).ravel())
+        if not _is_finite_array(yvals):
+            st.error(f"Non-finite values in boxplot group '{name}'.")
+            return
+        fig.add_trace(go.Box(y=yvals, name=str(name), boxmean=True))
 
     fig.update_layout(
         xaxis_title=groupby_label,
@@ -291,7 +321,7 @@ def plot_boxplot(df, groupby_label, factor_name_map):
         boxmode='group',
         xaxis=dict(categoryorder='category ascending')
     )
-    st.plotly_chart(fig, use_container_width=True)
+    _safe_plot(fig)
 
 
 # -------------------------
@@ -507,9 +537,13 @@ def anova_oneway():
     st.subheader('Box Plot for Factor Levels')
     fig = go.Figure()
     for level in df[factor_name].unique():
-        fig.add_trace(go.Box(y=df.loc[df[factor_name] == level, "Y"], name=level, boxmean=True))
+        vals = list(np.asarray(df.loc[df[factor_name] == level, "Y"]).ravel())
+        if not _is_finite_array(vals):
+            st.error("Non-finite values in box plot.")
+            return
+        fig.add_trace(go.Box(y=vals, name=level, boxmean=True))
     fig.update_layout(xaxis_title=factor_name, yaxis_title="Y", title="Distribution of Y across Levels", height=500)
-    st.plotly_chart(fig, use_container_width=True)
+    _safe_plot(fig)
 
     # Statistical Analysis: OLS and classic printed summary
     model = smf.ols(f"Y ~ C({factor_name})", data=df).fit()
@@ -517,29 +551,54 @@ def anova_oneway():
     st.subheader("Linear Regression Model Summary")
     st.text(model.summary())
 
-    # Variance Decomposition (Plotly pies)
+    # Variance Decomposition (Plotly pies) — robust to ordering
     st.subheader("Variance Decomposition (SST vs. SSTr & SSE)")
     anova_table = sm.stats.anova_lm(model, typ=2)
-    sstr = float(anova_table['sum_sq'].iloc[0])
-    sse  = float(anova_table['sum_sq'].iloc[1])
-    sst  = sstr + sse
 
-    pies = make_subplots(rows=1, cols=2, specs=[[{'type': 'domain'}, {'type': 'domain'}]],
-                         subplot_titles=("Total Sum of Squares (SST)", "Treatment vs Error (SSTr vs SSE)"))
+    # Compute SSE from 'Residual' row; SST directly from data; SSTR = SST - SSE
+    try:
+        # Residual row (robust to position)
+        resid_row = anova_table.index.str.contains("Residual", case=False, regex=False)
+        if not resid_row.any():
+            raise ValueError("Residual row not found in ANOVA table.")
+        sse = float(anova_table.loc[resid_row, 'sum_sq'].iloc[0])
+    except Exception:
+        # Fallback: compute SSE from model
+        sse = float(np.sum(np.square(model.resid)))
 
-    # Left: SST (single slice)
-    pies.add_trace(
-        go.Pie(labels=["SST"], values=[sst], textinfo='label+percent'),
-        row=1, col=1
-    )
-    # Right: SSTR vs SSE
-    pies.add_trace(
-        go.Pie(labels=["SSTr", "SSE"], values=[sstr, sse], textinfo='label+percent'),
-        row=1, col=2
-    )
+    # SST from data (more robust than relying on table ordering)
+    y = np.asarray(df['Y'], dtype=float)
+    ybar = float(np.mean(y))
+    sst = float(np.sum((y - ybar) ** 2))
+    sstr = max(sst - sse, 0.0)  # guard against tiny negatives from floating error
 
-    pies.update_layout(height=500, showlegend=False)
-    st.plotly_chart(pies, use_container_width=True)
+    # Guard against non-finite/negative values for pies
+    if not all(map(np.isfinite, [sst, sstr, sse])) or sst <= 0:
+        st.info("Variance pies unavailable (non-finite or zero SST).")
+    else:
+        pies = make_subplots(
+            rows=1, cols=2,
+            specs=[[{'type': 'domain'}, {'type': 'domain'}]],
+            subplot_titles=("Total Sum of Squares (SST)", "Treatment vs Error (SSTr vs SSE)")
+        )
+
+        # Left: SST (single slice)—use small epsilon slice to ensure stable rendering
+        pies.add_trace(
+            go.Pie(labels=["SST"], values=[sst], textinfo='label+percent', hole=0.4),
+            row=1, col=1
+        )
+        # Right: SSTR vs SSE
+        # Avoid both zeros; if both zero, skip the right pie
+        if sstr <= 0 and sse <= 0:
+            st.info("No variance to display in SSTr vs SSE pie.")
+        else:
+            pies.add_trace(
+                go.Pie(labels=["SSTr", "SSE"], values=[max(sstr, 0.0), max(sse, 0.0)], textinfo='label+percent', hole=0.4),
+                row=1, col=2
+            )
+
+        pies.update_layout(height=500, showlegend=False)
+        _safe_plot(pies)
 
 
 def Analysis():
@@ -593,14 +652,16 @@ def Analysis():
     st.subheader("Distribution by Machine (Box Plot)")
     fig_box = go.Figure()
     for m in ["A", "B", "C"]:
-        fig_box.add_trace(go.Box(y=list(np.asarray(df.loc[df["Machine"] == m, "CycleTime"]).ravel()),
-                                 name=f"Machine {m}",
-                                 boxmean=True))
+        vals = list(np.asarray(df.loc[df["Machine"] == m, "CycleTime"]).ravel())
+        if not _is_finite_array(vals):
+            st.error("Non-finite values in box plot.")
+            return
+        fig_box.add_trace(go.Box(y=vals, name=f"Machine {m}", boxmean=True))
     fig_box.update_layout(xaxis_title="Machine",
                           yaxis_title="Cycle Time (seconds)",
                           height=450,
                           title="Cycle Time Distribution across Machines")
-    st.plotly_chart(fig_box, use_container_width=True)
+    _safe_plot(fig_box)
 
     # -----------------------
     # OLS model and classic text summary
@@ -619,9 +680,13 @@ def Analysis():
     # Effect size (eta-squared)
     eta_sq = np.nan
     try:
-        sstr = float(anova_tbl.loc["C(Machine)", "sum_sq"])
-        sse = float(anova_tbl.loc["Residual", "sum_sq"])
-        sst = sstr + sse
+        # Robust computation: eta^2 = SSTR / SST, with SSTR = SST - SSE
+        resid = model.resid
+        sse = float(np.sum(np.square(resid)))
+        y = np.asarray(df['CycleTime'], dtype=float)
+        ybar = float(np.mean(y))
+        sst = float(np.sum((y - ybar) ** 2))
+        sstr = max(sst - sse, 0.0)
         eta_sq = sstr / sst if sst > 0 else np.nan
         st.markdown(f"**Effect size (η²)**: {eta_sq:.3f}  — proportion of total variance explained by Machine.")
     except Exception:
@@ -679,7 +744,7 @@ def Analysis():
                           yaxis_title="Residuals",
                           height=420,
                           title="Residuals vs Fitted")
-    st.plotly_chart(fig_rvf, use_container_width=True)
+    _safe_plot(fig_rvf)
 
     # QQ plot (normality)
     osm, osr = stats.probplot(resid, dist="norm", sparams=(), fit=False)
@@ -703,7 +768,7 @@ def Analysis():
         height=420,
         title="Q–Q Plot of Residuals"
     )
-    st.plotly_chart(fig_qq, use_container_width=True)
+    _safe_plot(fig_qq)
 
     # -----------------------
     # Step-by-step interpretation guide
