@@ -128,21 +128,16 @@ def fit_factorial_model(df, factor_name_map):
 
 
 def format_equation(results, factor_name_map):
-    """
-    Human-friendly equation using custom names (no LaTeX special chars).
-    """
+    """Human-friendly equation using custom names (no LaTeX special chars)."""
     keys = _ensure_unique_ordered_keys(factor_name_map)
     coefs = results.params
     parts = []
-    # Intercept
     if "Intercept" in coefs.index:
         parts.append(f"{coefs['Intercept']:.3f}")
-    # Mains
     for k in keys:
         nm = f"Q('{factor_name_map[k]}_num')"
         if nm in coefs.index:
             parts.append(f"{coefs[nm]:+.3f}·{factor_name_map[k]}")
-    # Interactions
     for a, b in combinations(keys, 2):
         nm = f"Q('{factor_name_map[a]}_num'):Q('{factor_name_map[b]}_num')"
         if nm in coefs.index:
@@ -213,14 +208,12 @@ def plot_surface(df, factor1_custom, factor2_custom):
         st.error("Selected factors not found for surface plot.")
         return
 
-    # Build pivot (mean Y by two numeric-coded factors)
     pivot = (
         df.pivot_table(values='Y', index=idx, columns=col, aggfunc='mean')
           .sort_index(axis=0)
           .sort_index(axis=1)
     )
 
-    # Validate there are enough points and no NaNs for a surface
     if pivot.shape[0] < 2 or pivot.shape[1] < 2:
         st.warning("Not enough grid points to draw a surface. Increase replications/levels.")
         return
@@ -228,7 +221,6 @@ def plot_surface(df, factor1_custom, factor2_custom):
         st.error("Surface has missing cells (NaN). Increase replications or ensure all level combinations exist.")
         return
 
-    # Force numeric arrays
     try:
         x = np.asarray(pivot.index, dtype=float)
         y = np.asarray(pivot.columns, dtype=float)
@@ -259,14 +251,11 @@ def plot_boxplot(df, groupby_label, factor_name_map):
     supports "A", "A * B", and "A * B * C" where labels are the CUSTOM factor names.
     We construct an explicit group label for each row so interaction levels don't collapse.
     """
-    # Allow flexible spacing around '*'
     parts = [p.strip() for p in groupby_label.split('*') if p.strip()]
 
     def col_from_label(lbl):
-        # lbl is a CUSTOM label (e.g., "Temperature" after user renaming)
         return f"{lbl}_num"
 
-    # Build per-row group labels
     try:
         if len(parts) == 1:
             a = parts[0]
@@ -302,12 +291,10 @@ def plot_boxplot(df, groupby_label, factor_name_map):
         st.error(f"Failed to build interaction groups: {e}")
         return
 
-    # Force category order to stabilize Plotly layout
     cats = pd.Categorical(group_series, categories=sorted(group_series.unique()), ordered=True)
     group_series = pd.Series(cats, index=df.index, name="__group__")
 
     fig = go.Figure()
-    # Draw a trace per unique category (explicit; avoids accidental collapse)
     for cat in cats.categories:
         mask = (group_series == cat)
         yvals = list(np.asarray(df.loc[mask, 'Y']).ravel())
@@ -473,7 +460,6 @@ def factorial_twolevels():
 
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
-
     st.markdown("**Main Effects**")
     for fac in ["FactorA", "FactorB"]:
         st.caption(f"Pairwise comparisons for {fac}")
@@ -505,7 +491,6 @@ def anova_oneway():
         "high": st.sidebar.text_input("Level 3 label", "High")
     }
 
-    # Coeffs
     st.sidebar.header("Effects (relative to baseline level)")
     coef_intercept = st.sidebar.slider('Baseline mean', -100.0, 100.0, 0.0)
     coef_medium = st.sidebar.slider(f'Effect of {level_names["medium"]}', -100.0, 100.0, 0.0)
@@ -753,12 +738,192 @@ def Analysis():
 
 
 # -------------------------
+# NEW PAGE: Choice-Based Conjoint Analysis
+# -------------------------
+def conjoint_analysis():
+    st.title("Conjoint Analysis (Choice-Based) — Shoe Components")
+    st.markdown("By **Leonardo H. Talero-Sarmiento** "
+                "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
+    st.markdown("""
+In this exercise, students evaluate **pairwise alternatives** for a shoe made up of two attributes:
+
+- **Upper Material** *(3 levels)*  
+- **Sole Type** *(2 levels)*
+
+Choose the preferred option in each task. After all choices are recorded, the app fits a **logistic regression (Logit)** to
+estimate how each attribute level influences choice probability (part-worth utilities).
+    """)
+
+    # ---------- Sidebar controls ----------
+    st.sidebar.header("Conjoint Settings")
+    attr1_name = st.sidebar.text_input("Attribute 1 name (3 levels)", "Upper Material")
+    attr1_levels = st.sidebar.text_input("Attribute 1 levels (comma)", "Leather,Synthetic,Mesh")
+    attr1_levels = [s.strip() for s in attr1_levels.split(",") if s.strip()]
+    if len(attr1_levels) != 3:
+        st.warning("Attribute 1 must have exactly **3** levels. Using defaults: Leather, Synthetic, Mesh.")
+        attr1_levels = ["Leather", "Synthetic", "Mesh"]
+
+    attr2_name = st.sidebar.text_input("Attribute 2 name (2 levels)", "Sole Type")
+    attr2_levels = st.sidebar.text_input("Attribute 2 levels (comma)", "Cushioned,Minimal")
+    attr2_levels = [s.strip() for s in attr2_levels.split(",") if s.strip()]
+    if len(attr2_levels) != 2:
+        st.warning("Attribute 2 must have exactly **2** levels. Using defaults: Cushioned, Minimal.")
+        attr2_levels = ["Cushioned", "Minimal"]
+
+    n_tasks = st.sidebar.slider("Number of pairwise choice tasks", 3, 20, 8, 1)
+    seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=1, step=1)
+
+    # ---------- Build full factorial profiles ----------
+    profiles = pd.DataFrame(list(itertools.product(attr1_levels, attr2_levels)),
+                            columns=[attr1_name, attr2_name])
+    profiles["ProfileID"] = np.arange(1, len(profiles)+1)
+
+    st.subheader("All Possible Alternatives (Profiles)")
+    st.dataframe(profiles)
+
+    # ---------- Create choice sets (2 profiles per task) ----------
+    rng = np.random.default_rng(seed or None)
+    # Build fixed pairs for reproducibility based on seed
+    pairs = []
+    used = set()
+    for t in range(n_tasks):
+        a, b = rng.choice(profiles["ProfileID"], size=2, replace=False)
+        pairs.append((int(a), int(b)))
+    choice_sets = pd.DataFrame(pairs, columns=["A_ProfileID", "B_ProfileID"])
+    choice_sets.index.name = "Task"
+    choice_sets.reset_index(inplace=True)
+    choice_sets["Task"] += 1
+
+    # Store in session to persist student picks
+    if "conjoint_pairs" not in st.session_state or st.session_state.get("conjoint_seed") != seed or st.session_state.get("conjoint_tasks") != n_tasks:
+        st.session_state["conjoint_pairs"] = choice_sets
+        st.session_state["conjoint_choices"] = {}  # task -> "A" or "B"
+        st.session_state["conjoint_seed"] = seed
+        st.session_state["conjoint_tasks"] = n_tasks
+
+    st.subheader("Choice Tasks — **Select the Best Option**")
+    st.caption("For each task, compare alternatives A and B and choose the preferred one.")
+
+    # Render each task
+    for _, row in st.session_state["conjoint_pairs"].iterrows():
+        task = int(row["Task"])
+        a_id = int(row["A_ProfileID"])
+        b_id = int(row["B_ProfileID"])
+        a = profiles.loc[profiles.ProfileID == a_id, [attr1_name, attr2_name]].iloc[0]
+        b = profiles.loc[profiles.ProfileID == b_id, [attr1_name, attr2_name]].iloc[0]
+
+        c1, c2, c3 = st.columns([1.2, 1.2, 0.8])
+        with c1:
+            st.markdown(f"**Task {task} — Option A**")
+            st.table(pd.DataFrame(a).T.rename(index={0: f"A (ID {a_id})"}))
+        with c2:
+            st.markdown(f"**Task {task} — Option B**")
+            st.table(pd.DataFrame(b).T.rename(index={0: f"B (ID {b_id})"}))
+        with c3:
+            st.radio("Your choice", options=["A", "B"], key=f"choice_task_{task}",
+                     index=0 if st.session_state["conjoint_choices"].get(task) == "A" else
+                     (1 if st.session_state["conjoint_choices"].get(task) == "B" else 0))
+            # Persist
+            st.session_state["conjoint_choices"][task] = st.session_state[f"choice_task_{task}"]
+
+        st.markdown("---")
+
+    # ---------- Build estimation dataset once student has chosen ----------
+    choices = st.session_state["conjoint_choices"]
+    all_answered = (len(choices) == n_tasks) and all(c in ("A", "B") for c in choices.values())
+
+    st.subheader("Estimation Dataset (long format)")
+    if not all_answered:
+        st.info("Please complete all choices above to enable estimation.")
+        return
+
+    # Construct long dataset: each task produces two rows
+    rows = []
+    for _, row in st.session_state["conjoint_pairs"].iterrows():
+        task = int(row["Task"])
+        a_id = int(row["A_ProfileID"])
+        b_id = int(row["B_ProfileID"])
+        choice = choices[task]
+        for alt, pid in zip(["A", "B"], [a_id, b_id]):
+            prof = profiles.loc[profiles.ProfileID == pid, [attr1_name, attr2_name]].iloc[0]
+            chosen = 1 if alt == choice else 0
+            rows.append({
+                "Task": task,
+                "Alt": alt,
+                "ProfileID": pid,
+                attr1_name: prof[attr1_name],
+                attr2_name: prof[attr2_name],
+                "Chosen": chosen
+            })
+    long_df = pd.DataFrame(rows).sort_values(["Task", "Alt"]).reset_index(drop=True)
+    st.dataframe(long_df)
+
+    st.download_button("Download choice data (CSV)",
+                       data=long_df.to_csv(index=False),
+                       file_name="conjoint_choice_data.csv",
+                       mime="text/csv")
+
+    # ---------- Fit Logit ----------
+    st.subheader("Logistic Regression (Choice ~ Attributes)")
+    # Dummy-code attributes (reference: first level of each)
+    X = pd.get_dummies(long_df[[attr1_name, attr2_name]], drop_first=True)
+    X = sm.add_constant(X, has_constant="add")
+    y = long_df["Chosen"].astype(int)
+
+    # Guard against degenerate data (e.g., same choice always producing complete separation)
+    if y.sum() == 0 or y.sum() == len(y):
+        st.error("All choices are identical (all 0 or all 1). At least one task must have the other alternative chosen.")
+        return
+    if X.shape[1] == 1:
+        st.error("No attribute variation after encoding. Adjust attributes or tasks.")
+        return
+
+    try:
+        logit_model = sm.Logit(y, X).fit(disp=False)
+        st.text(logit_model.summary())
+    except Exception as e:
+        st.error(f"Logit failed to converge: {e}")
+        return
+
+    # ---------- Odds ratios & CIs ----------
+    st.subheader("Odds Ratios (exp(coef)) with 95% CI")
+    params = logit_model.params
+    conf = logit_model.conf_int()
+    or_df = pd.DataFrame({
+        "term": params.index,
+        "coef": params.values,
+        "odds_ratio": np.exp(params.values),
+        "ci_low": np.exp(conf[0].values),
+        "ci_high": np.exp(conf[1].values),
+        "p_value": logit_model.pvalues.values
+    })
+    # Hide constant in the OR table for clarity
+    or_df = or_df[or_df["term"] != "const"].reset_index(drop=True)
+    st.dataframe(or_df)
+
+    st.download_button("Download Odds Ratios (CSV)",
+                       data=or_df.to_csv(index=False),
+                       file_name="conjoint_odds_ratios.csv",
+                       mime="text/csv")
+
+    # ---------- Quick interpretation ----------
+    st.subheader("Quick Interpretation")
+    st.markdown(f"""
+- Reference levels (baseline utilities): **{attr1_name} = {attr1_levels[0]}**, **{attr2_name} = {attr2_levels[0]}**.  
+- A positive coefficient / odds ratio **> 1** means that level **increases** the probability of being chosen versus its reference.  
+- A negative coefficient / odds ratio **< 1** means that level **decreases** the probability of being chosen versus its reference.  
+- Use **p-values** (or confidence intervals not crossing 1) to judge statistical significance.
+    """)
+
+
+# -------------------------
 # Navigation
 # -------------------------
 PAGES = {
     "Anova One-way - Introduction": anova_oneway,
     "Introduction to Factorial Designs": factorial_twolevels,
     "Factorial Designs with Three Factors and Three Levels": three_factorial,
+    "Conjoint Analysis (Choice-Based)": conjoint_analysis,  # NEW PAGE
     "Tips to Analyze the Statistical Outputs": Analysis,
 }
 
