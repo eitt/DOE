@@ -7,10 +7,10 @@ from itertools import combinations
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 import streamlit as st
-import matplotlib.pyplot as plt
 
 # -------------------------
 # Globals / constants
@@ -56,7 +56,6 @@ def compute_response(df, coefficients, factor_name_map, noise_sd=0.5, random_sta
     keys = _ensure_unique_ordered_keys(factor_name_map)
 
     # Guarantee numeric columns exist with the CUSTOM name suffix
-    # e.g., Temperature_num -> "UserTemp_num"
     for k in keys:
         src = f"{k}_num"
         dst = f"{factor_name_map[k]}_num"
@@ -64,7 +63,6 @@ def compute_response(df, coefficients, factor_name_map, noise_sd=0.5, random_sta
             df = df.rename(columns={src: dst})
 
     # Build y from coefficients
-    # Expected length: 1 + len(keys) + C(len(keys), 2)
     needed = 1 + len(keys) + len(list(combinations(keys, 2)))
     if len(coefficients) != needed:
         st.warning(f"Coefficient count mismatch: expected {needed}, got {len(coefficients)}. Truncating/Extending with zeros.")
@@ -281,7 +279,8 @@ def three_factorial():
     st.subheader('Model Fitting')
     results = fit_factorial_model(df, factor_name_map)
     st.code(format_equation(results, factor_name_map))
-    st.write(results.summary())
+    # >>> Print text summary (classic)
+    st.text(results.summary())
 
 
 def factorial_twolevels():
@@ -340,7 +339,8 @@ def factorial_twolevels():
     st.subheader('Model Fitting')
     results = fit_factorial_model(df, factor_map_2)
     st.code(format_equation(results, factor_map_2))
-    st.write(results.summary())
+    # >>> Print text summary (classic)
+    st.text(results.summary())
 
 
 def anova_oneway():
@@ -392,29 +392,35 @@ def anova_oneway():
     fig.update_layout(xaxis_title=factor_name, yaxis_title="Y", title="Distribution of Y across Levels", height=500)
     st.plotly_chart(fig, use_container_width=True)
 
-    st.subheader('Statistical Analysis: One-Way ANOVA')
+    # Statistical Analysis: OLS and classic printed summary
     model = smf.ols(f"Y ~ C({factor_name})", data=df).fit()
+    # >>> Print text summary (classic) — no new tables
+    st.subheader("Linear Regression Model Summary")
+    st.text(model.summary())
+
+    # Variance Decomposition (Plotly pies)
+    st.subheader("Variance Decomposition (SST vs. SSTr & SSE)")
     anova_table = sm.stats.anova_lm(model, typ=2)
-    st.write("### ANOVA Table")
-    st.write(anova_table)
-    st.write("### Linear Model Summary")
-    st.write(model.summary())
+    sstr = float(anova_table['sum_sq'].iloc[0])
+    sse  = float(anova_table['sum_sq'].iloc[1])
+    sst  = sstr + sse
 
-    st.subheader("Mean Structure")
-    st.code(f"μ({level_names['low']})   = {coef_intercept:.3f}\n"
-            f"μ({level_names['medium']}) = {coef_intercept + coef_medium:.3f}\n"
-            f"μ({level_names['high']})   = {coef_intercept + coef_high:.3f}")
+    pies = make_subplots(rows=1, cols=2, specs=[[{'type': 'domain'}, {'type': 'domain'}]],
+                         subplot_titles=("Total Sum of Squares (SST)", "Treatment vs Error (SSTr vs SSE)"))
 
-    # Sum of squares visualization
-    sstr = anova_table['sum_sq'].iloc[0]
-    sse = anova_table['sum_sq'].iloc[1]
-    sst = sstr + sse
-    fig2, axs = plt.subplots(1, 2, figsize=(12, 5))
-    axs[0].pie([sst], labels=[f"SST: {sst:.2f}"], autopct='%1.1f%%')
-    axs[0].set_title("Total Sum of Squares (SST)")
-    axs[1].pie([sstr, sse], labels=[f"SSTr: {sstr:.2f}", f"SSE: {sse:.2f}"], autopct='%1.1f%%')
-    axs[1].set_title("Treatment vs Error")
-    st.pyplot(fig2)
+    # Left: SST (single slice)
+    pies.add_trace(
+        go.Pie(labels=["SST"], values=[sst], textinfo='label+percent'),
+        row=1, col=1
+    )
+    # Right: SSTR vs SSE
+    pies.add_trace(
+        go.Pie(labels=["SSTr", "SSE"], values=[sstr, sse], textinfo='label+percent'),
+        row=1, col=2
+    )
+
+    pies.update_layout(height=500, showlegend=False)
+    st.plotly_chart(pies, use_container_width=True)
 
 
 def Analysis():
