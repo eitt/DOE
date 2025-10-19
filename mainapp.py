@@ -194,6 +194,64 @@ def plot_surface(df, factor1_custom, factor2_custom):
 
 def plot_boxplot(df, groupby_label, factor_name_map):
     """
+    Boxplots by a factor (custom name) or interactions:
+    supports "A", "A * B", and "A * B * C" where labels are the CUSTOM factor names.
+    Groups are shown by numeric-coded levels to match your *_num columns.
+    """
+    fig = go.Figure()
+    parts = groupby_label.split(" * ")
+
+    # Build the grouping column name(s)
+    def col_from_label(lbl):
+        return f"{lbl}_num"
+
+    missing = False
+    if len(parts) == 1:
+        gcol = col_from_label(parts[0])
+        if gcol not in df.columns:
+            st.error(f"Column '{gcol}' not found.")
+            return
+        group_series = df[gcol].astype(str)
+
+    elif len(parts) == 2:
+        a_label, b_label = parts
+        a_col, b_col = col_from_label(a_label), col_from_label(b_label)
+        for c in (a_col, b_col):
+            if c not in df.columns:
+                st.error(f"Column '{c}' not found.")
+                missing = True
+        if missing:
+            return
+        inter_col = f"Interaction_{a_label}_{b_label}"
+        df[inter_col] = df[a_col].astype(str) + " * " + df[b_col].astype(str)
+        group_series = df[inter_col]
+
+    elif len(parts) == 3:
+        a_label, b_label, c_label = parts
+        a_col, b_col, c_col = col_from_label(a_label), col_from_label(b_label), col_from_label(c_label)
+        for c in (a_col, b_col, c_col):
+            if c not in df.columns:
+                st.error(f"Column '{c}' not found.")
+                missing = True
+        if missing:
+            return
+        inter_col = f"Interaction_{a_label}_{b_label}_{c_label}"
+        df[inter_col] = (
+            df[a_col].astype(str) + " * " + df[b_col].astype(str) + " * " + df[c_col].astype(str)
+        )
+        group_series = df[inter_col]
+
+    else:
+        st.error("Only up to 3-way interactions are supported.")
+        return
+
+    # Plot
+    for name, group in df.groupby(group_series):
+        fig.add_trace(go.Box(y=group['Y'], name=str(name), boxmean=True))
+
+    fig.update_layout(xaxis_title=groupby_label, yaxis_title='Y', title='Boxplot by Group', height=500)
+    st.plotly_chart(fig, use_container_width=True)
+    """
     Boxplots by a factor (custom name) or an interaction "A * B".
     """
     fig = go.Figure()
@@ -264,11 +322,16 @@ def three_factorial():
     plot_3d(df, factor_name_map)
 
     st.subheader('Analysis of Y based on Variability Source — Box Plot')
-    # Grouping options use custom labels
     custom_labels = list(factor_name_map.values())
-    groupby_options = custom_labels + [f"{fa} * {fb}" for fa, fb in combinations(custom_labels, 2)]
+    # include 1-way, 2-way, and 3-way options
+    groupby_options = (
+        custom_labels
+        + [f"{fa} * {fb}" for fa, fb in combinations(custom_labels, 2)]
+        + [f"{custom_labels[0]} * {custom_labels[1]} * {custom_labels[2]}"]
+    )
     groupby_label = st.selectbox('Group by', groupby_options, index=0)
     plot_boxplot(df, groupby_label, factor_name_map)
+
 
     st.subheader('Surface Plot')
     f1 = st.selectbox('First Factor', custom_labels, index=0)
@@ -283,6 +346,30 @@ def three_factorial():
     st.code(format_equation(results, factor_name_map))
     # >>> Print text summary (classic)
     st.text(results.summary())
+        # --- Post-hoc analysis (Tukey HSD) ---
+    st.subheader("Post-hoc Analysis (Tukey HSD)")
+
+    # Main effects: compare 'low', 'medium', 'high' for each factor (use original factor keys, not custom labels)
+    st.markdown("**Main Effects**")
+    for fac in ["Temperature", "Pressure", "Thinner"]:
+        st.caption(f"Pairwise comparisons for {fac}")
+        tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
+        st.text(tuk.summary().as_text())
+
+    # 2-way interactions: compare each cell mean across combined labels
+    st.markdown("**Two-way Interaction Cells**")
+    for fa, fb in combinations(["Temperature", "Pressure", "Thinner"], 2):
+        st.caption(f"Cells for {fa} × {fb}")
+        groups = df[[fa, fb]].astype(str).agg(' * '.join, axis=1)
+        tuk = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
+        st.text(tuk.summary().as_text())
+
+    # 3-way interaction cells (optional but requested)
+    st.markdown("**Three-way Interaction Cells (A × B × C)**")
+    groups_3 = df[["Temperature", "Pressure", "Thinner"]].astype(str).agg(' * '.join, axis=1)
+    tuk3 = pairwise_tukeyhsd(endog=df["Y"], groups=groups_3, alpha=0.05)
+    st.text(tuk3.summary().as_text())
+
 
 
 def factorial_twolevels():
@@ -343,6 +430,23 @@ def factorial_twolevels():
     st.code(format_equation(results, factor_map_2))
     # >>> Print text summary (classic)
     st.text(results.summary())
+
+        # --- Post-hoc analysis (Tukey HSD) ---
+    st.subheader("Post-hoc Analysis (Tukey HSD)")
+
+    # Main effects (each factor has two levels; Tukey degenerates to a t-test equivalent, still fine)
+    st.markdown("**Main Effects**")
+    for fac in ["FactorA", "FactorB"]:
+        st.caption(f"Pairwise comparisons for {fac}")
+        tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
+        st.text(tuk.summary().as_text())
+
+    # 2-way cell means (A × B)
+    st.markdown("**Interaction Cells (A × B)**")
+    groups = df[["FactorA", "FactorB"]].astype(str).agg(' * '.join, axis=1)
+    tuk_ab = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
+    st.text(tuk_ab.summary().as_text())
+
 
 
 def anova_oneway():
