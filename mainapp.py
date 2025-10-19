@@ -1,647 +1,453 @@
+# =========================
+# Factorial/ANOVA Streamlit App (clean & robust)
+# =========================
 import itertools
-import numpy as np
-import pandas as pd
-import statsmodels.formula.api as smf
-import plotly.graph_objects as go
-import streamlit as st
 from itertools import combinations
 
-# Define numeric mappings
-FACTOR_VALUES = {'low': -1, 'medium': 0, 'high': 1}
-TWO_LEVEL_MAPPING = {'low': -1, 'high': 1}
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
+import streamlit as st
+import matplotlib.pyplot as plt
 
-def create_factorial_dataframe(levels, numeric_mapping, replications=2):
+# -------------------------
+# Globals / constants
+# -------------------------
+FACTOR_VALUES_3 = {'low': -1, 'medium': 0, 'high': 1}
+FACTOR_VALUES_2 = {'low': -1, 'high': 1}
+
+
+# -------------------------
+# Helpers
+# -------------------------
+def _ensure_unique_ordered_keys(d: dict) -> list:
+    """Return the keys of a dict in insertion order as a list (explicit)."""
+    return list(d.keys())
+
+
+def create_factorial_dataframe(levels: dict, numeric_mapping: dict, replications: int = 2, random_state: int | None = None) -> pd.DataFrame:
     """
-    Generates a factorial design dataframe with numeric mappings.
-
-    Args:
-        levels (dict): Dictionary where keys are factor names and values are lists of levels.
-        numeric_mapping (dict): Mapping from factor levels to numeric values.
-        replications (int): Number of replications.
-
-    Returns:
-        pd.DataFrame: Dataframe containing the factorial design with numeric mappings.
+    Generates a factorial design dataframe with numeric mappings for any number of factors.
+    `levels` is a dict: {factor_key: [level_str, ...]}
     """
-    df = pd.DataFrame(list(itertools.product(*levels.values())) * replications, columns=levels.keys())
-
-    # Apply numeric mapping dynamically
+    rng = np.random.default_rng(seed=random_state)
+    grid = list(itertools.product(*levels.values()))
+    df = pd.DataFrame(grid * replications, columns=levels.keys())
+    # numeric maps
     for col in df.columns:
-        df[f'{col}_num'] = df[col].map(numeric_mapping)
-
+        if set(df[col].unique()).issubset(set(numeric_mapping.keys())):
+            df[f'{col}_num'] = df[col].map(numeric_mapping)
+        else:
+            # If custom labels are used, map by position
+            lvl_list = list(levels[col])
+            pos_map = {lvl: numeric_mapping[lvl] for lvl in lvl_list if lvl in numeric_mapping}
+            df[f'{col}_num'] = df[col].map(pos_map)
     return df
 
-def compute_response(df, coefficients, factor_names):
+
+def compute_response(df: pd.DataFrame, coefficients: list[float], factor_name_map: dict, noise_sd: float = 0.5, random_state: int | None = None) -> pd.DataFrame:
     """
-    Computes response variable Y dynamically for any factorial design.
-
-    Args:
-        df (pd.DataFrame): Input dataframe.
-        coefficients (list): Model coefficients.
-        factor_names (dict): Mapping of factor names.
-
-    Returns:
-        pd.DataFrame: Dataframe with computed Y values.
+    Compute Y = b0 + sum(bi*Xi) + sum(bij*Xi*Xj) + noise
+    factor_name_map: {"internal_key": "Custom Name"}
     """
-    noise = np.random.normal(0, 0.5, len(df))
+    rng = np.random.default_rng(seed=random_state)
+    keys = _ensure_unique_ordered_keys(factor_name_map)
 
-    # Ensure factor columns exist before renaming
-    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names if f"{factor}_num" in df.columns}
-    df = df.rename(columns=rename_mapping)
+    # Guarantee numeric columns exist with the CUSTOM name suffix
+    # e.g., Temperature_num -> "UserTemp_num"
+    for k in keys:
+        src = f"{k}_num"
+        dst = f"{factor_name_map[k]}_num"
+        if src in df.columns and dst not in df.columns:
+            df = df.rename(columns={src: dst})
 
-    # Compute main effects
-    y = coefficients[0] + sum(
-        coefficients[i] * df[f'{factor_names[factor]}_num']
-        for i, factor in enumerate(factor_names, start=1)
-    )
+    # Build y from coefficients
+    # Expected length: 1 + len(keys) + C(len(keys), 2)
+    needed = 1 + len(keys) + len(list(combinations(keys, 2)))
+    if len(coefficients) != needed:
+        st.warning(f"Coefficient count mismatch: expected {needed}, got {len(coefficients)}. Truncating/Extending with zeros.")
+        if len(coefficients) < needed:
+            coefficients = coefficients + [0.0] * (needed - len(coefficients))
+        else:
+            coefficients = coefficients[:needed]
 
-    # Compute interaction effects
-    interaction_index = len(factor_names) + 1
-    for i, (f1, f2) in enumerate(combinations(factor_names, 2)):
-        y += coefficients[interaction_index + i] * df[f'{factor_names[f1]}_num'] * df[f'{factor_names[f2]}_num']
+    # Intercept
+    y = np.full(len(df), coefficients[0], dtype=float)
 
-    df['Y'] = y + noise
+    # Main effects
+    for i, k in enumerate(keys, start=1):
+        col = f"{factor_name_map[k]}_num"
+        if col not in df.columns:
+            st.error(f"Missing column '{col}' required for main effect.")
+            return df
+        y += coefficients[i] * df[col].to_numpy(dtype=float)
+
+    # Interactions
+    base = 1 + len(keys)
+    for j, (k1, k2) in enumerate(combinations(keys, 2)):
+        c1 = f"{factor_name_map[k1]}_num"
+        c2 = f"{factor_name_map[k2]}_num"
+        if c1 not in df.columns or c2 not in df.columns:
+            st.error(f"Missing columns '{c1}' or '{c2}' required for interaction.")
+            return df
+        y += coefficients[base + j] * (df[c1].to_numpy(dtype=float) * df[c2].to_numpy(dtype=float))
+
+    # Noise
+    y = y + rng.normal(0, noise_sd, len(df))
+    df['Y'] = y
     return df
 
-def fit_factorial_model(df, factor_names):
-    """
-    Fits an OLS model for factorial designs dynamically.
 
-    Args:
-        df (pd.DataFrame): Input dataframe.
-        factor_names (dict): Mapping of factor names.
-
-    Returns:
-        statsmodels.regression.linear_model.RegressionResultsWrapper: Fitted model results.
-    """
-    factors = list(factor_names.keys())
-
-    # Construct formula dynamically
-    formula = "Y ~ " + " + ".join([f"Q('{factor_names[f]}_num')" for f in factors]) + \
-              " + " + " + ".join([f"Q('{factor_names[f1]}_num'):Q('{factor_names[f2]}_num')"
-                                  for f1, f2 in combinations(factors, 2)])
-
+def fit_factorial_model(df: pd.DataFrame, factor_name_map: dict):
+    """OLS with main effects + 2-way interactions on *_num columns (custom names)."""
+    keys = _ensure_unique_ordered_keys(factor_name_map)
+    mains = [f"Q('{factor_name_map[k]}_num')" for k in keys]
+    inters = [f"Q('{factor_name_map[a]}_num'):Q('{factor_name_map[b]}_num')" for a, b in combinations(keys, 2)]
+    formula = "Y ~ " + " + ".join(mains + inters)
     return smf.ols(formula, data=df).fit()
 
-def print_equation(results, factor_names):
+
+def format_equation(results, factor_name_map: dict) -> str:
     """
-    Constructs and returns a formatted regression equation from model results.
+    Human-friendly equation using custom names (no LaTeX special chars).
     """
+    keys = _ensure_unique_ordered_keys(factor_name_map)
+    terms = ["Intercept"] + [f"{factor_name_map[k]}" for k in keys] + \
+            [f"{factor_name_map[a]}:{factor_name_map[b]}" for a, b in combinations(keys, 2)]
+    # Map param index -> readable term name
+    # statsmodels params order matches design matrix columns; for our Q() terms, it should align.
     coefs = results.params
-    terms = ["Intercept"] + [f"{factor_names[f]}_num" for f in factor_names] + \
-            [f"{factor_names[f1]}_num:{factor_names[f2]}_num" for f1, f2 in combinations(factor_names, 2)]
-    return "Y = " + " + ".join(f"{coefs[i]:.2f} * {term}" for i, term in enumerate(terms))
+    # Build line; try to align by available names
+    parts = []
+    # Intercept
+    if "Intercept" in coefs.index:
+        parts.append(f"{coefs['Intercept']:.3f}")
+    # Mains
+    for k in keys:
+        nm = f"Q('{factor_name_map[k]}_num')"
+        if nm in coefs.index:
+            parts.append(f"{coefs[nm]:+.3f}·{factor_name_map[k]}")
+    # Interactions
+    for a, b in combinations(keys, 2):
+        nm = f"Q('{factor_name_map[a]}_num'):Q('{factor_name_map[b]}_num')"
+        if nm in coefs.index:
+            parts.append(f"{coefs[nm]:+.3f}·{factor_name_map[a]}·{factor_name_map[b]}")
+    return "Y = " + " ".join(parts)
 
-def plot_2d(df, factor_names):
-    """
-    Generates a 2D scatter plot for a two-level factorial design.
-    """
-    fig = go.Figure(data=go.Scatter(
-        x=df[f'{factor_names["FactorA"]}_num'], 
-        y=df[f'{factor_names["FactorB"]}_num'], 
-        mode='markers', 
-        marker=dict(
-            size=8,
-            color=df['Y'],  
-            colorscale='Viridis',  
-            colorbar=dict(title='Y')
+
+def plot_2d(df: pd.DataFrame, factor_name_map: dict):
+    """2D scatter heat by Y for two-level design."""
+    try:
+        xname = list(factor_name_map.values())[0]
+        yname = list(factor_name_map.values())[1]
+        fig = go.Figure(data=go.Scatter(
+            x=df[f'{xname}_num'],
+            y=df[f'{yname}_num'],
+            mode='markers',
+            marker=dict(size=10, color=df['Y'], colorbar=dict(title='Y'))
+        ))
+        fig.update_layout(
+            xaxis_title=xname,
+            yaxis_title=yname,
+            title='2D Factor Space (colored by Y)',
+            height=500
         )
-    ))
+        st.plotly_chart(fig, use_container_width=True)
+    except Exception as e:
+        st.error(f"2D plot error: {e}")
 
-    fig.update_layout(
-        xaxis_title=factor_names["FactorA"],
-        yaxis_title=factor_names["FactorB"],
-        title='2D Plot for Two-Level Factorial Design'
-    )
-    st.plotly_chart(fig)
 
-def plot_3d(df, factor_names):
+def plot_3d(df: pd.DataFrame, factor_name_map: dict):
+    """3D scatter for 3-factor design."""
+    try:
+        v = list(factor_name_map.values())
+        x, y, z = v[0], v[1], v[2]
+        fig = go.Figure(data=go.Scatter3d(
+            x=df[f'{x}_num'],
+            y=df[f'{y}_num'],
+            z=df[f'{z}_num'],
+            mode='markers',
+            marker=dict(size=8, color=df['Y'], colorbar=dict(title='Y'), opacity=0.85)
+        ))
+        fig.update_layout(
+            scene=dict(xaxis_title=x, yaxis_title=y, zaxis_title=z),
+            title='3D Factor Space (colored by Y)',
+            height=600
+        )
+        st.plotly_chart(fig, use_container_width=True)
+    except Exception as e:
+        st.error(f"3D plot error: {e}")
+
+
+def plot_surface(df: pd.DataFrame, factor1_custom: str, factor2_custom: str):
+    """3D surface Y over two *_num axes (requires a grid)."""
+    idx = f'{factor1_custom}_num'
+    col = f'{factor2_custom}_num'
+    if idx not in df.columns or col not in df.columns:
+        st.error("Selected factors not found for surface plot.")
+        return
+    pivot = df.pivot_table(values='Y', index=idx, columns=col, aggfunc='mean')
+    if pivot.shape[0] < 2 or pivot.shape[1] < 2:
+        st.warning("Not enough grid points to draw a surface. Increase replications/levels.")
+    fig = go.Figure(data=[go.Surface(z=pivot.values, x=pivot.index, y=pivot.columns)])
+    fig.update_layout(scene=dict(xaxis_title=factor1_custom, yaxis_title=factor2_custom, zaxis_title='Y'),
+                      title=f'Surface: {factor1_custom} vs {factor2_custom}', height=550)
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def plot_boxplot(df: pd.DataFrame, groupby_label: str, factor_name_map: dict):
     """
-    Generates a 3D scatter plot of the factorial design.
-    """
-    fig = go.Figure(data=go.Scatter3d(
-        x=df[f'{factor_names["Temperature"]}_num'], 
-        y=df[f'{factor_names["Pressure"]}_num'], 
-        z=df[f'{factor_names["Thinner"]}_num'],
-        mode='markers',
-        marker=dict(size=10, color=df['Y'], colorbar=dict(title='Y'), opacity=0.8)
-    ))
-
-    fig.update_layout(scene=dict(
-        xaxis_title=factor_names["Temperature"],
-        yaxis_title=factor_names["Pressure"],
-        zaxis_title=factor_names["Thinner"]
-    ))
-    
-    st.plotly_chart(fig)
-
-def plot_surface(df, factor1, factor2):
-    """
-    Generates a 3D surface plot for factorial design.
-    """
-    pivot_table = df.pivot_table(values='Y', index=f'{factor1}_num', columns=f'{factor2}_num')
-
-    fig = go.Figure(data=[go.Surface(z=pivot_table.values, x=pivot_table.index, y=pivot_table.columns)])
-
-    fig.update_layout(scene=dict(
-        xaxis_title=factor1,
-        yaxis_title=factor2,
-        zaxis_title='Y'
-    ))
-    
-    st.plotly_chart(fig)
-
-def plot_surface_twolevels(df, factor_names):
-    """
-    Generates a 3D surface plot for a two-level factorial design.
-    """
-    pivot_df = df.pivot_table(values='Y', index=f"{factor_names['FactorA']}_num", columns=f"{factor_names['FactorB']}_num")
-
-    fig = go.Figure(data=[go.Surface(z=pivot_df.values, x=pivot_df.index, y=pivot_df.columns)])
-
-    fig.update_layout(
-        title='Surface Plot for Two-Level Factorial Design',
-        width=800, height=500,
-        scene=dict(
-            xaxis_title=factor_names['FactorA'],
-            yaxis_title=factor_names['FactorB'],
-            zaxis_title='Y'
-        ),
-        margin=dict(l=65, r=50, b=65, t=90)
-    )
-
-    st.plotly_chart(fig)
-
-def plot_boxplot(df, groupby, factor_names):
-    """
-    Generates a boxplot grouped by a factor or an interaction term.
+    Boxplots by a factor (custom name) or an interaction "A * B".
     """
     fig = go.Figure()
-
-    # Handle interaction term dynamically
-    if "*" in groupby:
-        factors = groupby.split(" * ")
-
-        # Ensure factors exist in factor_names before using them
-        if factors[0] not in factor_names.values() or factors[1] not in factor_names.values():
-            st.error(f"Error: One of the selected factors '{factors[0]}' or '{factors[1]}' does not exist.")
+    # Interaction?
+    if " * " in groupby_label:
+        a_label, b_label = groupby_label.split(" * ")
+        a_col = f"{a_label}_num"
+        b_col = f"{b_label}_num"
+        if a_col not in df.columns or b_col not in df.columns:
+            st.error(f"Columns '{a_col}' or '{b_col}' not found.")
             return
-
-        # Find corresponding column names in df
-        col1 = [key for key, value in factor_names.items() if value == factors[0]]
-        col2 = [key for key, value in factor_names.items() if value == factors[1]]
-
-        if not col1 or not col2:
-            st.error(f"Error: Could not find corresponding columns for '{factors[0]}' and '{factors[1]}' in DataFrame.")
-            return
-        
-        col1 = f'{factor_names[col1[0]]}_num'
-        col2 = f'{factor_names[col2[0]]}_num'
-
-        if col1 not in df.columns or col2 not in df.columns:
-            st.error(f"Error: Columns '{col1}' or '{col2}' not found in DataFrame.")
-            return
-
-        # Create interaction column dynamically
-        df['Interaction'] = df[col1].astype(str) + " * " + df[col2].astype(str)
-        groupby = 'Interaction'
+        inter_col = f"Interaction_{a_label}_{b_label}"
+        df[inter_col] = df[a_col].astype(str) + " * " + df[b_col].astype(str)
+        gcol = inter_col
     else:
-        # Ensure correct factor name mapping to `_num` columns
-        groupby_mapped = {v: f"{v}_num" for v in factor_names.values()}
-        groupby = groupby_mapped.get(groupby, groupby)
+        gcol = f"{groupby_label}_num"
+        if gcol not in df.columns:
+            st.error(f"Column '{gcol}' not found.")
+            return
 
-    # Verify that `groupby` exists before running `.groupby()`
-    if groupby not in df.columns:
-        st.error(f"Error: The selected column '{groupby}' does not exist in the dataset.")
-        return
-
-    # Group and plot the data
-    for name, group in df.groupby(groupby):
+    for name, group in df.groupby(gcol):
         fig.add_trace(go.Box(y=group['Y'], name=str(name), boxmean=True))
 
-    fig.update_layout(xaxis_title=groupby, yaxis_title='Y')
-    st.plotly_chart(fig)
+    fig.update_layout(xaxis_title=groupby_label, yaxis_title='Y', title='Boxplot by Group', height=500)
+    st.plotly_chart(fig, use_container_width=True)
 
 
+# -------------------------
+# Pages
+# -------------------------
 def three_factorial():
-    """
-    Streamlit app for three-factor factorial design visualization and analysis.
-    """
-    st.title('Factorial Design Visualization')
-    st.markdown("By **Leonardo H. Talero-Sarmiento** [View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
+    st.title('Factorial Designs with Three Factors and Three Levels')
+    st.markdown("By **Leonardo H. Talero-Sarmiento** "
+                "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
 
-    # User-defined custom factor names
-    factor_names = {
-        "Temperature": st.sidebar.text_input("Enter a custom name for Temperature", "Temperature"),
-        "Pressure": st.sidebar.text_input("Enter a custom name for Pressure", "Pressure"),
-        "Thinner": st.sidebar.text_input("Enter a custom name for Thinner", "Thinner"),
+    # Sidebar controls
+    st.sidebar.header("Simulation controls")
+    replications = st.sidebar.slider("Replications per run", 1, 10, 2, 1)
+    noise_sd = st.sidebar.slider("Noise σ", 0.0, 5.0, 0.5, 0.1)
+    seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
+
+    # Custom names
+    st.sidebar.header("Custom factor names")
+    factor_name_map = {
+        "Temperature": st.sidebar.text_input("Name for Temperature", "Temperature"),
+        "Pressure": st.sidebar.text_input("Name for Pressure", "Pressure"),
+        "Thinner": st.sidebar.text_input("Name for Thinner", "Thinner"),
     }
 
-    # Coefficients Input
-    coefficients = [
-        st.sidebar.slider('Intercept (Coefficient 0)', -100.0, 100.0, 0.0)
-    ] + [
-        st.sidebar.slider(f'Coefficient {i+1} ({factor_names[factor]})', -100.0, 100.0, 0.0)
-        for i, factor in enumerate(["Temperature", "Pressure", "Thinner"])
-    ] + [
-        st.sidebar.slider(f'Coefficient {i+4} ({factor_names[f1]} * {factor_names[f2]})', -100.0, 100.0, 0.0)
-        for i, (f1, f2) in enumerate(combinations(["Temperature", "Pressure", "Thinner"], 2))
-    ]
+    # Coefficients: 1 + 3 mains + 3 interactions = 7
+    st.sidebar.header("Model coefficients")
+    coef = [st.sidebar.slider('Intercept', -100.0, 100.0, 0.0)]
+    for k in _ensure_unique_ordered_keys(factor_name_map):
+        coef.append(st.sidebar.slider(f'Main effect: {factor_name_map[k]}', -100.0, 100.0, 0.0))
+    for a, b in combinations(_ensure_unique_ordered_keys(factor_name_map), 2):
+        coef.append(st.sidebar.slider(f'Interaction: {factor_name_map[a]} × {factor_name_map[b]}', -100.0, 100.0, 0.0))
 
-    # Define factor levels
-    levels = {factor: ['low', 'medium', 'high'] for factor in factor_names.keys()}
+    # Build data
+    levels = {k: ['low', 'medium', 'high'] for k in factor_name_map}
+    df = create_factorial_dataframe(levels, FACTOR_VALUES_3, replications=replications, random_state=seed or None)
+    df = compute_response(df, coef, factor_name_map, noise_sd=noise_sd, random_state=seed or None)
 
-    # Create DataFrame
-    df = create_factorial_dataframe(levels, FACTOR_VALUES, replications=2)
-
-    # Ensure correct column renaming before computation
-    rename_mapping = {f"{factor}_num": f"{factor_names[factor]}_num" for factor in factor_names}
-    df.rename(columns=rename_mapping, inplace=True)
-
-    # Compute Y
-    df = compute_response(df, coefficients, factor_names)
-
-    # Display DataFrame
     st.subheader('Generated Data')
     st.dataframe(df)
+    st.download_button("Download CSV", data=df.to_csv(index=False), file_name="three_factorial_data.csv", mime="text/csv")
 
-    # CSV Download Button
-    csv = df.to_csv(index=False)
-    st.download_button("Download CSV", data=csv, file_name="data.csv", mime="text/csv")
-
-    # 3D Scatter Plot
     st.subheader('Factors Space')
-    plot_3d(df, factor_names)
+    plot_3d(df, factor_name_map)
 
-    # Boxplot Analysis
-    st.subheader('Analysis of Y based on Variability Source')
-    st.subheader('Box Plot')
+    st.subheader('Analysis of Y based on Variability Source — Box Plot')
+    # Grouping options use custom labels
+    custom_labels = list(factor_name_map.values())
+    groupby_options = custom_labels + [f"{fa} * {fb}" for fa, fb in combinations(custom_labels, 2)]
+    groupby_label = st.selectbox('Group by', groupby_options, index=0)
+    plot_boxplot(df, groupby_label, factor_name_map)
 
-    # 🔥 **Fix: Ensure interaction terms are correctly mapped**
-    original_factors = list(factor_names.keys())  # Extract original factor names
-    renamed_factors = list(factor_names.values())  # Extract renamed factor names
-
-    # Create `groupby_options` using renamed factor names
-    groupby_options = renamed_factors + [
-        f"{factor_names[f1]} * {factor_names[f2]}" for f1, f2 in combinations(original_factors, 2)
-    ]
-
-    groupby = st.selectbox('Group by', groupby_options, index=0)
-
-    # Ensure correct column selection
-    plot_boxplot(df, groupby, factor_names)
-
-    # Surface Plot Selection
     st.subheader('Surface Plot')
-    factor1 = st.selectbox('Select First Factor', renamed_factors, index=0)
-    factor2 = st.selectbox('Select Second Factor', renamed_factors, index=1)
-    
-    # Ensure valid surface plot selection
-    if factor1 != factor2:
-        plot_surface(df, factor1, factor2)
+    f1 = st.selectbox('First Factor', custom_labels, index=0)
+    f2 = st.selectbox('Second Factor', custom_labels, index=1)
+    if f1 != f2:
+        plot_surface(df, f1, f2)
     else:
-        st.error("Please select two different factors for the surface plot.")
+        st.info("Select two different factors for the surface.")
 
-    # Model Fitting
     st.subheader('Model Fitting')
-    results = fit_factorial_model(df, factor_names)
-    st.latex(print_equation(results, factor_names))
-    st.text(results.summary())
+    results = fit_factorial_model(df, factor_name_map)
+    st.code(format_equation(results, factor_name_map))
+    st.write(results.summary())
 
 
 def factorial_twolevels():
-    """
-    Streamlit app to interactively explore two-factor, two-level factorial designs.
-    """
-    st.title("Introduction to Factorial Designs")
-    st.markdown("By **Leonardo H. Talero-Sarmiento** [View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
-    st.markdown("A factorial design is an experimental design that studies the effects of two or more factors, each with multiple levels, on a dependent variable. In a factorial design, the factors are manipulated independently of each other, and the levels of each factor are crossed with the levels of the other factors. This allows researchers to study the main effects of each factor, as well as the interactions between the factors.")
-    st.markdown("Factorial designs are more efficient than one-factor-at-a-time designs, because they allow researchers to study the effects of multiple factors with the same number of participants. Additionally, factorial designs can help researchers to identify interactions between factors, which can be important for understanding the effects of the factors on the dependent variable.")
-    st.markdown("There are two main types of factorial designs: full factorial designs and fractional factorial designs. Full factorial designs include all possible combinations of levels for each factor. Fractional factorial designs are a subset of full factorial designs that include only a subset of the possible combinations of levels. Fractional factorial designs are less efficient than full factorial designs, but they can be used when resources are limited.")
-    
-    st.subheader('Two Factors and Two Levels')
+    st.title("Introduction to Factorial Designs (2 factors × 2 levels)")
+    st.markdown("By **Leonardo H. Talero-Sarmiento** "
+                "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
 
-    # Define two-level factor values
-    two_level_factor_values = {'FactorA': ['low', 'high'], 'FactorB': ['low', 'high']}
+    # Sidebar controls
+    st.sidebar.header("Simulation controls")
+    replications = st.sidebar.slider("Replications per run", 1, 15, 3, 1)
+    noise_sd = st.sidebar.slider("Noise σ", 0.0, 5.0, 0.5, 0.1)
+    seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
 
-    # Custom Factor Names from Sidebar
-    two_level_factor_names = {
-        "FactorA": st.sidebar.text_input("Enter a custom name for Factor A", "FactorA"),
-        "FactorB": st.sidebar.text_input("Enter a custom name for Factor B", "FactorB")
+    st.sidebar.header("Custom factor names")
+    factor_map_2 = {
+        "FactorA": st.sidebar.text_input("Name for Factor A", "FactorA"),
+        "FactorB": st.sidebar.text_input("Name for Factor B", "FactorB")
     }
 
-    # Coefficients Input
-    coefficients = [
-        st.sidebar.slider('Intercept (Coefficient 0)', -100.0, 100.0, 0.0),
-        st.sidebar.slider(f'{two_level_factor_names["FactorA"]} Coefficient', -100.0, 100.0, 0.0),
-        st.sidebar.slider(f'{two_level_factor_names["FactorB"]} Coefficient', -100.0, 100.0, 0.0),
-        st.sidebar.slider(f'Interaction ({two_level_factor_names["FactorA"]} * {two_level_factor_names["FactorB"]})', -100.0, 100.0, 0.0)
+    st.sidebar.header("Model coefficients")
+    # 1 + 2 mains + 1 interaction = 4
+    coef = [
+        st.sidebar.slider('Intercept', -100.0, 100.0, 0.0),
+        st.sidebar.slider(f'Main effect: {factor_map_2["FactorA"]}', -100.0, 100.0, 0.0),
+        st.sidebar.slider(f'Main effect: {factor_map_2["FactorB"]}', -100.0, 100.0, 0.0),
+        st.sidebar.slider(f'Interaction: {factor_map_2["FactorA"]} × {factor_map_2["FactorB"]}', -100.0, 100.0, 0.0)
     ]
 
-    # Create DataFrame
-    df = create_factorial_dataframe(two_level_factor_values, TWO_LEVEL_MAPPING, replications=3)
+    levels = {'FactorA': ['low', 'high'], 'FactorB': ['low', 'high']}
+    df = create_factorial_dataframe(levels, FACTOR_VALUES_2, replications=replications, random_state=seed or None)
 
-    # Ensure correct column renaming before computation
-    rename_mapping = {f"{factor}_num": f"{two_level_factor_names[factor]}_num" for factor in two_level_factor_values}
-    df.rename(columns=rename_mapping, inplace=True)
+    # Rename numeric columns to custom
+    for k, v in factor_map_2.items():
+        if f"{k}_num" in df.columns:
+            df.rename(columns={f"{k}_num": f"{v}_num"}, inplace=True)
 
-    # Compute Y
-    df = compute_response(df, coefficients, two_level_factor_names)
+    df = compute_response(df, coef, factor_map_2, noise_sd=noise_sd, random_state=seed or None)
 
-    # Display DataFrame
     st.subheader('Generated Data')
     st.dataframe(df)
+    st.download_button("Download CSV", data=df.to_csv(index=False), file_name="twolevel_factorial_data.csv", mime="text/csv")
 
-    # CSV Download Button
-    csv = df.to_csv(index=False)
-    st.download_button("Download CSV", data=csv, file_name="data.csv", mime="text/csv")
-
-    # 2D Scatter Plot
     st.subheader('Factors Space')
-    plot_2d(df, two_level_factor_names)
+    plot_2d(df, factor_map_2)
 
-    # Boxplot Analysis
-    st.subheader('Analysis of Y based on Variability Source')
-    st.subheader('Box Plot')
+    st.subheader('Analysis of Y based on Variability Source — Box Plot')
+    custom_labels = list(factor_map_2.values())
+    groupby_options = custom_labels + [f"{custom_labels[0]} * {custom_labels[1]}"]
+    groupby_label = st.selectbox('Group by', groupby_options, index=0)
+    plot_boxplot(df, groupby_label, factor_map_2)
 
-    # Dynamically Generate Grouping Options for Boxplots
-    groupby_options = list(two_level_factor_names.values()) + [f"{two_level_factor_names['FactorA']} * {two_level_factor_names['FactorB']}"]
-    groupby = st.selectbox('Group by', groupby_options, index=0)
-
-    # Ensure correct mapping before passing to plot_boxplot
-    plot_boxplot(df, groupby, two_level_factor_names)
-
-    # Surface Plot Selection
     st.subheader('Surface Plot')
-    plot_surface_twolevels(df, two_level_factor_names)
+    # For 2x2, show the single surface
+    plot_surface(df, custom_labels[0], custom_labels[1])
 
-    # Model Fitting
     st.subheader('Model Fitting')
-    results = fit_factorial_model(df, two_level_factor_names)
-    st.latex(print_equation(results, two_level_factor_names))
-    st.text(results.summary())
+    results = fit_factorial_model(df, factor_map_2)
+    st.code(format_equation(results, factor_map_2))
+    st.write(results.summary())
 
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
-
-import statsmodels.api as sm
-import statsmodels.formula.api as smf
-import matplotlib.pyplot as plt
 
 def anova_oneway():
-    """
-    Streamlit app to demonstrate One-Way ANOVA with one factor, three levels, and 15 replications per level.
-    """
-    st.title("One-Way ANOVA: Analysis of Variance with One Factor")
-    st.markdown("By **Leonardo H. Talero-Sarmiento** [View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
-    st.markdown("""
-    One-Way ANOVA is a statistical method used to compare the means of three or more independent groups 
-    to determine if there is a statistically significant difference between them. It helps to test 
-    whether the population means of the different levels of a factor are equal.
+    st.title("One-Way ANOVA: One Factor, Three Levels")
+    st.markdown("By **Leonardo H. Talero-Sarmiento** "
+                "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
 
-   
-    """)
+    # Controls
+    st.sidebar.header("Simulation controls")
+    replications = st.sidebar.slider("Replications per level", 3, 50, 15, 1)
+    noise_sd = st.sidebar.slider("Noise σ", 0.0, 5.0, 0.5, 0.1)
+    seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
 
-    st.subheader('One Factor with Three Levels')
-
-    # Custom Factor Name from Sidebar
-    factor_name = st.sidebar.text_input("Enter a custom name for the factor", "Factor")
-
-    # Custom Level Names from Sidebar
+    # Names
+    factor_name = st.sidebar.text_input("Factor name", "Factor")
     level_names = {
-        "low": st.sidebar.text_input("Enter a custom name for Level 1", "Low"),
-        "medium": st.sidebar.text_input("Enter a custom name for Level 2", "Medium"),
-        "high": st.sidebar.text_input("Enter a custom name for Level 3", "High")
+        "low": st.sidebar.text_input("Level 1 label", "Low"),
+        "medium": st.sidebar.text_input("Level 2 label", "Medium"),
+        "high": st.sidebar.text_input("Level 3 label", "High")
     }
 
-    # Coefficients Input
-    coefficients = [
-        st.sidebar.slider('Intercept (Baseline Level)', -100.0, 100.0, 0.0),
-        st.sidebar.slider(f'Effect of {level_names["medium"]}', -100.0, 100.0, 0.0),
-        st.sidebar.slider(f'Effect of {level_names["high"]}', -100.0, 100.0, 0.0)
-    ]
+    # Coeffs: baseline + (medium) + (high)
+    st.sidebar.header("Effects (relative to baseline level)")
+    coef_intercept = st.sidebar.slider('Baseline mean', -100.0, 100.0, 0.0)
+    coef_medium = st.sidebar.slider(f'Effect of {level_names["medium"]}', -100.0, 100.0, 0.0)
+    coef_high = st.sidebar.slider(f'Effect of {level_names["high"]}', -100.0, 100.0, 0.0)
 
-    # Define factor levels and replications
-    levels = ["low", "medium", "high"]
-    replications = 15  # Each level appears 15 times
+    # Build data
+    rng = np.random.default_rng(seed=seed or None)
+    raw_levels = np.repeat(['low', 'medium', 'high'], replications)
+    df = pd.DataFrame({factor_name: raw_levels})
+    # Relabel for display
+    map_show = {'low': level_names['low'], 'medium': level_names['medium'], 'high': level_names['high']}
+    df[factor_name] = df[factor_name].map(map_show)
+    # Generate Y
+    means = df[factor_name].map({level_names['low']: coef_intercept,
+                                 level_names['medium']: coef_intercept + coef_medium,
+                                 level_names['high']: coef_intercept + coef_high})
+    df['Y'] = means + rng.normal(0, noise_sd, len(df))
 
-    # Create DataFrame
-    df = pd.DataFrame({
-        factor_name: np.repeat(levels, replications)  # Repeat each level 15 times
-    })
-
-    # Assign numeric values to factor levels
-    level_mapping = {'low': 0, 'medium': 1, 'high': 2}
-    df[f"{factor_name}_num"] = df[factor_name].map(level_mapping)
-
-    # Rename levels to user-defined names
-    df[factor_name] = df[factor_name].map(level_names)
-
-    # Compute Response Variable (Y)
-    noise = np.random.normal(0, 0.5, len(df))  # Normally distributed random noise
-    df["Y"] = (coefficients[0]  # Intercept
-               + coefficients[1] * (df[factor_name] == level_names["medium"])  # Effect of Medium
-               + coefficients[2] * (df[factor_name] == level_names["high"])  # Effect of High
-               + noise)
-
-    # Display DataFrame
     st.subheader('Generated Data')
     st.dataframe(df)
+    st.download_button("Download CSV", data=df.to_csv(index=False), file_name="anova_data.csv", mime="text/csv")
 
-    # CSV Download Button
-    csv = df.to_csv(index=False)
-    st.download_button("Download CSV", data=csv, file_name="anova_data.csv", mime="text/csv")
-
-    # Boxplot Analysis
     st.subheader('Box Plot for Factor Levels')
     fig = go.Figure()
     for level in df[factor_name].unique():
-        fig.add_trace(go.Box(y=df[df[factor_name] == level]["Y"], name=level, boxmean=True))
+        fig.add_trace(go.Box(y=df.loc[df[factor_name] == level, "Y"], name=level, boxmean=True))
+    fig.update_layout(xaxis_title=factor_name, yaxis_title="Y", title="Distribution of Y across Levels", height=500)
+    st.plotly_chart(fig, use_container_width=True)
 
-    fig.update_layout(xaxis_title=factor_name, yaxis_title="Y", title="Distribution of Y across Levels")
-    st.plotly_chart(fig)
-
-    # One-Way ANOVA using Linear Regression
     st.subheader('Statistical Analysis: One-Way ANOVA')
-
-    formula = f"Y ~ C({factor_name})"
-    model = smf.ols(formula, data=df).fit()
+    model = smf.ols(f"Y ~ C({factor_name})", data=df).fit()
     anova_table = sm.stats.anova_lm(model, typ=2)
-
-    # Display ANOVA table
-    st.write("### **ANOVA Table:**")
+    st.write("### ANOVA Table")
     st.write(anova_table)
+    st.write("### Linear Model Summary")
+    st.write(model.summary())
 
-    # Regression Summary
-    st.write("### **Linear Regression Model Summary:**")
-    st.text(model.summary())
+    st.subheader("Mean Structure")
+    st.code(f"μ({level_names['low']})   = {coef_intercept:.3f}\n"
+            f"μ({level_names['medium']}) = {coef_intercept + coef_medium:.3f}\n"
+            f"μ({level_names['high']})   = {coef_intercept + coef_high:.3f}")
 
-    # Linear Equation Representation
-    st.subheader("Regression Equation Representation")
-    equation = f"Y = {model.params[0]:.2f}"
-    for i, level in enumerate(level_names.values(), start=1):
-        if i < len(model.params):  # Ensure level exists in model parameters
-            equation += f" + {model.params[i]:.2f} * I({factor_name} == '{level}')"
-    st.latex(equation)
-
-    # Extract Sum of Squares from ANOVA table
-    sst = anova_table["sum_sq"].sum()  # Sum of Squares Total
-    sstr = anova_table["sum_sq"][0]  # Sum of Squares Treatment
-    sse = anova_table["sum_sq"][1]  # Sum of Squares Error
-
-    # Pie Chart for Sum of Squares
-    st.subheader("Visualization of Sum of Squares")
-    
-    fig, axs = plt.subplots(1, 2, figsize=(12, 5))
-
-    # Pie chart for SST
-    axs[0].pie([sst], labels=[f"SST: {sst:.2f}"], autopct='%1.1f%%', colors=["#1f77b4"])
+    # Sum of squares visualization
+    sstr = anova_table['sum_sq'].iloc[0]
+    sse = anova_table['sum_sq'].iloc[1]
+    sst = sstr + sse
+    fig2, axs = plt.subplots(1, 2, figsize=(12, 5))
+    axs[0].pie([sst], labels=[f"SST: {sst:.2f}"], autopct='%1.1f%%')
     axs[0].set_title("Total Sum of Squares (SST)")
-
-    # Pie chart for SSTR vs. SSE
-    axs[1].pie([sstr, sse], labels=[f"SSTr: {sstr:.2f}", f"SSE: {sse:.2f}"], autopct='%1.1f%%', colors=["#ff7f0e", "#2ca02c"])
-    axs[1].set_title("Sum of Squares Treatment vs. Error")
-
-    st.pyplot(fig)
-
+    axs[1].pie([sstr, sse], labels=[f"SSTr: {sstr:.2f}", f"SSE: {sse:.2f}"], autopct='%1.1f%%')
+    axs[1].set_title("Treatment vs Error")
+    st.pyplot(fig2)
 
 
 def Analysis():
-    """
-    Tips to Analyze the Statistical Outputs.
-    """
     st.title("Tips to Analyze the Statistical Outputs")
-    st.markdown("By **Leonardo H. Talero-Sarmiento** [View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
-    st.subheader('Analysis of Y Based on a Source of Variability')
-
-    st.subheader('Box Plot')
-    
-    st.markdown("### *Why Are Box Plots by Group So Useful in Data Analysis?*")
+    st.markdown("By **Leonardo H. Talero-Sarmiento** "
+                "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
+    st.subheader('Analysis of Y Based on a Source of Variability — Box Plot')
     st.markdown("""
-    Creating a box plot for different groups is a powerful way to visually explore and compare data distributions across categories. This simple yet effective visualization can reveal patterns, differences, and anomalies that might be hidden in raw numbers. Here’s why box plots are incredibly useful and what insights they can provide:
+    Box plots by group provide a compact view of distributions: medians, spread, skewness, and outliers.
+    They are excellent for quickly spotting differences across categories, shifts over time, and potential anomalies.
     """)
-    
-    st.markdown("## 1. Comparing Distributions Across Groups")
+    st.subheader('How to Read an OLS Regression Output')
     st.markdown("""
-    Box plots allow us to compare the spread and central tendency of data across different categories at a glance.
-    
-    👉 **Example:** Imagine you're analyzing **student test scores** across multiple schools. A box plot can quickly show whether some schools have consistently higher scores, if others have a wider range of performance, or if certain schools have unusually low or high scores compared to the rest.
-    
-    👉 **Another example:** If you're studying **salaries across different industries**, a box plot can instantly highlight whether some fields (like tech) have a broader pay range while others (like education) have more uniform salaries.
-    """)
-    
-    st.markdown("## 2. Spotting Outliers")
-    st.markdown("""
-    Outliers—data points that fall far outside the typical range—are clearly visible in box plots as dots beyond the "whiskers." These can signal interesting insights or potential data issues.
-    
-    👉 **Example:** If you're analyzing **delivery times** for different shipping companies, and one company consistently has extreme delays (represented by outliers), this could indicate operational inefficiencies.
-    
-    👉 **Another example:** If you're studying **home prices** in different neighborhoods, outliers might reveal luxury properties or undervalued homes that merit deeper investigation.
-    """)
-    
-    st.markdown("## 3. Understanding Skewness and Symmetry")
-    st.markdown("""
-    A box plot isn’t just about the median (the middle value); it also shows how data is distributed. If the median is off-center within the box, it indicates skewness.
-    
-    👉 **Example:** Suppose you're analyzing **commute times** for employees in different cities. If the median commute time in one city is much closer to the lower quartile, it suggests that most people have short commutes, but a few endure very long ones—perhaps due to traffic congestion or urban sprawl.
-    
-    Recognizing skewness helps in making fair comparisons and drawing better conclusions.
-    """)
-    
-    st.markdown("## 4. Detecting Shifts and Trends Over Time")
-    st.markdown("""
-    If you compare box plots over different time periods, you can see how things change.
-    
-    👉 **Example:** A retail business tracking **monthly customer spending** can use box plots to reveal seasonal trends—perhaps spending spikes in **December** (holiday shopping) and drops in **January**.
-    
-    👉 **Another example:** If you're analyzing **stock market performance**, box plots can show how price volatility changes from one quarter to the next.
-    """)
-    
-    st.markdown("## 5. Exploring Relationships Between Variables")
-    st.markdown("""
-    Box plots help uncover connections between categorical and continuous variables.
-    
-    👉 **Example:** Suppose you're studying the impact of **different diet plans on weight loss**. By grouping individuals based on their diet type and plotting their weight loss results, a box plot could quickly reveal which diets tend to lead to the most consistent or extreme results.
-    
-    👉 **Another example:** In a **manufacturing setting**, box plots can help compare **defect rates across production shifts**, identifying if a certain shift tends to produce more defective items than others.
-    """)
-    
-    st.subheader('# How to Read an OLS Regression Output')
-
-    st.markdown("""
-    When running an **Ordinary Least Squares (OLS) regression**, the output provides key statistics to evaluate the model’s performance and understand the relationship between variables. Below is a breakdown of the main components and what they mean.
-    """)
-    
-    st.markdown("## 1. Model Summary")
-    st.markdown("""
-    This section gives an overview of the regression model:
-    
-    - **Dep. Variable:** The dependent variable (Y) being predicted.
-    - **Model:** Specifies the regression type (OLS - Ordinary Least Squares).
-    - **Method:** Indicates how the model estimates coefficients (Least Squares).
-    - **No. Observations:** The number of data points used in the model.
-    - **Df Model:** The degrees of freedom for the predictors (number of independent variables).
-    - **Df Residuals:** The degrees of freedom remaining after estimating the model.
-    - **Covariance Type:** Describes how standard errors are calculated (e.g., "nonrobust" or "robust").
-    """)
-    
-    st.markdown("## 2. Model Fit Statistics")
-    st.markdown("""
-    These metrics indicate how well the model explains the variability in the dependent variable:
-    
-    - **R-squared (R²):** Measures how much variation in Y is explained by the model. Ranges from 0 to 1, with higher values indicating a better fit.
-    - **Adjusted R-squared:** Similar to R² but adjusted for the number of predictors. Useful when comparing models with different numbers of variables.
-    - **F-statistic:** Tests whether at least one predictor is statistically significant. A higher value suggests a more meaningful model.
-    - **Prob (F-statistic):** The p-value for the F-test. A low value (e.g., < 0.05) suggests the model is statistically significant.
-    - **Log-Likelihood:** Measures model fit; higher values indicate a better model.
-    - **AIC / BIC:** Model selection criteria (lower values indicate a better fit with fewer parameters).
-    """)
-    
-    st.markdown("## 3. Understanding R-Squared (R²)")
-    st.markdown("""
-    - **What it tells you:** R² represents the percentage of variation in the dependent variable explained by the independent variables.
-    - **High R²:** The model explains most of the variability in Y.
-    - **Low R²:** The model does not explain much variation, meaning the predictors may not be strong enough.
-    
-    🔍 **Important:** A **high R² does not always mean a good model**—overfitting can occur if too many variables are used.
-    """)
-    
-    st.markdown("## 4. Checking Model Significance")
-    st.markdown("""
-    - **F-statistic & Prob (F-statistic):**  
-      - If the p-value is **low** (e.g., < 0.05), at least one predictor significantly contributes to the model.  
-      - If the p-value is **high**, the model may not be useful.
-    - **Adjusted R²:** If negative or decreasing as more variables are added, it suggests that additional predictors are not improving the model.
-    """)
-    
-    st.markdown("## 5. Next Steps: Improving the Model")
-    st.markdown("""
-    If the model has **poor fit** (low R², high p-values), consider:
-    ✅ Checking for **missing or irrelevant variables**  
-    ✅ Transforming variables (e.g., log transformation for skewed data)  
-    ✅ Using **interaction terms** or polynomial regression  
-    ✅ Trying **different models** (e.g., Ridge, Lasso, Decision Trees)  
-    """)
-    
-    st.markdown("## 🔍 Key Takeaways")
-    st.markdown("""
-    - **R² tells you how much variance the model explains, but it’s not the only factor to consider.**  
-    - **F-statistic and its p-value help determine if the model is significant.**  
-    - **Adjusted R² helps evaluate if additional predictors improve the model.**  
-    - **Low performance suggests revising predictors, transforming variables, or considering other modeling approaches.**  
-    
-    🚀 **Understanding these metrics helps in making better, data-driven decisions!**
+    Focus on **R²/Adj. R²** (fit), **F-test** (overall significance), **coefficients & p-values** (variable significance),
+    and **AIC/BIC** (model parsimony). Poor fit? Consider missing variables, transforms, interactions, or alternative models.
     """)
 
 
-# Navigation System
-pages = {
+# -------------------------
+# Navigation
+# -------------------------
+PAGES = {
     "Anova One-way - Introduction": anova_oneway,
     "Introduction to Factorial Designs": factorial_twolevels,
     "Factorial Designs with Three Factors and Three Levels": three_factorial,
-    "Tips to Analyze the Statistical Outputs":Analysis
+    "Tips to Analyze the Statistical Outputs": Analysis,
 }
 
 st.title('Navigation')
-selection = st.radio("Go to", list(pages.keys()))
-pages[selection]()
-
+choice = st.radio("Go to", list(PAGES.keys()))
+PAGES[choice]()
