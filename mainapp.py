@@ -1,5 +1,5 @@
 # =========================
-# Factorial/ANOVA Streamlit App (clean & robust)
+# Factorial/ANOVA Streamlit App (clean & robust) — Py3.9 safe
 # =========================
 import itertools
 from itertools import combinations
@@ -22,17 +22,17 @@ FACTOR_VALUES_2 = {'low': -1, 'high': 1}
 # -------------------------
 # Helpers
 # -------------------------
-def _ensure_unique_ordered_keys(d: dict) -> list:
+def _ensure_unique_ordered_keys(d):
     """Return the keys of a dict in insertion order as a list (explicit)."""
     return list(d.keys())
 
 
-def create_factorial_dataframe(levels: Dict, numeric_mapping: Dict, replications: int = 2, random_state: Optional[int] = None) -> pd.DataFrame:
+def create_factorial_dataframe(levels, numeric_mapping, replications=2, random_state=None):
     """
     Generates a factorial design dataframe with numeric mappings for any number of factors.
     `levels` is a dict: {factor_key: [level_str, ...]}
     """
-    rng = np.random.default_rng(seed=random_state)
+    _ = np.random.default_rng(seed=random_state)  # kept for future use
     grid = list(itertools.product(*levels.values()))
     df = pd.DataFrame(grid * replications, columns=levels.keys())
     # numeric maps
@@ -47,8 +47,7 @@ def create_factorial_dataframe(levels: Dict, numeric_mapping: Dict, replications
     return df
 
 
-def compute_response(df: pd.DataFrame, coefficients: List[float], factor_name_map: Dict, noise_sd: float = 0.5, random_state: Optional[int] = None) -> pd.DataFrame:
-
+def compute_response(df, coefficients, factor_name_map, noise_sd=0.5, random_state=None):
     """
     Compute Y = b0 + sum(bi*Xi) + sum(bij*Xi*Xj) + noise
     factor_name_map: {"internal_key": "Custom Name"}
@@ -101,7 +100,7 @@ def compute_response(df: pd.DataFrame, coefficients: List[float], factor_name_ma
     return df
 
 
-def fit_factorial_model(df: pd.DataFrame, factor_name_map: dict):
+def fit_factorial_model(df, factor_name_map):
     """OLS with main effects + 2-way interactions on *_num columns (custom names)."""
     keys = _ensure_unique_ordered_keys(factor_name_map)
     mains = [f"Q('{factor_name_map[k]}_num')" for k in keys]
@@ -110,17 +109,12 @@ def fit_factorial_model(df: pd.DataFrame, factor_name_map: dict):
     return smf.ols(formula, data=df).fit()
 
 
-def format_equation(results, factor_name_map: dict) -> str:
+def format_equation(results, factor_name_map):
     """
     Human-friendly equation using custom names (no LaTeX special chars).
     """
     keys = _ensure_unique_ordered_keys(factor_name_map)
-    terms = ["Intercept"] + [f"{factor_name_map[k]}" for k in keys] + \
-            [f"{factor_name_map[a]}:{factor_name_map[b]}" for a, b in combinations(keys, 2)]
-    # Map param index -> readable term name
-    # statsmodels params order matches design matrix columns; for our Q() terms, it should align.
     coefs = results.params
-    # Build line; try to align by available names
     parts = []
     # Intercept
     if "Intercept" in coefs.index:
@@ -138,7 +132,7 @@ def format_equation(results, factor_name_map: dict) -> str:
     return "Y = " + " ".join(parts)
 
 
-def plot_2d(df: pd.DataFrame, factor_name_map: dict):
+def plot_2d(df, factor_name_map):
     """2D scatter heat by Y for two-level design."""
     try:
         xname = list(factor_name_map.values())[0]
@@ -160,7 +154,7 @@ def plot_2d(df: pd.DataFrame, factor_name_map: dict):
         st.error(f"2D plot error: {e}")
 
 
-def plot_3d(df: pd.DataFrame, factor_name_map: dict):
+def plot_3d(df, factor_name_map):
     """3D scatter for 3-factor design."""
     try:
         v = list(factor_name_map.values())
@@ -182,7 +176,7 @@ def plot_3d(df: pd.DataFrame, factor_name_map: dict):
         st.error(f"3D plot error: {e}")
 
 
-def plot_surface(df: pd.DataFrame, factor1_custom: str, factor2_custom: str):
+def plot_surface(df, factor1_custom, factor2_custom):
     """3D surface Y over two *_num axes (requires a grid)."""
     idx = f'{factor1_custom}_num'
     col = f'{factor2_custom}_num'
@@ -198,7 +192,7 @@ def plot_surface(df: pd.DataFrame, factor1_custom: str, factor2_custom: str):
     st.plotly_chart(fig, use_container_width=True)
 
 
-def plot_boxplot(df: pd.DataFrame, groupby_label: str, factor_name_map: dict):
+def plot_boxplot(df, groupby_label, factor_name_map):
     """
     Boxplots by a factor (custom name) or an interaction "A * B".
     """
