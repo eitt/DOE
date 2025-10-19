@@ -27,7 +27,7 @@ def _ensure_unique_ordered_keys(d: dict) -> list:
     return list(d.keys())
 
 
-def create_factorial_dataframe(levels: dict, numeric_mapping: dict, replications: int = 2, random_state: int | None = None) -> pd.DataFrame:
+def create_factorial_dataframe(levels: Dict, numeric_mapping: Dict, replications: int = 2, random_state: Optional[int] = None) -> pd.DataFrame:
     """
     Generates a factorial design dataframe with numeric mappings for any number of factors.
     `levels` is a dict: {factor_key: [level_str, ...]}
@@ -47,7 +47,8 @@ def create_factorial_dataframe(levels: dict, numeric_mapping: dict, replications
     return df
 
 
-def compute_response(df: pd.DataFrame, coefficients: list[float], factor_name_map: dict, noise_sd: float = 0.5, random_state: int | None = None) -> pd.DataFrame:
+def compute_response(df: pd.DataFrame, coefficients: List[float], factor_name_map: Dict, noise_sd: float = 0.5, random_state: Optional[int] = None) -> pd.DataFrame:
+
     """
     Compute Y = b0 + sum(bi*Xi) + sum(bij*Xi*Xj) + noise
     factor_name_map: {"internal_key": "Custom Name"}
