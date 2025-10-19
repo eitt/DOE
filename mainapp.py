@@ -553,20 +553,28 @@ def Analysis():
 
     # QQ plot (normality)
     osm, osr = stats.probplot(resid, dist="norm", sparams=(), fit=False)
-    qq_x = np.array(osm)  # theoretical quantiles
-    qq_y = np.array(osr)  # ordered residuals
-    # Fit a line through the points
-    slope, intercept, _ = stats.linregress(qq_x, qq_y)
-    line_y = intercept + slope * qq_x
+    qq_x = np.array(osm, dtype=float)  # theoretical quantiles
+    qq_y = np.array(osr, dtype=float)  # ordered residuals
+
+    # Guard against pathological cases (e.g., all residuals identical)
+    if np.allclose(np.std(qq_y), 0):
+        # fallback: horizontal line at the common residual value
+        line_y = np.full_like(qq_x, fill_value=qq_y[0], dtype=float)
+    else:
+        lr = stats.linregress(qq_x, qq_y)
+        line_y = lr.intercept + lr.slope * qq_x
 
     fig_qq = go.Figure()
     fig_qq.add_trace(go.Scatter(x=qq_x, y=qq_y, mode='markers', name='Residuals'))
     fig_qq.add_trace(go.Scatter(x=qq_x, y=line_y, mode='lines', name='Reference line'))
-    fig_qq.update_layout(xaxis_title="Theoretical Quantiles",
-                         yaxis_title="Ordered Residuals",
-                         height=420,
-                         title="Q–Q Plot of Residuals")
+    fig_qq.update_layout(
+        xaxis_title="Theoretical Quantiles",
+        yaxis_title="Ordered Residuals",
+        height=420,
+        title="Q–Q Plot of Residuals"
+    )
     st.plotly_chart(fig_qq, use_container_width=True)
+
 
     # -----------------------
     # Step-by-step interpretation guide
