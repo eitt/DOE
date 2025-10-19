@@ -177,6 +177,50 @@ def plot_3d(df, factor_name_map):
 
 
 def plot_surface(df, factor1_custom, factor2_custom):
+    """3D surface Y over two *_num axes (requires a complete grid)."""
+    idx = f'{factor1_custom}_num'
+    col = f'{factor2_custom}_num'
+    if idx not in df.columns or col not in df.columns:
+        st.error("Selected factors not found for surface plot.")
+        return
+
+    # Build pivot (mean Y by two numeric-coded factors)
+    pivot = (
+        df.pivot_table(values='Y', index=idx, columns=col, aggfunc='mean')
+          .sort_index(axis=0)
+          .sort_index(axis=1)
+    )
+
+    # Validate there are enough points and no NaNs for a surface
+    if pivot.shape[0] < 2 or pivot.shape[1] < 2:
+        st.warning("Not enough grid points to draw a surface. Increase replications/levels.")
+        return
+    if pivot.isna().any().any():
+        st.error("Surface has missing cells (NaN). Increase replications or ensure all level combinations exist.")
+        return
+
+    # Force numeric arrays; Plotly Surface is picky
+    try:
+        x = np.asarray(pivot.index, dtype=float)
+        y = np.asarray(pivot.columns, dtype=float)
+        Z = np.asarray(pivot.values, dtype=float)
+    except Exception:
+        st.error("Surface axes must be numeric. Ensure factors are coded as numbers (e.g., -1, 0, 1).")
+        return
+
+    # Plot
+    fig = go.Figure(data=[go.Surface(z=Z, x=x, y=y)])
+    fig.update_layout(
+        scene=dict(
+            xaxis_title=factor1_custom,
+            yaxis_title=factor2_custom,
+            zaxis_title='Y'
+        ),
+        title=f'Surface: {factor1_custom} vs {factor2_custom}',
+        height=550
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
     """3D surface Y over two *_num axes (requires a grid)."""
     idx = f'{factor1_custom}_num'
     col = f'{factor2_custom}_num'
@@ -685,8 +729,19 @@ def Analysis():
     # Residuals vs Fitted
     fitted = model.fittedvalues
     fig_rvf = go.Figure()
-    fig_rvf.add_trace(go.Scatter(x=fitted, y=resid, mode='markers', name='Residuals'))
-    fig_rvf.add_hline(y=0, line_dash="dash")
+    fig_rvf.add_trace(go.Scatter(x=list(np.asarray(fitted).ravel()),
+                             y=list(np.asarray(resid).ravel()),
+                             mode='markers', name='Residuals'))
+
+    # Safer horizontal baseline (works across Plotly versions)
+    x_min = float(np.min(fitted))
+    x_max = float(np.max(fitted))
+    fig_rvf.add_shape(
+        type="line",
+        x0=x_min, x1=x_max, y0=0, y1=0,
+        xref="x", yref="y",
+    line=dict(dash="dash"))
+
     fig_rvf.update_layout(xaxis_title="Fitted values",
                           yaxis_title="Residuals",
                           height=420,
