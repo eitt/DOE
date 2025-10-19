@@ -59,7 +59,7 @@ def create_factorial_dataframe(levels, numeric_mapping, replications=2, random_s
         if set(df[col].unique()).issubset(set(numeric_mapping.keys())):
             df[f'{col}_num'] = df[col].map(numeric_mapping)
         else:
-            # If custom labels are used, map by position (fallback)
+            # Fallback: map by position if someone passed custom labels
             lvl_list = list(levels[col])
             pos_map = {lvl: numeric_mapping[lvl] for lvl in lvl_list if lvl in numeric_mapping}
             df[f'{col}_num'] = df[col].map(pos_map)
@@ -74,7 +74,7 @@ def compute_response(df, coefficients, factor_name_map, noise_sd=0.5, random_sta
     rng = np.random.default_rng(seed=random_state)
     keys = _ensure_unique_ordered_keys(factor_name_map)
 
-    # Guarantee numeric columns exist with the CUSTOM name suffix
+    # Ensure *_num columns are named with the CUSTOM label
     for k in keys:
         src = f"{k}_num"
         dst = f"{factor_name_map[k]}_num"
@@ -228,7 +228,7 @@ def plot_surface(df, factor1_custom, factor2_custom):
         st.error("Surface has missing cells (NaN). Increase replications or ensure all level combinations exist.")
         return
 
-    # Force numeric arrays; Plotly Surface is picky
+    # Force numeric arrays
     try:
         x = np.asarray(pivot.index, dtype=float)
         y = np.asarray(pivot.columns, dtype=float)
@@ -240,7 +240,6 @@ def plot_surface(df, factor1_custom, factor2_custom):
         st.error("Surface axes must be numeric. Ensure factors are coded as numbers (e.g., -1, 0, 1).")
         return
 
-    # Plot
     fig = go.Figure(data=[go.Surface(z=Z, x=x, y=y)])
     fig.update_layout(
         scene=dict(
@@ -258,10 +257,8 @@ def plot_boxplot(df, groupby_label, factor_name_map):
     """
     Boxplots by a factor (custom name) or interactions:
     supports "A", "A * B", and "A * B * C" where labels are the CUSTOM factor names.
-    Groups are shown by numeric-coded levels to match your *_num columns.
+    We construct an explicit group label for each row so interaction levels don't collapse.
     """
-    fig = go.Figure()
-
     # Allow flexible spacing around '*'
     parts = [p.strip() for p in groupby_label.split('*') if p.strip()]
 
@@ -269,57 +266,65 @@ def plot_boxplot(df, groupby_label, factor_name_map):
         # lbl is a CUSTOM label (e.g., "Temperature" after user renaming)
         return f"{lbl}_num"
 
-    # Build a single Series that contains the group label for each row
-    if len(parts) == 1:
-        gcol = col_from_label(parts[0])
-        if gcol not in df.columns:
-            st.error(f"Column '{gcol}' not found in DataFrame.")
+    # Build per-row group labels
+    try:
+        if len(parts) == 1:
+            a = parts[0]
+            a_col = col_from_label(a)
+            if a_col not in df.columns:
+                st.error(f"Column '{a_col}' not found in DataFrame.")
+                return
+            group_series = df[a_col].astype(str)
+
+        elif len(parts) == 2:
+            a, b = parts
+            a_col, b_col = col_from_label(a), col_from_label(b)
+            for c in (a_col, b_col):
+                if c not in df.columns:
+                    st.error(f"Column '{c}' not found in DataFrame.")
+                    return
+            group_series = (df[a_col].astype(str) + " * " + df[b_col].astype(str))
+
+        elif len(parts) == 3:
+            a, b, c = parts
+            a_col, b_col, c_col = col_from_label(a), col_from_label(b), col_from_label(c)
+            for col in (a_col, b_col, c_col):
+                if col not in df.columns:
+                    st.error(f"Column '{col}' not found in DataFrame.")
+                    return
+            group_series = (
+                df[a_col].astype(str) + " * " + df[b_col].astype(str) + " * " + df[c_col].astype(str)
+            )
+        else:
+            st.error("Only up to 3-way interactions are supported.")
             return
-        group_series = df[gcol].astype(str)
-
-    elif len(parts) == 2:
-        a_label, b_label = parts
-        a_col, b_col = col_from_label(a_label), col_from_label(b_label)
-        for c in (a_col, b_col):
-            if c not in df.columns:
-                st.error(f"Column '{c}' not found in DataFrame.")
-                return
-        inter_col = f"Interaction_{a_label}_{b_label}"
-        df[inter_col] = df[a_col].astype(str) + " * " + df[b_col].astype(str)
-        group_series = df[inter_col]
-
-    elif len(parts) == 3:
-        a_label, b_label, c_label = parts
-        a_col, b_col, c_col = col_from_label(a_label), col_from_label(b_label), col_from_label(c_label)
-        for c in (a_col, b_col, c_col):
-            if c not in df.columns:
-                st.error(f"Column '{c}' not found in DataFrame.")
-                return
-        inter_col = f"Interaction_{a_label}_{b_label}_{c_label}"
-        df[inter_col] = (
-            df[a_col].astype(str) + " * " + df[b_col].astype(str) + " * " + df[c_col].astype(str)
-        )
-        group_series = df[inter_col]
-
-    else:
-        st.error("Only up to 3-way interactions are supported.")
+    except Exception as e:
+        st.error(f"Failed to build interaction groups: {e}")
         return
 
-    # Draw boxplots for each group
-    for name, group in df.groupby(group_series):
-        yvals = list(np.asarray(group['Y']).ravel())
+    # Force category order to stabilize Plotly layout
+    cats = pd.Categorical(group_series, categories=sorted(group_series.unique()), ordered=True)
+    group_series = pd.Series(cats, index=df.index, name="__group__")
+
+    fig = go.Figure()
+    # Draw a trace per unique category (explicit; avoids accidental collapse)
+    for cat in cats.categories:
+        mask = (group_series == cat)
+        yvals = list(np.asarray(df.loc[mask, 'Y']).ravel())
+        if len(yvals) == 0:
+            continue
         if not _is_finite_array(yvals):
-            st.error(f"Non-finite values in boxplot group '{name}'.")
+            st.error(f"Non-finite values in boxplot group '{cat}'.")
             return
-        fig.add_trace(go.Box(y=yvals, name=str(name), boxmean=True))
+        fig.add_trace(go.Box(y=yvals, name=str(cat), boxmean=True, showlegend=False))
 
     fig.update_layout(
         xaxis_title=groupby_label,
         yaxis_title='Y',
         title='Boxplot by Group',
-        height=500,
+        height=520,
         boxmode='group',
-        xaxis=dict(categoryorder='category ascending')
+        xaxis=dict(categoryorder='array', categoryarray=list(cats.categories))
     )
     _safe_plot(fig)
 
@@ -368,7 +373,6 @@ def three_factorial():
 
     st.subheader('Analysis of Y based on Variability Source — Box Plot')
     custom_labels = list(factor_name_map.values())
-    # include 1-way, 2-way, and 3-way options
     groupby_options = (
         custom_labels
         + [f"{fa} * {fb}" for fa, fb in combinations(custom_labels, 2)]
@@ -388,20 +392,17 @@ def three_factorial():
     st.subheader('Model Fitting')
     results = fit_factorial_model(df, factor_name_map)
     st.code(format_equation(results, factor_name_map))
-    # >>> Print text summary (classic)
     st.text(results.summary())
 
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
 
-    # Main effects: compare 'low', 'medium', 'high' for each factor (use original factor keys, not custom labels)
     st.markdown("**Main Effects**")
     for fac in ["Temperature", "Pressure", "Thinner"]:
         st.caption(f"Pairwise comparisons for {fac}")
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
         st.text(tuk.summary().as_text())
 
-    # 2-way interactions: compare each cell mean across combined labels
     st.markdown("**Two-way Interaction Cells**")
     for fa, fb in combinations(["Temperature", "Pressure", "Thinner"], 2):
         st.caption(f"Cells for {fa} × {fb}")
@@ -409,7 +410,6 @@ def three_factorial():
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
         st.text(tuk.summary().as_text())
 
-    # 3-way interaction cells (optional but requested)
     st.markdown("**Three-way Interaction Cells (A × B × C)**")
     groups_3 = df[["Temperature", "Pressure", "Thinner"]].astype(str).agg(' * '.join, axis=1)
     tuk3 = pairwise_tukeyhsd(endog=df["Y"], groups=groups_3, alpha=0.05)
@@ -421,7 +421,6 @@ def factorial_twolevels():
     st.markdown("By **Leonardo H. Talero-Sarmiento** "
                 "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
 
-    # Sidebar controls
     st.sidebar.header("Simulation controls")
     replications = st.sidebar.slider("Replications per run", 1, 15, 3, 1)
     noise_sd = st.sidebar.slider("Noise σ", 0.0, 5.0, 0.5, 0.1)
@@ -434,7 +433,6 @@ def factorial_twolevels():
     }
 
     st.sidebar.header("Model coefficients")
-    # 1 + 2 mains + 1 interaction = 4
     coef = [
         st.sidebar.slider('Intercept', -100.0, 100.0, 0.0),
         st.sidebar.slider(f'Main effect: {factor_map_2["FactorA"]}', -100.0, 100.0, 0.0),
@@ -466,26 +464,22 @@ def factorial_twolevels():
     plot_boxplot(df, groupby_label, factor_map_2)
 
     st.subheader('Surface Plot')
-    # For 2x2, show the single surface
     plot_surface(df, custom_labels[0], custom_labels[1])
 
     st.subheader('Model Fitting')
     results = fit_factorial_model(df, factor_map_2)
     st.code(format_equation(results, factor_map_2))
-    # >>> Print text summary (classic)
     st.text(results.summary())
 
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
 
-    # Main effects (each factor has two levels; Tukey degenerates to a t-test equivalent, still fine)
     st.markdown("**Main Effects**")
     for fac in ["FactorA", "FactorB"]:
         st.caption(f"Pairwise comparisons for {fac}")
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
         st.text(tuk.summary().as_text())
 
-    # 2-way cell means (A × B)
     st.markdown("**Interaction Cells (A × B)**")
     groups = df[["FactorA", "FactorB"]].astype(str).agg(' * '.join, axis=1)
     tuk_ab = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
@@ -511,7 +505,7 @@ def anova_oneway():
         "high": st.sidebar.text_input("Level 3 label", "High")
     }
 
-    # Coeffs: baseline + (medium) + (high)
+    # Coeffs
     st.sidebar.header("Effects (relative to baseline level)")
     coef_intercept = st.sidebar.slider('Baseline mean', -100.0, 100.0, 0.0)
     coef_medium = st.sidebar.slider(f'Effect of {level_names["medium"]}', -100.0, 100.0, 0.0)
@@ -521,10 +515,8 @@ def anova_oneway():
     rng = np.random.default_rng(seed=seed or None)
     raw_levels = np.repeat(['low', 'medium', 'high'], replications)
     df = pd.DataFrame({factor_name: raw_levels})
-    # Relabel for display
     map_show = {'low': level_names['low'], 'medium': level_names['medium'], 'high': level_names['high']}
     df[factor_name] = df[factor_name].map(map_show)
-    # Generate Y
     means = df[factor_name].map({level_names['low']: coef_intercept,
                                  level_names['medium']: coef_intercept + coef_medium,
                                  level_names['high']: coef_intercept + coef_high})
@@ -541,38 +533,31 @@ def anova_oneway():
         if not _is_finite_array(vals):
             st.error("Non-finite values in box plot.")
             return
-        fig.add_trace(go.Box(y=vals, name=level, boxmean=True))
+        fig.add_trace(go.Box(y=vals, name=level, boxmean=True, showlegend=False))
     fig.update_layout(xaxis_title=factor_name, yaxis_title="Y", title="Distribution of Y across Levels", height=500)
     _safe_plot(fig)
 
-    # Statistical Analysis: OLS and classic printed summary
+    # OLS summary
     model = smf.ols(f"Y ~ C({factor_name})", data=df).fit()
-    # >>> Print text summary (classic) — no new tables
     st.subheader("Linear Regression Model Summary")
     st.text(model.summary())
 
-    # Variance Decomposition (Plotly pies) — robust to ordering
+    # Variance Decomposition pies
     st.subheader("Variance Decomposition (SST vs. SSTr & SSE)")
     anova_table = sm.stats.anova_lm(model, typ=2)
-
-    # Compute SSE from 'Residual' row; SST directly from data; SSTR = SST - SSE
     try:
-        # Residual row (robust to position)
         resid_row = anova_table.index.str.contains("Residual", case=False, regex=False)
         if not resid_row.any():
             raise ValueError("Residual row not found in ANOVA table.")
         sse = float(anova_table.loc[resid_row, 'sum_sq'].iloc[0])
     except Exception:
-        # Fallback: compute SSE from model
         sse = float(np.sum(np.square(model.resid)))
 
-    # SST from data (more robust than relying on table ordering)
     y = np.asarray(df['Y'], dtype=float)
     ybar = float(np.mean(y))
     sst = float(np.sum((y - ybar) ** 2))
-    sstr = max(sst - sse, 0.0)  # guard against tiny negatives from floating error
+    sstr = max(sst - sse, 0.0)
 
-    # Guard against non-finite/negative values for pies
     if not all(map(np.isfinite, [sst, sstr, sse])) or sst <= 0:
         st.info("Variance pies unavailable (non-finite or zero SST).")
     else:
@@ -581,22 +566,12 @@ def anova_oneway():
             specs=[[{'type': 'domain'}, {'type': 'domain'}]],
             subplot_titles=("Total Sum of Squares (SST)", "Treatment vs Error (SSTr vs SSE)")
         )
-
-        # Left: SST (single slice)—use small epsilon slice to ensure stable rendering
-        pies.add_trace(
-            go.Pie(labels=["SST"], values=[sst], textinfo='label+percent', hole=0.4),
-            row=1, col=1
-        )
-        # Right: SSTR vs SSE
-        # Avoid both zeros; if both zero, skip the right pie
-        if sstr <= 0 and sse <= 0:
-            st.info("No variance to display in SSTr vs SSE pie.")
-        else:
-            pies.add_trace(
-                go.Pie(labels=["SSTr", "SSE"], values=[max(sstr, 0.0), max(sse, 0.0)], textinfo='label+percent', hole=0.4),
-                row=1, col=2
-            )
-
+        pies.add_trace(go.Pie(labels=["SST"], values=[sst], textinfo='label+percent', hole=0.4),
+                       row=1, col=1)
+        if sstr > 0 or sse > 0:
+            pies.add_trace(go.Pie(labels=["SSTr", "SSE"], values=[max(sstr, 0.0), max(sse, 0.0)],
+                                  textinfo='label+percent', hole=0.4),
+                           row=1, col=2)
         pies.update_layout(height=500, showlegend=False)
         _safe_plot(pies)
 
@@ -613,9 +588,6 @@ def Analysis():
     (4) check assumptions (normality & homoscedasticity), and (5) guide interpretation step-by-step.
     """)
 
-    # -----------------------
-    # Sidebar: scenario controls
-    # -----------------------
     st.sidebar.header("Scenario & Simulation Controls")
     n_per_machine = st.sidebar.slider("Replications per machine", 10, 200, 40, 5)
     mean_A = st.sidebar.number_input("Mean cycle time — Machine A (sec)", 42.0, value=45.0, step=0.5)
@@ -626,9 +598,6 @@ def Analysis():
     sd_C = st.sidebar.slider("Std. dev. — Machine C", 0.1, 10.0, 2.4, 0.1)
     seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
 
-    # -----------------------
-    # Generate synthetic data (industrial engineering context)
-    # -----------------------
     rng = np.random.default_rng(seed=seed or None)
     df = pd.DataFrame({
         "Machine": np.repeat(["A", "B", "C"], n_per_machine),
@@ -646,9 +615,6 @@ def Analysis():
                        file_name="IE_cycle_times_simulated.csv",
                        mime="text/csv")
 
-    # -----------------------
-    # Visual 1: Boxplot by group
-    # -----------------------
     st.subheader("Distribution by Machine (Box Plot)")
     fig_box = go.Figure()
     for m in ["A", "B", "C"]:
@@ -656,31 +622,23 @@ def Analysis():
         if not _is_finite_array(vals):
             st.error("Non-finite values in box plot.")
             return
-        fig_box.add_trace(go.Box(y=vals, name=f"Machine {m}", boxmean=True))
+        fig_box.add_trace(go.Box(y=vals, name=f"Machine {m}", boxmean=True, showlegend=False))
     fig_box.update_layout(xaxis_title="Machine",
                           yaxis_title="Cycle Time (seconds)",
                           height=450,
                           title="Cycle Time Distribution across Machines")
     _safe_plot(fig_box)
 
-    # -----------------------
-    # OLS model and classic text summary
-    # -----------------------
     st.subheader("OLS Model: CycleTime ~ C(Machine)")
     model = smf.ols("CycleTime ~ C(Machine)", data=df).fit()
     st.text(model.summary())
 
-    # -----------------------
-    # ANOVA (one-way)
-    # -----------------------
     st.subheader("ANOVA (One-Way) — Text Output")
     anova_tbl = sm.stats.anova_lm(model, typ=2)
     st.text(anova_tbl.to_string())
 
-    # Effect size (eta-squared)
     eta_sq = np.nan
     try:
-        # Robust computation: eta^2 = SSTR / SST, with SSTR = SST - SSE
         resid = model.resid
         sse = float(np.sum(np.square(resid)))
         y = np.asarray(df['CycleTime'], dtype=float)
@@ -692,25 +650,17 @@ def Analysis():
     except Exception:
         st.info("Could not compute η² from ANOVA table.")
 
-    # -----------------------
-    # Post-hoc: Tukey HSD
-    # -----------------------
     st.subheader("Post-hoc Comparisons: Tukey HSD")
     tukey = pairwise_tukeyhsd(endog=df["CycleTime"], groups=df["Machine"], alpha=0.05)
     st.text(tukey.summary().as_text())
 
-    # -----------------------
-    # Assumptions: Normality & Homogeneity of variances
-    # -----------------------
     st.subheader("Model Assumptions")
 
-    # Normality of residuals (Shapiro-Wilk)
     resid = model.resid
     sh_W, sh_p = stats.shapiro(resid)
     st.markdown(f"**Shapiro–Wilk (residuals)**: W = {sh_W:.3f}, p = {sh_p:.4f} "
                 f"→ {'Fail to reject normality' if sh_p >= 0.05 else 'Potential non-normality'}")
 
-    # Homogeneity of variances (Levene across groups)
     A_vals = df.loc[df["Machine"] == "A", "CycleTime"]
     B_vals = df.loc[df["Machine"] == "B", "CycleTime"]
     C_vals = df.loc[df["Machine"] == "C", "CycleTime"]
@@ -718,19 +668,13 @@ def Analysis():
     st.markdown(f"**Levene (homogeneity)**: W = {lev_W:.3f}, p = {lev_p:.4f} "
                 f"→ {'Variances appear equal' if lev_p >= 0.05 else 'Variances may differ'}")
 
-    # -----------------------
-    # Residual diagnostics (Plotly)
-    # -----------------------
     st.subheader("Residual Diagnostics")
 
-    # Residuals vs Fitted
     fitted = model.fittedvalues
     fig_rvf = go.Figure()
     fig_rvf.add_trace(go.Scatter(x=list(np.asarray(fitted).ravel()),
                                  y=list(np.asarray(resid).ravel()),
                                  mode='markers', name='Residuals'))
-
-    # Safer horizontal baseline (works across Plotly versions)
     x_min = float(np.min(fitted))
     x_max = float(np.max(fitted))
     fig_rvf.add_shape(
@@ -739,21 +683,16 @@ def Analysis():
         xref="x", yref="y",
         line=dict(dash="dash")
     )
-
     fig_rvf.update_layout(xaxis_title="Fitted values",
                           yaxis_title="Residuals",
                           height=420,
                           title="Residuals vs Fitted")
     _safe_plot(fig_rvf)
 
-    # QQ plot (normality)
     osm, osr = stats.probplot(resid, dist="norm", sparams=(), fit=False)
-    qq_x = np.array(osm, dtype=float)  # theoretical quantiles
-    qq_y = np.array(osr, dtype=float)  # ordered residuals
-
-    # Guard against pathological cases (e.g., all residuals identical)
+    qq_x = np.array(osm, dtype=float)
+    qq_y = np.array(osr, dtype=float)
     if np.allclose(np.std(qq_y), 0):
-        # fallback: horizontal line at the common residual value
         line_y = np.full_like(qq_x, fill_value=qq_y[0], dtype=float)
     else:
         lr = stats.linregress(qq_x, qq_y)
@@ -770,9 +709,6 @@ def Analysis():
     )
     _safe_plot(fig_qq)
 
-    # -----------------------
-    # Step-by-step interpretation guide
-    # -----------------------
     st.subheader("How to Interpret These Results (Step-by-Step)")
     st.markdown(f"""
 1) **Context** — We compare mean **cycle times** across three machines (A/B/C). Lower and more uniform cycle times
@@ -808,9 +744,6 @@ def Analysis():
     and sustained homogeneity of variances.
     """)
 
-    # -----------------------
-    # Exports
-    # -----------------------
     st.subheader("Exports")
     tukey_df = pd.DataFrame(data=tukey._results_table.data[1:], columns=tukey._results_table.data[0])
     st.download_button("Download Tukey HSD results (CSV)",
