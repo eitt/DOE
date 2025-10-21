@@ -376,10 +376,28 @@ def three_factorial():
     else:
         st.info("Select two different factors for the surface.")
 
-    st.subheader('Model Fitting')
+    st.subheader('Model Fitting (Response Surface)')
     results = fit_factorial_model(df, factor_name_map)
     st.code(format_equation(results, factor_name_map))
     st.text(results.summary())
+
+    # --- MODIFICATION START ---
+    st.subheader("ANOVA Table (Categorical)")
+    st.markdown("This model treats factors as **categories** (e.g., 'low', 'medium', 'high') to partition variance, "
+                "which differs from the regression model above that uses **numeric** codes (-1, 0, 1).")
+    try:
+        # Use C() to ensure factors are treated as categorical
+        # The '*' operator includes main effects and all interactions
+        # We use the original column names which are the keys of `factor_name_map`
+        f1, f2, f3 = factor_name_map.keys()
+        formula_anova = f"Y ~ C({f1}) * C({f2}) * C({f3})"
+        model_anova = smf.ols(formula_anova, data=df).fit()
+        anova_table = sm.stats.anova_lm(model_anova, typ=2)
+        st.dataframe(anova_table)
+    except Exception as e:
+        st.error(f"Could not generate ANOVA table: {e}")
+    # --- MODIFICATION END ---
+
 
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
@@ -453,10 +471,25 @@ def factorial_twolevels():
     st.subheader('Surface Plot')
     plot_surface(df, custom_labels[0], custom_labels[1])
 
-    st.subheader('Model Fitting')
+    st.subheader('Model Fitting (Response Surface)')
     results = fit_factorial_model(df, factor_map_2)
     st.code(format_equation(results, factor_map_2))
     st.text(results.summary())
+
+    # --- MODIFICATION START ---
+    st.subheader("ANOVA Table (Categorical)")
+    st.markdown("This model treats factors as **categories** (e.g., 'low', 'high') to partition variance, "
+                "which differs from the regression model above that uses **numeric** codes (-1, 1).")
+    try:
+        # Formula for ANOVA model using the original categorical factor columns
+        # The '*' operator includes main effects and the interaction
+        formula_anova = "Y ~ C(FactorA) * C(FactorB)"
+        model_anova = smf.ols(formula_anova, data=df).fit()
+        anova_table = sm.stats.anova_lm(model_anova, typ=2)
+        st.dataframe(anova_table)
+    except Exception as e:
+        st.error(f"Could not generate ANOVA table: {e}")
+    # --- MODIFICATION END ---
 
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
@@ -503,8 +536,8 @@ def anova_oneway():
     map_show = {'low': level_names['low'], 'medium': level_names['medium'], 'high': level_names['high']}
     df[factor_name] = df[factor_name].map(map_show)
     means = df[factor_name].map({level_names['low']: coef_intercept,
-                                 level_names['medium']: coef_intercept + coef_medium,
-                                 level_names['high']: coef_intercept + coef_high})
+                                  level_names['medium']: coef_intercept + coef_medium,
+                                  level_names['high']: coef_intercept + coef_high})
     df['Y'] = means + rng.normal(0, noise_sd, len(df))
 
     st.subheader('Generated Data')
@@ -658,8 +691,8 @@ def Analysis():
     fitted = model.fittedvalues
     fig_rvf = go.Figure()
     fig_rvf.add_trace(go.Scatter(x=list(np.asarray(fitted).ravel()),
-                                 y=list(np.asarray(resid).ravel()),
-                                 mode='markers', name='Residuals'))
+                                  y=list(np.asarray(resid).ravel()),
+                                  mode='markers', name='Residuals'))
     x_min = float(np.min(fitted))
     x_max = float(np.max(fitted))
     fig_rvf.add_shape(
@@ -747,8 +780,7 @@ def conjoint_analysis():
     st.markdown("""
 In this exercise, students evaluate **pairwise alternatives** for a shoe made up of two attributes:
 
-- **Upper Material** *(3 levels)*  
-- **Sole Type** *(2 levels)*
+- **Upper Material** *(3 levels)* - **Sole Type** *(2 levels)*
 
 Choose the preferred option in each task. After all choices are recorded, the app fits a **logistic regression (Logit)** to
 estimate how each attribute level influences choice probability (part-worth utilities).
