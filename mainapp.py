@@ -381,7 +381,6 @@ def three_factorial():
     st.code(format_equation(results, factor_name_map))
     st.text(results.summary())
 
-    # --- MODIFICATION START ---
     st.subheader("ANOVA Table (Categorical)")
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'medium', 'high') to partition variance, "
                 "which differs from the regression model above that uses **numeric** codes (-1, 0, 1).")
@@ -396,7 +395,6 @@ def three_factorial():
         st.dataframe(anova_table)
     except Exception as e:
         st.error(f"Could not generate ANOVA table: {e}")
-    # --- MODIFICATION END ---
 
 
     # --- Post-hoc analysis (Tukey HSD) ---
@@ -476,7 +474,6 @@ def factorial_twolevels():
     st.code(format_equation(results, factor_map_2))
     st.text(results.summary())
 
-    # --- MODIFICATION START ---
     st.subheader("ANOVA Table (Categorical)")
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'high') to partition variance, "
                 "which differs from the regression model above that uses **numeric** codes (-1, 1).")
@@ -489,7 +486,6 @@ def factorial_twolevels():
         st.dataframe(anova_table)
     except Exception as e:
         st.error(f"Could not generate ANOVA table: {e}")
-    # --- MODIFICATION END ---
 
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
@@ -901,6 +897,11 @@ estimate how each attribute level influences choice probability (part-worth util
     X = pd.get_dummies(long_df[[attr1_name, attr2_name]], drop_first=True)
     X = sm.add_constant(X, has_constant="add")
     y = long_df["Chosen"].astype(int)
+
+    # --- FIX ---
+    # Explicitly cast X to float to avoid "dtype=object" error in statsmodels
+    X = X.astype(float)
+    # --- END FIX ---
 
     # Guard against degenerate data (e.g., same choice always producing complete separation)
     if y.sum() == 0 or y.sum() == len(y):
