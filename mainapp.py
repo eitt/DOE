@@ -412,6 +412,93 @@ def plot_boxplot(df, groupby_label, factor_name_map):
     )
     _safe_plot(fig)
 
+def _format_tukey_summary_for_display(tukey_result, data_df, group_col):
+    """
+    Processes Tukey HSD results to generate a grouped summary table.
+    Similar to the example: Age Group, N, Mean, Grouping.
+    """
+    # 1. Get means and N for each group
+    group_stats = data_df.groupby(group_col)['Y'].agg(['mean', 'count']).reset_index()
+    group_stats.rename(columns={'mean': 'Mean', 'count': 'N', group_col: 'Group'}, inplace=True)
+    group_stats['Mean'] = group_stats['Mean'].round(2)
+    
+    # 2. Extract significant differences
+    tukey_df = pd.DataFrame(data=tukey_result._results_table.data[1:], 
+                            columns=tukey_result._results_table.data[0])
+    
+    # Filter only significant differences
+    significant_diffs = tukey_df[tukey_df['reject']].copy()
+
+    # 3. Assign grouping letters based on significant differences
+    # Initialize all groups to 'A' (can change later)
+    group_stats['Grouping'] = ''
+    
+    # Create a list of all unique groups (factor levels)
+    all_groups = group_stats['Group'].tolist()
+    
+    # Create a dictionary to hold the group assignments
+    group_assignments = {group: [] for group in all_groups}
+    current_letter = 'A'
+
+    # Sort groups by mean for consistent assignment, if desired
+    # For a simple A/B/C grouping, sorting by mean is usually what you want
+    sorted_groups = group_stats.sort_values('Mean', ascending=False)['Group'].tolist()
+    
+    # Track which groups have been assigned
+    assigned_groups = set()
+
+    for g1 in sorted_groups:
+        if g1 in assigned_groups:
+            continue
+        
+        # Start a new group with the current letter
+        current_group_members = [g1]
+        assigned_groups.add(g1)
+        
+        # Find other groups that are NOT significantly different from g1 and haven't been assigned
+        for g2 in sorted_groups:
+            if g1 == g2 or g2 in assigned_groups:
+                continue
+            
+            # Check if (g1, g2) or (g2, g1) is NOT in significant_diffs
+            is_significant = False
+            if not significant_diffs[(
+                (significant_diffs['group1'] == g1) & (significant_diffs['group2'] == g2) |
+                (significant_diffs['group1'] == g2) & (significant_diffs['group2'] == g1)
+            )].empty:
+                is_significant = True
+            
+            if not is_significant:
+                # To be in the same group as g1, g2 must also not be significantly different from ALL
+                # current_group_members.
+                can_add_to_group = True
+                for member in current_group_members:
+                    if not significant_diffs[(
+                        (significant_diffs['group1'] == member) & (significant_diffs['group2'] == g2) |
+                        (significant_diffs['group1'] == g2) & (significant_diffs['group2'] == member)
+                    )].empty:
+                        can_add_to_group = False
+                        break
+                
+                if can_add_to_group:
+                    current_group_members.append(g2)
+                    assigned_groups.add(g2)
+        
+        # Assign the current letter to all members of this identified group
+        for member in current_group_members:
+            group_assignments[member].append(current_letter)
+        
+        # Move to the next letter for the next distinct group
+        current_letter = chr(ord(current_letter) + 1)
+        
+    # Consolidate grouping letters
+    # If a group belongs to multiple letters (e.g., AB), concatenate them
+    final_grouping = {group: "".join(sorted(set(letters))) for group, letters in group_assignments.items()}
+    group_stats['Grouping'] = group_stats['Group'].map(final_grouping)
+
+    # Sort the final output by mean for display
+    return group_stats.sort_values('Mean', ascending=False).reset_index(drop=True)
+
 
 # -------------------------
 # Pages
@@ -529,18 +616,59 @@ def three_factorial():
         st.caption(f"Pairwise comparisons for {fac}")
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
         st.text(tuk.summary().as_text())
+        
+        tukey_grouped_df = _format_tukey_summary_for_display(tuk, df, fac)
+        st.dataframe(tukey_grouped_df)
+        st.download_button(
+            label=f"Download {fac} Tukey Grouping",
+            data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
+            file_name=f"{fac}_tukey_grouping.csv",
+            mime="text/csv",
+            key=f"download_tukey_{fac}"
+        )
+
 
     st.markdown("**Two-way Interaction Cells**")
     for fa, fb in combinations(custom_names, 2): # Use custom names
-        st.caption(f"Cells for {fa} × {fb}")
+        interaction_label = f"{fa} * {fb}"
+        st.caption(f"Cells for {interaction_label}")
         groups = df[[fa, fb]].astype(str).agg(' * '.join, axis=1)
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
         st.text(tuk.summary().as_text())
+        
+        # Create a temporary dataframe with combined groups for _format_tukey_summary_for_display
+        temp_df_interaction = df.copy()
+        temp_df_interaction['__interaction_groups__'] = groups
+        
+        tukey_grouped_df = _format_tukey_summary_for_display(tuk, temp_df_interaction, '__interaction_groups__')
+        st.dataframe(tukey_grouped_df)
+        st.download_button(
+            label=f"Download {interaction_label} Tukey Grouping",
+            data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
+            file_name=f"{interaction_label.replace(' * ', '_')}_tukey_grouping.csv",
+            mime="text/csv",
+            key=f"download_tukey_{interaction_label}"
+        )
+
 
     st.markdown("**Three-way Interaction Cells (A × B × C)**")
+    interaction_label_3way = f"{custom_names[0]} * {custom_names[1]} * {custom_names[2]}"
     groups_3 = df[custom_names].astype(str).agg(' * '.join, axis=1) # Use custom names
     tuk3 = pairwise_tukeyhsd(endog=df["Y"], groups=groups_3, alpha=0.05)
     st.text(tuk3.summary().as_text())
+
+    temp_df_3way_interaction = df.copy()
+    temp_df_3way_interaction['__3way_interaction_groups__'] = groups_3
+    
+    tukey_grouped_df = _format_tukey_summary_for_display(tuk3, temp_df_3way_interaction, '__3way_interaction_groups__')
+    st.dataframe(tukey_grouped_df)
+    st.download_button(
+        label=f"Download {interaction_label_3way} Tukey Grouping",
+        data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
+        file_name=f"{interaction_label_3way.replace(' * ', '_')}_tukey_grouping.csv",
+        mime="text/csv",
+        key=f"download_tukey_{interaction_label_3way}"
+    )
 
 
 def factorial_twolevels():
@@ -649,10 +777,35 @@ def factorial_twolevels():
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
         st.text(tuk.summary().as_text())
 
+        tukey_grouped_df = _format_tukey_summary_for_display(tuk, df, fac)
+        st.dataframe(tukey_grouped_df)
+        st.download_button(
+            label=f"Download {fac} Tukey Grouping",
+            data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
+            file_name=f"{fac}_tukey_grouping.csv",
+            mime="text/csv",
+            key=f"download_tukey_{fac}"
+        )
+
+
     st.markdown("**Interaction Cells (A × B)**")
+    interaction_label = f"{custom_names[0]} * {custom_names[1]}"
     groups = df[custom_names].astype(str).agg(' * '.join, axis=1) # Use custom names
     tuk_ab = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
     st.text(tuk_ab.summary().as_text())
+
+    temp_df_interaction = df.copy()
+    temp_df_interaction['__interaction_groups__'] = groups
+    
+    tukey_grouped_df = _format_tukey_summary_for_display(tuk_ab, temp_df_interaction, '__interaction_groups__')
+    st.dataframe(tukey_grouped_df)
+    st.download_button(
+        label=f"Download {interaction_label} Tukey Grouping",
+        data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
+        file_name=f"{interaction_label.replace(' * ', '_')}_tukey_grouping.csv",
+        mime="text/csv",
+        key=f"download_tukey_{interaction_label}"
+    )
 
 
 def anova_oneway():
@@ -747,6 +900,23 @@ def anova_oneway():
         pies.update_layout(height=500, showlegend=False)
         _safe_plot(pies)
 
+    # --- Post-hoc analysis (Tukey HSD) ---
+    st.subheader("Post-hoc Analysis (Tukey HSD)")
+    st.markdown(f"**Pairwise comparisons for {factor_name}**")
+    tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[factor_name], alpha=0.05)
+    st.text(tuk.summary().as_text())
+    
+    tukey_grouped_df = _format_tukey_summary_for_display(tuk, df, factor_name)
+    st.markdown(f"**Significant Differences Summary for {factor_name}**")
+    st.dataframe(tukey_grouped_df)
+    st.download_button(
+        label=f"Download {factor_name} Tukey Grouping",
+        data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
+        file_name=f"{factor_name}_tukey_grouping.csv",
+        mime="text/csv",
+        key=f"download_tukey_{factor_name}"
+    )
+
 
 def Analysis():
     st.title("Tips to Analyze the Statistical Outputs")
@@ -825,6 +995,18 @@ def Analysis():
     st.subheader("Post-hoc Comparisons: Tukey HSD")
     tukey = pairwise_tukeyhsd(endog=df["CycleTime"], groups=df["Machine"], alpha=0.05)
     st.text(tukey.summary().as_text())
+
+    # Special case for Analysis page, which uses 'CycleTime' and 'Machine'
+    tukey_grouped_df_analysis = _format_tukey_summary_for_display(tukey, df, 'Machine')
+    st.markdown("**Significant Differences Summary for Machine**")
+    st.dataframe(tukey_grouped_df_analysis)
+    st.download_button(
+        label=f"Download Machine Tukey Grouping",
+        data=tukey_grouped_df_analysis.to_csv(index=False).encode("utf-8"),
+        file_name=f"Machine_tukey_grouping.csv",
+        mime="text/csv",
+        key=f"download_tukey_Machine_analysis"
+    )
 
     st.subheader("Model Assumptions")
 
@@ -1339,6 +1521,11 @@ estimate how each attribute level influences choice probability (part-worth util
     # Dummy-code attributes (reference: first level of each)
     X = pd.get_dummies(long_df[[attr1_name, attr2_name]], drop_first=True)
     X = sm.add_constant(X, has_constant="add")
+
+    # Explicitly add the intercept column if it was dropped (e.g. if X was empty after drop_first=True)
+    if 'const' not in X.columns:
+        X.insert(0, 'const', 1.0)
+        
     y = long_df["Chosen"].astype(int)
 
     # Explicitly cast X to float to avoid "dtype=object" error in statsmodels
@@ -1348,12 +1535,12 @@ estimate how each attribute level influences choice probability (part-worth util
     if y.sum() == 0 or y.sum() == len(y):
         st.error("All choices are identical (all 0 or all 1). At least one task must have the other alternative chosen.")
         return
-    if X.shape[1] == 1:
+    if X.shape[1] == 1 and 'const' in X.columns: # Only intercept remains
         st.error("No attribute variation after encoding. Adjust attributes or tasks.")
         return
 
     try:
-        logit_model = sm.Logit(y, X).fit(disp=False)
+        logit_model = sm.Logit(y, X).fit(disp=False, maxiter=100) # Increased maxiter for robustness
         st.text(logit_model.summary())
     except Exception as e:
         st.error(f"Logit failed to converge: {e}")
