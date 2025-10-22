@@ -412,13 +412,13 @@ def plot_boxplot(df, groupby_label, factor_name_map):
     )
     _safe_plot(fig)
 
-def _format_tukey_summary_for_display(tukey_result, data_df, group_col):
+def _format_tukey_summary_for_display(tukey_result, data_df, group_col, response_col='Y'):
     """
     Processes Tukey HSD results to generate a grouped summary table.
     Similar to the example: Age Group, N, Mean, Grouping.
     """
     # 1. Get means and N for each group
-    group_stats = data_df.groupby(group_col)['Y'].agg(['mean', 'count']).reset_index()
+    group_stats = data_df.groupby(group_col)[response_col].agg(['mean', 'count']).reset_index()
     group_stats.rename(columns={'mean': 'Mean', 'count': 'N', group_col: 'Group'}, inplace=True)
     group_stats['Mean'] = group_stats['Mean'].round(2)
     
@@ -997,7 +997,7 @@ def Analysis():
     st.text(tukey.summary().as_text())
 
     # Special case for Analysis page, which uses 'CycleTime' and 'Machine'
-    tukey_grouped_df_analysis = _format_tukey_summary_for_display(tukey, df, 'Machine')
+    tukey_grouped_df_analysis = _format_tukey_summary_for_display(tukey, df, 'Machine', response_col='CycleTime')
     st.markdown("**Significant Differences Summary for Machine**")
     st.dataframe(tukey_grouped_df_analysis)
     st.download_button(
