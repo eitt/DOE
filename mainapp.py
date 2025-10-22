@@ -327,7 +327,6 @@ def three_factorial():
     # Sidebar controls
     st.sidebar.header("Simulation controls")
 
-    # --- MODIFICATION START ---
     st.sidebar.markdown("**Slider Range Controls**")
     c1, c2 = st.sidebar.columns(2)
     with c1:
@@ -337,7 +336,6 @@ def three_factorial():
         coef_max = st.number_input("Coefficients Max", value=10.0, step=1.0)
         noise_max = st.number_input("Noise σ Max", value=5.0, min_value=0.1, step=0.5)
     st.sidebar.markdown("---")
-    # --- MODIFICATION END ---
 
     replications = st.sidebar.slider("Replications per run", 1, 10, 2, 1)
     # Use noise_max
@@ -441,7 +439,6 @@ def factorial_twolevels():
 
     st.sidebar.header("Simulation controls")
 
-    # --- MODIFICATION START ---
     st.sidebar.markdown("**Slider Range Controls**")
     c1, c2 = st.sidebar.columns(2)
     with c1:
@@ -451,7 +448,6 @@ def factorial_twolevels():
         coef_max = st.number_input("Coefficients Max", value=10.0, step=1.0)
         noise_max = st.number_input("Noise σ Max", value=5.0, min_value=0.1, step=0.5)
     st.sidebar.markdown("---")
-    # --- MODIFICATION END ---
 
     replications = st.sidebar.slider("Replications per run", 1, 15, 3, 1)
     # Use noise_max
@@ -888,7 +884,7 @@ estimate how each attribute level influences choice probability (part-worth util
 
     # ---------- Build estimation dataset once student has chosen ----------
     choices = st.session_state["conjoint_choices"]
-    all_answered = (len(choices) == n_tasks) and all(c in ("A",B") for c in choices.values())
+    all_answered = (len(choices) == n_tasks) and all(c in ("A", "B") for c in choices.values())
 
     st.subheader("Estimation Dataset (long format)")
     if not all_answered:
