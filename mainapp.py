@@ -808,7 +808,7 @@ def Analysis():
 
 
 # -------------------------
-# NEW PAGE: 2^(k-p) Fractional Factorial
+# MODIFIED PAGE: 2^(k-p) Fractional Factorial
 # -------------------------
 def fractional_factorial():
     st.title("Introduction to $2^{k-p}$ Fractional Factorial Designs")
@@ -816,124 +816,280 @@ def fractional_factorial():
                 "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
     st.markdown("""
 A **full factorial** design ($2^k$) requires testing all possible combinations of $k$ factors at 2 levels.
-For $k=3$ factors, this is $2^3 = 8$ runs. For $k=5$, it's $2^5 = 32$ runs. This can quickly become too expensive.
+This can quickly become too expensive.
+- $2^3 = 8$ runs
+- $2^4 = 16$ runs
+- $2^5 = 32$ runs
 
-A **fractional factorial** design ($2^{k-p}$) runs only a *fraction* of these experiments.
-- $p$ is the number of "generators" used to create the design.
-- We sacrifice the ability to estimate certain interactions to save resources.
-- The most common and simple example is the **$2^{3-1}$** design, which studies **3 factors in only $2^{3-1} = 4$ runs** (a "half-fraction").
+A **fractional factorial** design ($2^{k-p}$) runs only a *fraction* (e.g., $1/2, 1/4$) of these experiments, sacrificing the ability to estimate certain interactions to save resources.
     """)
 
-    st.sidebar.header("Design Controls ($2^{3-1}$)")
-    generator_choice = st.sidebar.selectbox(
-        "Choose Design Generator",
-        ("I = +ABC", "I = -ABC"),
-        index=0,
-        help="This is the **Defining Relation**. `I = +ABC` selects the 'principal fraction'."
+    st.sidebar.header("Design Controls ($2^{k-1}$)")
+    design_choice = st.sidebar.selectbox(
+        "Choose Design",
+        ("$2^{3-1}$ (3 factors, 4 runs)", 
+         "$2^{4-1}$ (4 factors, 8 runs)", 
+         "$2^{5-1}$ (5 factors, 16 runs)"),
+        index=0
     )
-    
-    # 1. Create the full 2^3 factorial
-    full_factorial = pd.DataFrame(
-        list(itertools.product([-1, 1], repeat=3)),
-        columns=['A', 'B', 'C']
-    )
-    full_factorial['ABC'] = full_factorial['A'] * full_factorial['B'] * full_factorial['C']
 
-    # 2. Select the fraction based on the generator
-    if generator_choice == "I = +ABC":
-        principal_fraction = full_factorial[full_factorial['ABC'] == 1].copy()
-        alternate_fraction = full_factorial[full_factorial['ABC'] == -1].copy()
-        defining_relation = "I = +ABC"
-        generator = "C = AB"
-    else: # I = -ABC
-        principal_fraction = full_factorial[full_factorial['ABC'] == -1].copy()
-        alternate_fraction = full_factorial[full_factorial['ABC'] == 1].copy()
-        defining_relation = "I = -ABC"
-        generator = "C = -AB"
-
-    principal_fraction['Fraction'] = "Principal"
-    alternate_fraction['Fraction'] = "Alternate"
-    
-    # Combine for plotting
-    plot_df = pd.concat([principal_fraction, alternate_fraction])
-    
-    # 3. Create the 3D plot
-    st.subheader("3D Factor Space for $2^{3-1}$ Design")
-    
+    design_df = pd.DataFrame()
+    resolution_str = ""
+    aliases_md = ""
+    plot_title = ""
     fig = go.Figure()
-    
-    # Add Principal Fraction (selected runs)
-    df_p = plot_df[plot_df['Fraction'] == 'Principal']
-    fig.add_trace(go.Scatter3d(
-        x=df_p['A'], y=df_p['B'], z=df_p['C'],
-        mode='markers',
-        marker=dict(size=10, color='blue', opacity=1.0),
-        name=f"Principal Fraction ({defining_relation})"
-    ))
-    
-    # Add Alternate Fraction (grayed out)
-    df_a = plot_df[plot_df['Fraction'] == 'Alternate']
-    fig.add_trace(go.Scatter3d(
-        x=df_a['A'], y=df_a['B'], z=df_a['C'],
-        mode='markers',
-        marker=dict(size=8, color='gray', opacity=0.2),
-        name="Alternate Fraction (not run)"
-    ))
 
-    fig.update_layout(
-        scene=dict(xaxis_title='Factor A', yaxis_title='Factor B', zaxis_title='Factor C',
-                   xaxis=dict(range=[-1.2, 1.2]),
-                   yaxis=dict(range=[-1.2, 1.2]),
-                   zaxis=dict(range=[-1.2, 1.2])),
-        title=f'Runs for $2^{3-1}$ Design (Selected: {defining_relation})',
-        height=550,
-        legend_title="Fraction"
-    )
+    if design_choice.startswith("$2^{3-1}$"):
+        k, p = 3, 1
+        base_k = k - p
+        base_factors = ['A', 'B']
+        gen_factor = 'C'
+        all_factors = ['A', 'B', 'C']
+        
+        generator = st.sidebar.radio("Generator", ("I = +ABC", "I = -ABC"), key="gen_3_1")
+        sign = 1 if generator == "I = +ABC" else -1
+        
+        # 1. Build the fractional design
+        design_df = pd.DataFrame(list(itertools.product([-1, 1], repeat=base_k)), columns=base_factors)
+        design_df[gen_factor] = sign * design_df['A'] * design_df['B']
+        design_df = design_df[all_factors] # Reorder columns
+        
+        # 2. Build the full factorial for plotting
+        full_df = pd.DataFrame(list(itertools.product([-1, 1], repeat=k)), columns=all_factors)
+        full_df['prod'] = full_df['A'] * full_df['B'] * full_df['C']
+        
+        selected_runs = full_df[full_df['prod'] == sign]
+        alternate_runs = full_df[full_df['prod'] == -sign]
+
+        # 3. Create the 3D plot
+        fig.add_trace(go.Scatter3d(
+            x=selected_runs['A'], y=selected_runs['B'], z=selected_runs['C'],
+            mode='markers', marker=dict(size=10, color='blue', opacity=1.0),
+            name=f"Principal Fraction ({generator})"
+        ))
+        fig.add_trace(go.Scatter3d(
+            x=alternate_runs['A'], y=alternate_runs['B'], z=alternate_runs['C'],
+            mode='markers', marker=dict(size=8, color='gray', opacity=0.2),
+            name="Alternate Fraction (not run)"
+        ))
+        fig.update_layout(
+            scene=dict(xaxis_title='Factor A', yaxis_title='Factor B', zaxis_title='Factor C',
+                       xaxis=dict(range=[-1.2, 1.2]), yaxis=dict(range=[-1.2, 1.2]), zaxis=dict(range=[-1.2, 1.2])),
+            height=550, legend_title="Fraction"
+        )
+        
+        # 4. Analysis
+        plot_title = f'Runs for $2^{3-1}$ Design (Selected: {generator})'
+        resolution_str = "**Resolution III**: Main effects are aliased (confounded) with two-way interactions."
+        aliases_md = f"""
+- **Defining Relation:** `{generator}`
+- **Aliasing Structure:**
+    - $I = {generator[4:]}$
+    - $A = {generator[3]}BC$
+    - $B = {generator[3]}AC$
+    - $C = {generator[3]}AB$
+"""
+
+    elif design_choice.startswith("$2^{4-1}$"):
+        k, p = 4, 1
+        base_k = k - p
+        base_factors = ['A', 'B', 'C']
+        gen_factor = 'D'
+        all_factors = ['A', 'B', 'C', 'D']
+        
+        generator = st.sidebar.radio("Generator", ("I = +ABCD", "I = -ABCD"), key="gen_4_1")
+        sign = 1 if generator == "I = +ABCD" else -1
+
+        # 1. Build the fractional design
+        design_df = pd.DataFrame(list(itertools.product([-1, 1], repeat=base_k)), columns=base_factors)
+        design_df[gen_factor] = sign * design_df['A'] * design_df['B'] * design_df['C']
+        design_df = design_df[all_factors]
+        
+        # 2. Build full factorial for plotting
+        full_df = pd.DataFrame(list(itertools.product([-1, 1], repeat=k)), columns=all_factors)
+        full_df['prod'] = full_df['A'] * full_df['B'] * full_df['C'] * full_df['D']
+        
+        selected_runs = full_df[full_df['prod'] == sign]
+        alternate_runs = full_df[full_df['prod'] == -sign]
+        
+        # 3. Create the 4D plot (as two 3D cubes)
+        fig = make_subplots(
+            rows=1, cols=2,
+            specs=[[{'type': 'scene'}, {'type': 'scene'}]],
+            subplot_titles=('Cube: D = -1', 'Cube: D = +1')
+        )
+        
+        # Plot for D = -1
+        sel_d_neg = selected_runs[selected_runs['D'] == -1]
+        alt_d_neg = alternate_runs[alternate_runs['D'] == -1]
+        fig.add_trace(go.Scatter3d(
+            x=sel_d_neg['A'], y=sel_d_neg['B'], z=sel_d_neg['C'],
+            mode='markers', marker=dict(size=8, color='blue'),
+            name="Selected Runs"
+        ), row=1, col=1)
+        fig.add_trace(go.Scatter3d(
+            x=alt_d_neg['A'], y=alt_d_neg['B'], z=alt_d_neg['C'],
+            mode='markers', marker=dict(size=6, color='gray', opacity=0.2),
+            name="Alternate Runs"
+        ), row=1, col=1)
+        
+        # Plot for D = +1
+        sel_d_pos = selected_runs[selected_runs['D'] == 1]
+        alt_d_pos = alternate_runs[alternate_runs['D'] == 1]
+        fig.add_trace(go.Scatter3d(
+            x=sel_d_pos['A'], y=sel_d_pos['B'], z=sel_d_pos['C'],
+            mode='markers', marker=dict(size=8, color='blue'),
+            showlegend=False # Hide redundant legend
+        ), row=1, col=2)
+        fig.add_trace(go.Scatter3d(
+            x=alt_d_pos['A'], y=alt_d_pos['B'], z=alt_d_pos['C'],
+            mode='markers', marker=dict(size=6, color='gray', opacity=0.2),
+            showlegend=False
+        ), row=1, col=2)
+        
+        fig.update_layout(height=550, legend_title="Fraction")
+        fig.update_scenes(
+            xaxis_title='A', yaxis_title='B', zaxis_title='C',
+            xaxis=dict(range=[-1.2, 1.2]), yaxis=dict(range=[-1.2, 1.2]), zaxis=dict(range=[-1.2, 1.2])
+        )
+
+        # 4. Analysis
+        plot_title = f'Runs for $2^{4-1}$ Design (Selected: {generator})'
+        resolution_str = "**Resolution IV**: Main effects are clean (aliased with 3-way interactions). Two-way interactions are aliased with other two-way interactions."
+        aliases_md = f"""
+- **Defining Relation:** `{generator}`
+- **Aliasing Structure (Key Pairs):**
+    - $I = {generator[4:]}$
+    - $A = {generator[3]}BCD$
+    - $B = {generator[3]}ACD$
+    - $C = {generator[3]}ABD$
+    - $D = {generator[3]}ABC$
+    - $AB = {generator[3]}CD$
+    - $AC = {generator[3]}BD$
+    - $AD = {generator[3]}BC$
+"""
+
+    elif design_choice.startswith("$2^{5-1}$"):
+        k, p = 5, 1
+        base_k = k - p
+        base_factors = ['A', 'B', 'C', 'D']
+        gen_factor = 'E'
+        all_factors = ['A', 'B', 'C', 'D', 'E']
+        
+        generator = st.sidebar.radio("Generator", ("I = +ABCDE", "I = -ABCDE"), key="gen_5_1")
+        sign = 1 if generator == "I = +ABCDE" else -1
+
+        # 1. Build the fractional design
+        design_df = pd.DataFrame(list(itertools.product([-1, 1], repeat=base_k)), columns=base_factors)
+        design_df[gen_factor] = sign * design_df['A'] * design_df['B'] * design_df['C'] * design_df['D']
+        design_df = design_df[all_factors]
+        
+        # 2. Build full factorial for plotting
+        full_df = pd.DataFrame(list(itertools.product([-1, 1], repeat=k)), columns=all_factors)
+        full_df['prod'] = full_df['A'] * full_df['B'] * full_df['C'] * full_df['D'] * full_df['E']
+        
+        selected_runs = full_df[full_df['prod'] == sign]
+        alternate_runs = full_df[full_df['prod'] == -sign]
+        
+        # 3. Create the 5D plot (as two 3D cubes, with E as color/symbol)
+        fig = make_subplots(
+            rows=1, cols=2,
+            specs=[[{'type': 'scene'}, {'type': 'scene'}]],
+            subplot_titles=('Cube: D = -1', 'Cube: D = +1')
+        )
+        
+        # Plot for D = -1
+        sel_d_neg = selected_runs[selected_runs['D'] == -1]
+        alt_d_neg = alternate_runs[alternate_runs['D'] == -1]
+        
+        # D=-1, E=-1 (Selected)
+        df_plot = sel_d_neg[sel_d_neg['E'] == -1]
+        fig.add_trace(go.Scatter3d(
+            x=df_plot['A'], y=df_plot['B'], z=df_plot['C'], mode='markers',
+            marker=dict(size=8, color='blue', symbol='circle'), name="Selected, E = -1"
+        ), row=1, col=1)
+        # D=-1, E=+1 (Selected)
+        df_plot = sel_d_neg[sel_d_neg['E'] == 1]
+        fig.add_trace(go.Scatter3d(
+            x=df_plot['A'], y=df_plot['B'], z=df_plot['C'], mode='markers',
+            marker=dict(size=8, color='green', symbol='square'), name="Selected, E = +1"
+        ), row=1, col=1)
+        # D=-1, E=-1 (Alternate)
+        df_plot = alt_d_neg[alt_d_neg['E'] == -1]
+        fig.add_trace(go.Scatter3d(
+            x=df_plot['A'], y=df_plot['B'], z=df_plot['C'], mode='markers',
+            marker=dict(size=6, color='gray', opacity=0.2, symbol='circle'), name="Alternate, E = -1"
+        ), row=1, col=1)
+        # D=-1, E=+1 (Alternate)
+        df_plot = alt_d_neg[alt_d_neg['E'] == 1]
+        fig.add_trace(go.Scatter3d(
+            x=df_plot['A'], y=df_plot['B'], z=df_plot['C'], mode='markers',
+            marker=dict(size=6, color='gray', opacity=0.2, symbol='square'), name="Alternate, E = +1"
+        ), row=1, col=1)
+
+        # Plot for D = +1
+        sel_d_pos = selected_runs[selected_runs['D'] == 1]
+        alt_d_pos = alternate_runs[alternate_runs['D'] == 1]
+        
+        # D=+1, E=-1 (Selected)
+        df_plot = sel_d_pos[sel_d_pos['E'] == -1]
+        fig.add_trace(go.Scatter3d(
+            x=df_plot['A'], y=df_plot['B'], z=df_plot['C'], mode='markers',
+            marker=dict(size=8, color='blue', symbol='circle'), showlegend=False
+        ), row=1, col=2)
+        # D=+1, E=+1 (Selected)
+        df_plot = sel_d_pos[sel_d_pos['E'] == 1]
+        fig.add_trace(go.Scatter3d(
+            x=df_plot['A'], y=df_plot['B'], z=df_plot['C'], mode='markers',
+            marker=dict(size=8, color='green', symbol='square'), showlegend=False
+        ), row=1, col=2)
+        # D=+1, E=-1 (Alternate)
+        df_plot = alt_d_pos[alt_d_pos['E'] == -1]
+        fig.add_trace(go.Scatter3d(
+            x=df_plot['A'], y=df_plot['B'], z=df_plot['C'], mode='markers',
+            marker=dict(size=6, color='gray', opacity=0.2, symbol='circle'), showlegend=False
+        ), row=1, col=2)
+        # D=+1, E=+1 (Alternate)
+        df_plot = alt_d_pos[alt_d_pos['E'] == 1]
+        fig.add_trace(go.Scatter3d(
+            x=df_plot['A'], y=df_plot['B'], z=df_plot['C'], mode='markers',
+            marker=dict(size=6, color='gray', opacity=0.2, symbol='square'), showlegend=False
+        ), row=1, col=2)
+
+        fig.update_layout(height=600, legend_title="Fraction & Factor E")
+        fig.update_scenes(
+            xaxis_title='A', yaxis_title='B', zaxis_title='C',
+            xaxis=dict(range=[-1.2, 1.2]), yaxis=dict(range=[-1.2, 1.2]), zaxis=dict(range=[-1.2, 1.2])
+        )
+
+        # 4. Analysis
+        plot_title = f'Runs for $2^{5-1}$ Design (Selected: {generator})'
+        resolution_str = "**Resolution V**: Main effects are clean (aliased with 4-way interactions). Two-way interactions are also clean (aliased with 3-way interactions)."
+        aliases_md = f"""
+- **Defining Relation:** `{generator}`
+- **Aliasing Structure (Key Pairs):**
+    - $I = {generator[4:]}$
+    - $A = {generator[3]}BCDE$
+    - $B = {generator[3]}ACDE$
+    ... (Main effects are aliased with 4-way interactions)
+    - $AB = {generator[3]}CDE$
+    - $AC = {generator[3]}BDE$
+    ... (Two-way interactions are aliased with 3-way interactions)
+"""
+    
+    # --- Display Common Elements ---
+    
+    st.subheader("Factor Space Visualization")
+    st.markdown(plot_title)
     _safe_plot(fig)
-    st.markdown(f"The **{len(df_p)} blue points** are the experiments you run. The {len(df_a)} gray points are the ones you save.")
+    st.markdown(f"The design matrix below shows the **{len(design_df)} selected runs**.")
 
+    st.subheader("Design Matrix")
+    st.dataframe(design_df.reset_index(drop=True))
 
-    # 4. Show the design matrix
-    st.subheader(f"Design Matrix (4 Runs)")
-    st.dataframe(principal_fraction[['A', 'B', 'C']].reset_index(drop=True))
-
-    # 5. Analyze Resolution and Aliasing
     st.subheader("Design Analysis: Resolution & Aliasing")
-    st.markdown(f"""
-This design is defined by:
-- **Generator:** `{generator}`
-- **Defining Relation:** `{defining_relation}`
-    """)
-    
-    st.info("""
-**Resolution**
-
-The **Resolution** of a design is the length of the *shortest word* in its defining relation.
-- The shortest (and only) word in `I = ABC` is **ABC**, which has length **3**.
-- Therefore, this is a **Resolution III** design.
-
-**What does Resolution III mean?**
-- **Main effects** are aliased (confounded) with **two-way interactions**.
-- **This is a significant trade-off.** You cannot tell if an observed effect is due to Factor A or the interaction of B and C.
-    """)
-    
-    st.markdown(f"""
-**Aliasing Structure**
-
-By "multiplying" the defining relation `I = {defining_relation[4:]}` by any effect, we find its alias:
-- $I = {defining_relation[4:]}$ (The Intercept is aliased with the ABC interaction)
-- $A = A \cdot I = A \cdot (ABC) = A^2BC = BC$
-- $B = B \cdot I = B \cdot (ABC) = AB^2C = AC$
-- $C = C \cdot I = C \cdot (ABC) = ABC^2 = AB$
-
-The full structure is:
-- **`I = ABC`**
-- **`A = BC`**
-- **`B = AC`**
-- **`C = AB`**
-
-**Conclusion:** This design is very efficient for *screening* (finding the most important main effects) **if** you can assume all two-way interactions are negligible.
-    """)
+    st.info(resolution_str)
+    st.markdown(aliases_md)
 
 
 # -------------------------
@@ -1124,7 +1280,7 @@ PAGES = {
     "Anova One-way - Introduction": anova_oneway,
     "Introduction to Factorial Designs": factorial_twolevels,
     "Factorial Designs with Three Factors and Three Levels": three_factorial,
-    "Fractional Factorial Designs (2^k-p)": fractional_factorial, # <-- NEW PAGE ADDED
+    "Fractional Factorial Designs (2^k-p)": fractional_factorial,
     "Conjoint Analysis (Choice-Based)": conjoint_analysis,
     "Tips to Analyze the Statistical Outputs": Analysis,
 }
