@@ -430,73 +430,60 @@ def _format_tukey_summary_for_display(tukey_result, data_df, group_col, response
     significant_diffs = tukey_df[tukey_df['reject']].copy()
 
     # 3. Assign grouping letters based on significant differences
-    # Initialize all groups to 'A' (can change later)
-    group_stats['Grouping'] = ''
+    # This logic is complex and aims to replicate Minitab's grouping
     
-    # Create a list of all unique groups (factor levels)
-    all_groups = group_stats['Group'].tolist()
-    
-    # Create a dictionary to hold the group assignments
-    group_assignments = {group: [] for group in all_groups}
-    current_letter = 'A'
-
-    # Sort groups by mean for consistent assignment, if desired
-    # For a simple A/B/C grouping, sorting by mean is usually what you want
+    # Sort groups by mean, descending. This is the order we'll process.
     sorted_groups = group_stats.sort_values('Mean', ascending=False)['Group'].tolist()
     
-    # Track which groups have been assigned
-    assigned_groups = set()
+    # Dictionary to hold the letters for each group
+    group_letters = {group: [] for group in sorted_groups}
+    
+    current_letter_index = 0
+    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    
+    # This list will hold sets of groups. Each set is a "clique" that gets a letter.
+    letter_groups = []
 
-    for g1 in sorted_groups:
-        if g1 in assigned_groups:
-            continue
+    for i, group1 in enumerate(sorted_groups):
+        # Check if this group is already part of a letter group
+        is_grouped = any(group1 in letter_group for letter_group in letter_groups)
         
-        # Start a new group with the current letter
-        current_group_members = [g1]
-        assigned_groups.add(g1)
-        
-        # Find other groups that are NOT significantly different from g1 and haven't been assigned
-        for g2 in sorted_groups:
-            if g1 == g2 or g2 in assigned_groups:
-                continue
+        if not is_grouped:
+            # Start a new letter group
+            new_letter_group = {group1}
             
-            # Check if (g1, g2) or (g2, g1) is NOT in significant_diffs
-            is_significant = False
-            if not significant_diffs[(
-                (significant_diffs['group1'] == g1) & (significant_diffs['group2'] == g2) |
-                (significant_diffs['group1'] == g2) & (significant_diffs['group2'] == g1)
-            )].empty:
-                is_significant = True
-            
-            if not is_significant:
-                # To be in the same group as g1, g2 must also not be significantly different from ALL
-                # current_group_members.
-                can_add_to_group = True
-                for member in current_group_members:
-                    if not significant_diffs[(
-                        (significant_diffs['group1'] == member) & (significant_diffs['group2'] == g2) |
-                        (significant_diffs['group1'] == g2) & (significant_diffs['group2'] == member)
-                    )].empty:
-                        can_add_to_group = False
+            # Look at remaining groups to see if they can join
+            for group2 in sorted_groups[i+1:]:
+                
+                # Check if group2 is non-significant with ALL members of the current new_letter_group
+                is_non_significant_with_all = True
+                for member in new_letter_group:
+                    is_diff = not significant_diffs[
+                        ((significant_diffs['group1'] == group2) & (significant_diffs['group2'] == member)) |
+                        ((significant_diffs['group1'] == member) & (significant_diffs['group2'] == group2))
+                    ].empty
+                    
+                    if is_diff:
+                        is_non_significant_with_all = False
                         break
                 
-                if can_add_to_group:
-                    current_group_members.append(g2)
-                    assigned_groups.add(g2)
-        
-        # Assign the current letter to all members of this identified group
-        for member in current_group_members:
-            group_assignments[member].append(current_letter)
-        
-        # Move to the next letter for the next distinct group
-        current_letter = chr(ord(current_letter) + 1)
-        
-    # Consolidate grouping letters
-    # If a group belongs to multiple letters (e.g., AB), concatenate them
-    final_grouping = {group: "".join(sorted(set(letters))) for group, letters in group_assignments.items()}
-    group_stats['Grouping'] = group_stats['Group'].map(final_grouping)
+                if is_non_significant_with_all:
+                    new_letter_group.add(group2)
 
-    # Sort the final output by mean for display
+            letter_groups.append(new_letter_group)
+
+    # Now assign the letters based on the cliques
+    letter_groups.sort(key=lambda g: min(sorted_groups.index(m) for m in g))
+    
+    for letter_group in letter_groups:
+        letter = letters[current_letter_index]
+        for group in letter_group:
+            group_letters[group].append(letter)
+        current_letter_index += 1
+
+    # Format the final table
+    group_stats['Grouping'] = group_stats['Group'].map(lambda g: "".join(group_letters[g]))
+    
     return group_stats.sort_values('Mean', ascending=False).reset_index(drop=True)
 
 
@@ -580,15 +567,18 @@ def three_factorial():
     st.code(format_equation(results, factor_name_map))
     st.text(results.summary())
 
-    # --- MODIFICATION START ---
     st.subheader("Effect Significance Plots")
-    st.markdown("These plots help visualize the relative importance of each factor and interaction from the regression model.")
+    st.markdown("""
+    These plots help visualize the relative importance of each factor and interaction from the regression model.
+
+    - **Pareto Plot:** Sorts effects from largest to smallest absolute magnitude. Bars shaded **blue** are statistically significant ($p < 0.05$), while **grey** bars are not. This helps quickly identify the "vital few" factors that have the largest impact on the response.
+    - **Daniel Plot (Normal Plot):** Checks which effects are significant. Insignificant effects (pure noise) will tend to fall along the **red line**. Significant effects (real factor impacts) will "pop off" this line, appearing as outliers. This is a visual way to separate real signals from random noise.
+    """)
     c1, c2 = st.columns(2)
     with c1:
         plot_pareto(results)
     with c2:
         plot_daniel(results)
-    # --- MODIFICATION END ---
 
     st.subheader("ANOVA Table (Categorical)")
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'medium', 'high') to partition variance, "
@@ -615,16 +605,24 @@ def three_factorial():
     for fac in custom_names: # Use custom names
         st.caption(f"Pairwise comparisons for {fac}")
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
-        st.text(tuk.summary().as_text())
         
+        # Create full dataframe for filtering and download
+        tuk_df_full = pd.DataFrame(data=tuk._results_table.data[1:], columns=tuk._results_table.data[0])
+        
+        # Show only significant differences
+        st.dataframe(tuk_df_full[tuk_df_full['reject'] == True])
+        
+        # Show grouped summary
         tukey_grouped_df = _format_tukey_summary_for_display(tuk, df, fac)
         st.dataframe(tukey_grouped_df)
+        st.caption("ℹ️ **How to read this table:** Groups (levels) that **share a letter** in the 'Grouping' column are **not** significantly different from each other.")
+
         st.download_button(
-            label=f"Download {fac} Tukey Grouping",
-            data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
-            file_name=f"{fac}_tukey_grouping.csv",
+            label=f"Download Full {fac} Pairwise Report",
+            data=tuk_df_full.to_csv(index=False).encode("utf-8"),
+            file_name=f"{fac}_tukey_full_report.csv",
             mime="text/csv",
-            key=f"download_tukey_{fac}"
+            key=f"download_tukey_full_{fac}"
         )
 
 
@@ -634,7 +632,12 @@ def three_factorial():
         st.caption(f"Cells for {interaction_label}")
         groups = df[[fa, fb]].astype(str).agg(' * '.join, axis=1)
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
-        st.text(tuk.summary().as_text())
+        
+        # Create full dataframe for filtering and download
+        tuk_df_full = pd.DataFrame(data=tuk._results_table.data[1:], columns=tuk._results_table.data[0])
+
+        # Show only significant differences
+        st.dataframe(tuk_df_full[tuk_df_full['reject'] == True])
         
         # Create a temporary dataframe with combined groups for _format_tukey_summary_for_display
         temp_df_interaction = df.copy()
@@ -642,12 +645,14 @@ def three_factorial():
         
         tukey_grouped_df = _format_tukey_summary_for_display(tuk, temp_df_interaction, '__interaction_groups__')
         st.dataframe(tukey_grouped_df)
+        st.caption("ℹ️ **How to read this table:** Groups (levels) that **share a letter** in the 'Grouping' column are **not** significantly different from each other.")
+
         st.download_button(
-            label=f"Download {interaction_label} Tukey Grouping",
-            data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
-            file_name=f"{interaction_label.replace(' * ', '_')}_tukey_grouping.csv",
+            label=f"Download Full {interaction_label} Pairwise Report",
+            data=tuk_df_full.to_csv(index=False).encode("utf-8"),
+            file_name=f"{interaction_label.replace(' * ', '_')}_tukey_full_report.csv",
             mime="text/csv",
-            key=f"download_tukey_{interaction_label}"
+            key=f"download_tukey_full_{interaction_label}"
         )
 
 
@@ -655,19 +660,26 @@ def three_factorial():
     interaction_label_3way = f"{custom_names[0]} * {custom_names[1]} * {custom_names[2]}"
     groups_3 = df[custom_names].astype(str).agg(' * '.join, axis=1) # Use custom names
     tuk3 = pairwise_tukeyhsd(endog=df["Y"], groups=groups_3, alpha=0.05)
-    st.text(tuk3.summary().as_text())
+
+    # Create full dataframe for filtering and download
+    tuk_df_full_3way = pd.DataFrame(data=tuk3._results_table.data[1:], columns=tuk3._results_table.data[0])
+    
+    # Show only significant differences
+    st.dataframe(tuk_df_full_3way[tuk_df_full_3way['reject'] == True])
 
     temp_df_3way_interaction = df.copy()
     temp_df_3way_interaction['__3way_interaction_groups__'] = groups_3
     
     tukey_grouped_df = _format_tukey_summary_for_display(tuk3, temp_df_3way_interaction, '__3way_interaction_groups__')
     st.dataframe(tukey_grouped_df)
+    st.caption("ℹ️ **How to read this table:** Groups (levels) that **share a letter** in the 'Grouping' column are **not** significantly different from each other.")
+    
     st.download_button(
-        label=f"Download {interaction_label_3way} Tukey Grouping",
-        data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
-        file_name=f"{interaction_label_3way.replace(' * ', '_')}_tukey_grouping.csv",
+        label=f"Download Full {interaction_label_3way} Pairwise Report",
+        data=tuk_df_full_3way.to_csv(index=False).encode("utf-8"),
+        file_name=f"{interaction_label_3way.replace(' * ', '_')}_tukey_full_report.csv",
         mime="text/csv",
-        key=f"download_tukey_{interaction_label_3way}"
+        key=f"download_tukey_full_{interaction_label_3way}"
     )
 
 
@@ -741,15 +753,18 @@ def factorial_twolevels():
     st.code(format_equation(results, factor_map_2))
     st.text(results.summary())
 
-    # --- MODIFICATION START ---
     st.subheader("Effect Significance Plots")
-    st.markdown("These plots help visualize the relative importance of each factor and interaction from the regression model.")
+    st.markdown("""
+    These plots help visualize the relative importance of each factor and interaction from the regression model.
+
+    - **Pareto Plot:** Sorts effects from largest to smallest absolute magnitude. Bars shaded **blue** are statistically significant ($p < 0.05$), while **grey** bars are not. This helps quickly identify the "vital few" factors that have the largest impact on the response.
+    - **Daniel Plot (Normal Plot):** Checks which effects are significant. Insignificant effects (pure noise) will tend to fall along the **red line**. Significant effects (real factor impacts) will "pop off" this line, appearing as outliers. This is a visual way to separate real signals from random noise.
+    """)
     c1, c2 = st.columns(2)
     with c1:
         plot_pareto(results)
     with c2:
         plot_daniel(results)
-    # --- MODIFICATION END ---
 
     st.subheader("ANOVA Table (Categorical)")
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'high') to partition variance, "
@@ -775,16 +790,24 @@ def factorial_twolevels():
     for fac in custom_names: # Use custom names
         st.caption(f"Pairwise comparisons for {fac}")
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
-        st.text(tuk.summary().as_text())
+        
+        # Create full dataframe for filtering and download
+        tuk_df_full = pd.DataFrame(data=tuk._results_table.data[1:], columns=tuk._results_table.data[0])
+        
+        # Show only significant differences
+        st.dataframe(tuk_df_full[tuk_df_full['reject'] == True])
 
+        # Show grouped summary
         tukey_grouped_df = _format_tukey_summary_for_display(tuk, df, fac)
         st.dataframe(tukey_grouped_df)
+        st.caption("ℹ️ **How to read this table:** Groups (levels) that **share a letter** in the 'Grouping' column are **not** significantly different from each other.")
+
         st.download_button(
-            label=f"Download {fac} Tukey Grouping",
-            data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
-            file_name=f"{fac}_tukey_grouping.csv",
+            label=f"Download Full {fac} Pairwise Report",
+            data=tuk_df_full.to_csv(index=False).encode("utf-8"),
+            file_name=f"{fac}_tukey_full_report.csv",
             mime="text/csv",
-            key=f"download_tukey_{fac}"
+            key=f"download_tukey_full_{fac}"
         )
 
 
@@ -792,19 +815,26 @@ def factorial_twolevels():
     interaction_label = f"{custom_names[0]} * {custom_names[1]}"
     groups = df[custom_names].astype(str).agg(' * '.join, axis=1) # Use custom names
     tuk_ab = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
-    st.text(tuk_ab.summary().as_text())
+    
+    # Create full dataframe for filtering and download
+    tuk_df_full_ab = pd.DataFrame(data=tuk_ab._results_table.data[1:], columns=tuk_ab._results_table.data[0])
+    
+    # Show only significant differences
+    st.dataframe(tuk_df_full_ab[tuk_df_full_ab['reject'] == True])
 
     temp_df_interaction = df.copy()
     temp_df_interaction['__interaction_groups__'] = groups
     
     tukey_grouped_df = _format_tukey_summary_for_display(tuk_ab, temp_df_interaction, '__interaction_groups__')
     st.dataframe(tukey_grouped_df)
+    st.caption("ℹ️ **How to read this table:** Groups (levels) that **share a letter** in the 'Grouping' column are **not** significantly different from each other.")
+
     st.download_button(
-        label=f"Download {interaction_label} Tukey Grouping",
-        data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
-        file_name=f"{interaction_label.replace(' * ', '_')}_tukey_grouping.csv",
+        label=f"Download Full {interaction_label} Pairwise Report",
+        data=tuk_df_full_ab.to_csv(index=False).encode("utf-8"),
+        file_name=f"{interaction_label.replace(' * ', '_')}_tukey_full_report.csv",
         mime="text/csv",
-        key=f"download_tukey_{interaction_label}"
+        key=f"download_tukey_full_{interaction_label}"
     )
 
 
@@ -904,17 +934,26 @@ def anova_oneway():
     st.subheader("Post-hoc Analysis (Tukey HSD)")
     st.markdown(f"**Pairwise comparisons for {factor_name}**")
     tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[factor_name], alpha=0.05)
-    st.text(tuk.summary().as_text())
     
+    # Create full dataframe for filtering and download
+    tuk_df_full = pd.DataFrame(data=tuk._results_table.data[1:], columns=tuk._results_table.data[0])
+    
+    # Show only significant differences
+    st.caption("Significant Pairwise Differences (p < 0.05):")
+    st.dataframe(tuk_df_full[tuk_df_full['reject'] == True])
+    
+    # Show grouped summary
     tukey_grouped_df = _format_tukey_summary_for_display(tuk, df, factor_name)
-    st.markdown(f"**Significant Differences Summary for {factor_name}**")
+    st.markdown(f"**Grouping Summary for {factor_name}**")
     st.dataframe(tukey_grouped_df)
+    st.caption("ℹ️ **How to read this table:** Groups (levels) that **share a letter** in the 'Grouping' column are **not** significantly different from each other.")
+
     st.download_button(
-        label=f"Download {factor_name} Tukey Grouping",
-        data=tukey_grouped_df.to_csv(index=False).encode("utf-8"),
-        file_name=f"{factor_name}_tukey_grouping.csv",
+        label=f"Download Full {factor_name} Pairwise Report",
+        data=tuk_df_full.to_csv(index=False).encode("utf-8"),
+        file_name=f"{factor_name}_tukey_full_report.csv",
         mime="text/csv",
-        key=f"download_tukey_{factor_name}"
+        key=f"download_tukey_full_{factor_name}"
     )
 
 
@@ -994,18 +1033,26 @@ def Analysis():
 
     st.subheader("Post-hoc Comparisons: Tukey HSD")
     tukey = pairwise_tukeyhsd(endog=df["CycleTime"], groups=df["Machine"], alpha=0.05)
-    st.text(tukey.summary().as_text())
+    
+    # Create full dataframe for filtering and download
+    tuk_df_full_analysis = pd.DataFrame(data=tukey._results_table.data[1:], columns=tukey._results_table.data[0])
+
+    # Show only significant differences
+    st.caption("Significant Pairwise Differences (p < 0.05):")
+    st.dataframe(tuk_df_full_analysis[tuk_df_full_analysis['reject'] == True])
 
     # Special case for Analysis page, which uses 'CycleTime' and 'Machine'
     tukey_grouped_df_analysis = _format_tukey_summary_for_display(tukey, df, 'Machine', response_col='CycleTime')
-    st.markdown("**Significant Differences Summary for Machine**")
+    st.markdown("**Grouping Summary for Machine**")
     st.dataframe(tukey_grouped_df_analysis)
+    st.caption("ℹ️ **How to read this table:** Groups (levels) that **share a letter** in the 'Grouping' column are **not** significantly different from each other.")
+
     st.download_button(
-        label=f"Download Machine Tukey Grouping",
-        data=tukey_grouped_df_analysis.to_csv(index=False).encode("utf-8"),
-        file_name=f"Machine_tukey_grouping.csv",
+        label=f"Download Full Machine Pairwise Report",
+        data=tuk_df_full_analysis.to_csv(index=False).encode("utf-8"),
+        file_name=f"Machine_tukey_full_report.csv",
         mime="text/csv",
-        key=f"download_tukey_Machine_analysis"
+        key=f"download_tukey_full_Machine_analysis"
     )
 
     st.subheader("Model Assumptions")
@@ -1080,7 +1127,8 @@ def Analysis():
    small/medium/large (rule-of-thumb), but use domain judgment.
 
 6) **Post-hoc (Tukey HSD)** — Pairs with `reject = True` differ significantly.
-   Use these to identify which machines are **statistically slower** (e.g., C slower than A, B).
+   Use these to identify which machines are **statistically slower** (e.g., C slower than A, B). The **Grouping Summary** table
+   is the easiest way to see this: machines that *do not share a letter* are significantly different.
 
 7) **Assumptions** — Shapiro–Wilk tests residual normality (we want p ≥ 0.05). Levene assesses equal variances
    (we want p ≥ 0.05). If violated, consider **transformations** (e.g., log) or **robust/ Welch ANOVA**.
@@ -1088,7 +1136,7 @@ def Analysis():
 8) **Diagnostics** — The residuals-vs-fitted plot should look **random** around zero (no patterns).
    The Q–Q plot should be roughly linear (normal residuals).
 
-9) **Actionable conclusion** — If Machine C is significantly slower, prioritize:
+9) **Actionable conclusion** — If Machine C is significantly slower (e.g., it's in group 'A' and Machine A is in group 'B'), prioritize:
    - **SMED/Setup reduction** or **micro-motion** improvements on C
    - **Preventive maintenance** if downtime adds to cycle time variance
    - **Work redistribution** (balance stations upstream/downstream)
@@ -1099,10 +1147,9 @@ def Analysis():
     """)
 
     st.subheader("Exports")
-    tukey_df = pd.DataFrame(data=tukey._results_table.data[1:], columns=tukey._results_table.data[0])
-    st.download_button("Download Tukey HSD results (CSV)",
-                       data=tukey_df.to_csv(index=False),
-                       file_name="tukey_hsd_results.csv",
+    st.download_button("Download Full Tukey HSD results (CSV)",
+                       data=tuk_df_full_analysis.to_csv(index=False),
+                       file_name="tukey_hsd_full_results.csv",
                        mime="text/csv")
 
 
@@ -1179,7 +1226,7 @@ A **fractional factorial** design ($2^{k-p}$) runs only a *fraction* (e.g., $1/2
         
         # 4. Analysis
         plot_title = f'Runs for $2^{3-1}$ Design (Selected: {generator})'
-        resolution_str = "**Resolution III**: Main effects are aliased (confounded) with two-way interactions."
+        resolution_str = "**Resolution III** (shortest word `ABC` has length 3). Main effects are aliased with two-way interactions."
         aliases_md = f"""
 - **Defining Relation:** `{generator}`
 - **Aliasing Structure:**
@@ -1254,7 +1301,7 @@ A **fractional factorial** design ($2^{k-p}$) runs only a *fraction* (e.g., $1/2
 
         # 4. Analysis
         plot_title = f'Runs for $2^{4-1}$ Design (Selected: {generator})'
-        resolution_str = "**Resolution IV**: Main effects are clean (aliased with 3-way interactions). Two-way interactions are aliased with other two-way interactions."
+        resolution_str = "**Resolution IV** (shortest word `ABCD` has length 4). Main effects are clean, but two-way interactions are aliased with each other."
         aliases_md = f"""
 - **Defining Relation:** `{generator}`
 - **Aliasing Structure (Key Pairs):**
@@ -1363,7 +1410,7 @@ A **fractional factorial** design ($2^{k-p}$) runs only a *fraction* (e.g., $1/2
 
         # 4. Analysis
         plot_title = f'Runs for $2^{5-1}$ Design (Selected: {generator})'
-        resolution_str = "**Resolution V**: Main effects are clean (aliased with 4-way interactions). Two-way interactions are also clean (aliased with 3-way interactions)."
+        resolution_str = "**Resolution V** (shortest word `ABCDE` has length 5). Main effects and two-way interactions are both clean (not aliased with each other)."
         aliases_md = f"""
 - **Defining Relation:** `{generator}`
 - **Aliasing Structure (Key Pairs):**
@@ -1387,7 +1434,28 @@ A **fractional factorial** design ($2^{k-p}$) runs only a *fraction* (e.g., $1/2
     st.dataframe(design_df.reset_index(drop=True))
 
     st.subheader("Design Analysis: Resolution & Aliasing")
-    st.info(resolution_str)
+    st.markdown("""
+    **What is Resolution?**
+
+    The **Resolution** of a design is a number (e.g., III, IV, V) that describes the degree of aliasing (confounding). It's a critical measure of the design's quality.
+
+    - **Calculation:** The Resolution is the length of the *shortest "word"* in the design's **Defining Relation**.
+    - A "word" is the product of letters (e.g., `ABC`, `ABCD`).
+    - The "length" is the number of letters in the word (e.g., `ABC` has length 3).
+
+    **Common Resolutions:**
+    - **Resolution III:** The shortest word has length 3 (e.g., `I = ABC`). This is the lowest practical resolution.
+        - **Consequence:** Main effects (like `A`) are aliased with two-way interactions (like `BC`).
+        - **Use:** Good for *screening* many factors when you can assume interactions are negligible.
+    - **Resolution IV:** The shortest word has length 4 (e.g., `I = ABCD`).
+        - **Consequence:** Main effects are *not* aliased with two-way interactions (they are aliased with 3-way interactions, which are often ignored). Two-way interactions *are* aliased with other two-way interactions (e.g., `AB = CD`).
+        - **Use:** A very popular and efficient design.
+    - **Resolution V:** The shortest word has length 5 (e.g., `I = ABCDE`).
+        - **Consequence:** Main effects are "clean" (aliased with 4-way interactions). Two-way interactions are also "clean" (aliased with 3-way interactions).
+        - **Use:** A very high-quality design, great for estimating main effects and two-way interactions.
+    """)
+    
+    st.info(f"**This design is {resolution_str}**")
     st.markdown(aliases_md)
 
 
