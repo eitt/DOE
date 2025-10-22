@@ -326,8 +326,22 @@ def three_factorial():
 
     # Sidebar controls
     st.sidebar.header("Simulation controls")
+
+    # --- MODIFICATION START ---
+    st.sidebar.markdown("**Slider Range Controls**")
+    c1, c2 = st.sidebar.columns(2)
+    with c1:
+        coef_min = st.number_input("Coefficients Min", value=-10.0, step=1.0)
+        coef_step = st.number_input("Coefficients Step", value=0.5, step=0.1, min_value=0.01, format="%.2f")
+    with c2:
+        coef_max = st.number_input("Coefficients Max", value=10.0, step=1.0)
+        noise_max = st.number_input("Noise σ Max", value=5.0, min_value=0.1, step=0.5)
+    st.sidebar.markdown("---")
+    # --- MODIFICATION END ---
+
     replications = st.sidebar.slider("Replications per run", 1, 10, 2, 1)
-    noise_sd = st.sidebar.slider("Noise σ", 0.0, 5.0, 0.5, 0.1)
+    # Use noise_max
+    noise_sd = st.sidebar.slider("Noise σ", 0.0, noise_max, 0.5, 0.1)
     seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
 
     # Custom names
@@ -340,11 +354,12 @@ def three_factorial():
 
     # Coefficients: 1 + 3 mains + 3 interactions = 7
     st.sidebar.header("Model coefficients")
-    coef = [st.sidebar.slider('Intercept', -100.0, 100.0, 0.0)]
+    # Use coef_min, coef_max, coef_step
+    coef = [st.sidebar.slider('Intercept', coef_min, coef_max, 0.0, step=coef_step)]
     for k in _ensure_unique_ordered_keys(factor_name_map):
-        coef.append(st.sidebar.slider(f'Main effect: {factor_name_map[k]}', -100.0, 100.0, 0.0))
+        coef.append(st.sidebar.slider(f'Main effect: {factor_name_map[k]}', coef_min, coef_max, 0.0, step=coef_step))
     for a, b in combinations(_ensure_unique_ordered_keys(factor_name_map), 2):
-        coef.append(st.sidebar.slider(f'Interaction: {factor_name_map[a]} × {factor_name_map[b]}', -100.0, 100.0, 0.0))
+        coef.append(st.sidebar.slider(f'Interaction: {factor_name_map[a]} × {factor_name_map[b]}', coef_min, coef_max, 0.0, step=coef_step))
 
     # Build data
     levels = {k: ['low', 'medium', 'high'] for k in factor_name_map}
@@ -425,8 +440,22 @@ def factorial_twolevels():
                 "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
 
     st.sidebar.header("Simulation controls")
+
+    # --- MODIFICATION START ---
+    st.sidebar.markdown("**Slider Range Controls**")
+    c1, c2 = st.sidebar.columns(2)
+    with c1:
+        coef_min = st.number_input("Coefficients Min", value=-10.0, step=1.0)
+        coef_step = st.number_input("Coefficients Step", value=0.5, step=0.1, min_value=0.01, format="%.2f")
+    with c2:
+        coef_max = st.number_input("Coefficients Max", value=10.0, step=1.0)
+        noise_max = st.number_input("Noise σ Max", value=5.0, min_value=0.1, step=0.5)
+    st.sidebar.markdown("---")
+    # --- MODIFICATION END ---
+
     replications = st.sidebar.slider("Replications per run", 1, 15, 3, 1)
-    noise_sd = st.sidebar.slider("Noise σ", 0.0, 5.0, 0.5, 0.1)
+    # Use noise_max
+    noise_sd = st.sidebar.slider("Noise σ", 0.0, noise_max, 0.5, 0.1)
     seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
 
     st.sidebar.header("Custom factor names")
@@ -436,11 +465,12 @@ def factorial_twolevels():
     }
 
     st.sidebar.header("Model coefficients")
+    # Use coef_min, coef_max, coef_step
     coef = [
-        st.sidebar.slider('Intercept', -100.0, 100.0, 0.0),
-        st.sidebar.slider(f'Main effect: {factor_map_2["FactorA"]}', -100.0, 100.0, 0.0),
-        st.sidebar.slider(f'Main effect: {factor_map_2["FactorB"]}', -100.0, 100.0, 0.0),
-        st.sidebar.slider(f'Interaction: {factor_map_2["FactorA"]} × {factor_map_2["FactorB"]}', -100.0, 100.0, 0.0)
+        st.sidebar.slider('Intercept', coef_min, coef_max, 0.0, step=coef_step),
+        st.sidebar.slider(f'Main effect: {factor_map_2["FactorA"]}', coef_min, coef_max, 0.0, step=coef_step),
+        st.sidebar.slider(f'Main effect: {factor_map_2["FactorB"]}', coef_min, coef_max, 0.0, step=coef_step),
+        st.sidebar.slider(f'Interaction: {factor_map_2["FactorA"]} × {factor_map_2["FactorB"]}', coef_min, coef_max, 0.0, step=coef_step)
     ]
 
     levels = {'FactorA': ['low', 'high'], 'FactorB': ['low', 'high']}
@@ -858,7 +888,7 @@ estimate how each attribute level influences choice probability (part-worth util
 
     # ---------- Build estimation dataset once student has chosen ----------
     choices = st.session_state["conjoint_choices"]
-    all_answered = (len(choices) == n_tasks) and all(c in ("A", "B") for c in choices.values())
+    all_answered = (len(choices) == n_tasks) and all(c in ("A",B") for c in choices.values())
 
     st.subheader("Estimation Dataset (long format)")
     if not all_answered:
@@ -898,10 +928,8 @@ estimate how each attribute level influences choice probability (part-worth util
     X = sm.add_constant(X, has_constant="add")
     y = long_df["Chosen"].astype(int)
 
-    # --- FIX ---
     # Explicitly cast X to float to avoid "dtype=object" error in statsmodels
     X = X.astype(float)
-    # --- END FIX ---
 
     # Guard against degenerate data (e.g., same choice always producing complete separation)
     if y.sum() == 0 or y.sum() == len(y):
