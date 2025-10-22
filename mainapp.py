@@ -46,6 +46,103 @@ def _safe_plot(fig):
         st.error(f"Plot rendering error: {e}")
 
 
+def _clean_term_names(terms_list):
+    """Cleans statsmodels regression terms for pretty plotting."""
+    cleaned = []
+    for term in terms_list:
+        # e.g., "Q('Temp_num'):Q('Pressure_num')" -> "Temp x Pressure"
+        # e.g., "Q('Temp_num')" -> "Temp"
+        t = term.replace("Q('", "").replace("_num')", "").replace("'):", " x ").replace("'", "")
+        cleaned.append(t)
+    return cleaned
+
+
+def plot_pareto(results):
+    """
+    Generates a Pareto plot of effect magnitudes, coloring by significance.
+    """
+    try:
+        effects = results.params.drop('Intercept')
+        p_values = results.pvalues.loc[effects.index]
+        
+        df = pd.DataFrame({
+            'abs_effect': effects.abs(),
+            'p_value': p_values
+        }).sort_values('abs_effect', ascending=False)
+        
+        df['is_significant'] = df['p_value'] < 0.05
+        df['color'] = df['is_significant'].map({True: 'blue', False: 'grey'})
+        df['term_clean'] = _clean_term_names(df.index)
+        
+        fig = go.Figure()
+        fig.add_trace(go.Bar(
+            x=df['term_clean'],
+            y=df['abs_effect'],
+            marker_color=df['color'],
+            text=df['abs_effect'].apply(lambda x: f'{x:.3f}'),
+            textposition='outside'
+        ))
+        
+        fig.update_layout(
+            title='Pareto Plot of Effect Magnitudes',
+            xaxis_title='Factor / Interaction',
+            yaxis_title='Absolute Effect (Coefficient)',
+            xaxis=dict(categoryorder='total descending'), # Sort bars by y-value
+            showlegend=False,
+            height=500
+        )
+        _safe_plot(fig)
+    except Exception as e:
+        st.warning(f"Could not generate Pareto Plot: {e}")
+
+
+def plot_daniel(results):
+    """
+    Generates a Normal Probability Plot (Daniel Plot) of effects.
+    """
+    try:
+        effects = results.params.drop('Intercept')
+        terms = _clean_term_names(effects.index)
+        
+        # Get plot data and fit line from scipy.stats.probplot
+        (osm, osr), (slope, intercept, r) = stats.probplot(effects, dist='norm', fit=True)
+        
+        fig = go.Figure()
+        
+        # Add scatter points
+        fig.add_trace(go.Scatter(
+            x=osm,
+            y=osr,
+            mode='markers+text',
+            text=terms,
+            textposition='top right',
+            marker_color='blue',
+            name='Effects'
+        ))
+        
+        # Add the fitted line
+        line_x = np.array([np.min(osm), np.max(osm)])
+        line_y = slope * line_x + intercept
+        
+        fig.add_trace(go.Scatter(
+            x=line_x, y=line_y, mode='lines',
+            line=dict(dash='dash', color='red'),
+            name='Fit Line (Insignificant Effects)'
+        ))
+        
+        fig.update_layout(
+            title='Normal Plot of Effects (Daniel Plot)',
+            xaxis_title='Theoretical Quantiles (z-scores)',
+            yaxis_title='Ordered Effect (Coefficient)',
+            showlegend=True,
+            height=500
+        )
+        _safe_plot(fig)
+    
+    except Exception as e:
+        st.warning(f"Could not generate Daniel Plot: {e}")
+
+
 def create_factorial_dataframe(levels, numeric_mapping, replications=2, random_state=None):
     """
     Generates a factorial design dataframe with numeric mappings for any number of factors.
@@ -396,6 +493,16 @@ def three_factorial():
     st.code(format_equation(results, factor_name_map))
     st.text(results.summary())
 
+    # --- MODIFICATION START ---
+    st.subheader("Effect Significance Plots")
+    st.markdown("These plots help visualize the relative importance of each factor and interaction from the regression model.")
+    c1, c2 = st.columns(2)
+    with c1:
+        plot_pareto(results)
+    with c2:
+        plot_daniel(results)
+    # --- MODIFICATION END ---
+
     st.subheader("ANOVA Table (Categorical)")
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'medium', 'high') to partition variance, "
                 "which differs from the regression model above that uses **numeric** codes (-1, 0, 1).")
@@ -505,6 +612,16 @@ def factorial_twolevels():
     results = fit_factorial_model(df, factor_map_2)
     st.code(format_equation(results, factor_map_2))
     st.text(results.summary())
+
+    # --- MODIFICATION START ---
+    st.subheader("Effect Significance Plots")
+    st.markdown("These plots help visualize the relative importance of each factor and interaction from the regression model.")
+    c1, c2 = st.columns(2)
+    with c1:
+        plot_pareto(results)
+    with c2:
+        plot_daniel(results)
+    # --- MODIFICATION END ---
 
     st.subheader("ANOVA Table (Categorical)")
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'high') to partition variance, "
