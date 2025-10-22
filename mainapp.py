@@ -362,12 +362,10 @@ def three_factorial():
     df = create_factorial_dataframe(levels, FACTOR_VALUES_3, replications=replications, random_state=seed or None)
     df = compute_response(df, coef, factor_name_map, noise_sd=noise_sd, random_state=seed or None)
 
-    # --- MODIFICATION START ---
     # Rename categorical columns to custom names for display, download, and categorical models
     categorical_cols_to_rename = {k: v for k, v in factor_name_map.items() if k in df.columns}
     df.rename(columns=categorical_cols_to_rename, inplace=True)
     custom_names = list(factor_name_map.values())
-    # --- MODIFICATION END ---
 
     st.subheader('Generated Data')
     st.dataframe(df)
@@ -377,7 +375,6 @@ def three_factorial():
     plot_3d(df, factor_name_map)
 
     st.subheader('Analysis of Y based on Variability Source — Box Plot')
-    # This list is already custom_labels
     groupby_options = (
         custom_names
         + [f"{fa} * {fb}" for fa, fb in combinations(custom_names, 2)]
@@ -403,7 +400,6 @@ def three_factorial():
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'medium', 'high') to partition variance, "
                 "which differs from the regression model above that uses **numeric** codes (-1, 0, 1).")
     try:
-        # --- MODIFICATION START ---
         # Use C() and Q() to handle custom names with spaces
         f1, f2, f3 = [f"C(Q('{name}'))" for name in custom_names]
         formula_anova = f"Y ~ {f1} * {f2} * {f3}"
@@ -414,7 +410,6 @@ def three_factorial():
         anova_table.index = anova_table.index.str.replace("C\(Q\('", "", regex=True).str.replace("'\)\)", "", regex=True)
         
         st.dataframe(anova_table)
-        # --- MODIFICATION END ---
     except Exception as e:
         st.error(f"Could not generate ANOVA table: {e}")
 
@@ -422,7 +417,6 @@ def three_factorial():
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
 
-    # --- MODIFICATION START ---
     st.markdown("**Main Effects**")
     for fac in custom_names: # Use custom names
         st.caption(f"Pairwise comparisons for {fac}")
@@ -440,7 +434,6 @@ def three_factorial():
     groups_3 = df[custom_names].astype(str).agg(' * '.join, axis=1) # Use custom names
     tuk3 = pairwise_tukeyhsd(endog=df["Y"], groups=groups_3, alpha=0.05)
     st.text(tuk3.summary().as_text())
-    # --- MODIFICATION END ---
 
 
 def factorial_twolevels():
@@ -486,14 +479,12 @@ def factorial_twolevels():
         if f"{k}_num" in df.columns:
             df.rename(columns={f"{k}_num": f"{v}_num"}, inplace=True)
 
-    df = compute_response(df, factor_map_2, noise_sd=noise_sd, random_state=seed or None)
+    df = compute_response(df, coef, factor_map_2, noise_sd=noise_sd, random_state=seed or None)
 
-    # --- MODIFICATION START ---
     # Rename categorical columns to custom names for display, download, and categorical models
     categorical_cols_to_rename = {k: v for k, v in factor_map_2.items() if k in df.columns}
     df.rename(columns=categorical_cols_to_rename, inplace=True)
     custom_names = list(factor_map_2.values())
-    # --- MODIFICATION END ---
 
     st.subheader('Generated Data')
     st.dataframe(df)
@@ -503,7 +494,6 @@ def factorial_twolevels():
     plot_2d(df, factor_map_2)
 
     st.subheader('Analysis of Y based on Variability Source — Box Plot')
-    # custom_labels is already custom_names
     groupby_options = custom_names + [f"{custom_names[0]} * {custom_names[1]}"]
     groupby_label = st.selectbox('Group by', groupby_options, index=0)
     plot_boxplot(df, groupby_label, factor_map_2)
@@ -520,7 +510,6 @@ def factorial_twolevels():
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'high') to partition variance, "
                 "which differs from the regression model above that uses **numeric** codes (-1, 1).")
     try:
-        # --- MODIFICATION START ---
         # Use C() and Q() to handle custom names with spaces
         f1, f2 = [f"C(Q('{name}'))" for name in custom_names]
         formula_anova = f"Y ~ {f1} * {f2}"
@@ -531,14 +520,12 @@ def factorial_twolevels():
         anova_table.index = anova_table.index.str.replace("C\(Q\('", "", regex=True).str.replace("'\)\)", "", regex=True)
 
         st.dataframe(anova_table)
-        # --- MODIFICATION END ---
     except Exception as e:
         st.error(f"Could not generate ANOVA table: {e}")
 
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
     
-    # --- MODIFICATION START ---
     st.markdown("**Main Effects**")
     for fac in custom_names: # Use custom names
         st.caption(f"Pairwise comparisons for {fac}")
@@ -549,7 +536,6 @@ def factorial_twolevels():
     groups = df[custom_names].astype(str).agg(' * '.join, axis=1) # Use custom names
     tuk_ab = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
     st.text(tuk_ab.summary().as_text())
-    # --- MODIFICATION END ---
 
 
 def anova_oneway():
@@ -822,6 +808,135 @@ def Analysis():
 
 
 # -------------------------
+# NEW PAGE: 2^(k-p) Fractional Factorial
+# -------------------------
+def fractional_factorial():
+    st.title("Introduction to $2^{k-p}$ Fractional Factorial Designs")
+    st.markdown("By **Leonardo H. Talero-Sarmiento** "
+                "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
+    st.markdown("""
+A **full factorial** design ($2^k$) requires testing all possible combinations of $k$ factors at 2 levels.
+For $k=3$ factors, this is $2^3 = 8$ runs. For $k=5$, it's $2^5 = 32$ runs. This can quickly become too expensive.
+
+A **fractional factorial** design ($2^{k-p}$) runs only a *fraction* of these experiments.
+- $p$ is the number of "generators" used to create the design.
+- We sacrifice the ability to estimate certain interactions to save resources.
+- The most common and simple example is the **$2^{3-1}$** design, which studies **3 factors in only $2^{3-1} = 4$ runs** (a "half-fraction").
+    """)
+
+    st.sidebar.header("Design Controls ($2^{3-1}$)")
+    generator_choice = st.sidebar.selectbox(
+        "Choose Design Generator",
+        ("I = +ABC", "I = -ABC"),
+        index=0,
+        help="This is the **Defining Relation**. `I = +ABC` selects the 'principal fraction'."
+    )
+    
+    # 1. Create the full 2^3 factorial
+    full_factorial = pd.DataFrame(
+        list(itertools.product([-1, 1], repeat=3)),
+        columns=['A', 'B', 'C']
+    )
+    full_factorial['ABC'] = full_factorial['A'] * full_factorial['B'] * full_factorial['C']
+
+    # 2. Select the fraction based on the generator
+    if generator_choice == "I = +ABC":
+        principal_fraction = full_factorial[full_factorial['ABC'] == 1].copy()
+        alternate_fraction = full_factorial[full_factorial['ABC'] == -1].copy()
+        defining_relation = "I = +ABC"
+        generator = "C = AB"
+    else: # I = -ABC
+        principal_fraction = full_factorial[full_factorial['ABC'] == -1].copy()
+        alternate_fraction = full_factorial[full_factorial['ABC'] == 1].copy()
+        defining_relation = "I = -ABC"
+        generator = "C = -AB"
+
+    principal_fraction['Fraction'] = "Principal"
+    alternate_fraction['Fraction'] = "Alternate"
+    
+    # Combine for plotting
+    plot_df = pd.concat([principal_fraction, alternate_fraction])
+    
+    # 3. Create the 3D plot
+    st.subheader("3D Factor Space for $2^{3-1}$ Design")
+    
+    fig = go.Figure()
+    
+    # Add Principal Fraction (selected runs)
+    df_p = plot_df[plot_df['Fraction'] == 'Principal']
+    fig.add_trace(go.Scatter3d(
+        x=df_p['A'], y=df_p['B'], z=df_p['C'],
+        mode='markers',
+        marker=dict(size=10, color='blue', opacity=1.0),
+        name=f"Principal Fraction ({defining_relation})"
+    ))
+    
+    # Add Alternate Fraction (grayed out)
+    df_a = plot_df[plot_df['Fraction'] == 'Alternate']
+    fig.add_trace(go.Scatter3d(
+        x=df_a['A'], y=df_a['B'], z=df_a['C'],
+        mode='markers',
+        marker=dict(size=8, color='gray', opacity=0.2),
+        name="Alternate Fraction (not run)"
+    ))
+
+    fig.update_layout(
+        scene=dict(xaxis_title='Factor A', yaxis_title='Factor B', zaxis_title='Factor C',
+                   xaxis=dict(range=[-1.2, 1.2]),
+                   yaxis=dict(range=[-1.2, 1.2]),
+                   zaxis=dict(range=[-1.2, 1.2])),
+        title=f'Runs for $2^{3-1}$ Design (Selected: {defining_relation})',
+        height=550,
+        legend_title="Fraction"
+    )
+    _safe_plot(fig)
+    st.markdown(f"The **{len(df_p)} blue points** are the experiments you run. The {len(df_a)} gray points are the ones you save.")
+
+
+    # 4. Show the design matrix
+    st.subheader(f"Design Matrix (4 Runs)")
+    st.dataframe(principal_fraction[['A', 'B', 'C']].reset_index(drop=True))
+
+    # 5. Analyze Resolution and Aliasing
+    st.subheader("Design Analysis: Resolution & Aliasing")
+    st.markdown(f"""
+This design is defined by:
+- **Generator:** `{generator}`
+- **Defining Relation:** `{defining_relation}`
+    """)
+    
+    st.info("""
+**Resolution**
+
+The **Resolution** of a design is the length of the *shortest word* in its defining relation.
+- The shortest (and only) word in `I = ABC` is **ABC**, which has length **3**.
+- Therefore, this is a **Resolution III** design.
+
+**What does Resolution III mean?**
+- **Main effects** are aliased (confounded) with **two-way interactions**.
+- **This is a significant trade-off.** You cannot tell if an observed effect is due to Factor A or the interaction of B and C.
+    """)
+    
+    st.markdown(f"""
+**Aliasing Structure**
+
+By "multiplying" the defining relation `I = {defining_relation[4:]}` by any effect, we find its alias:
+- $I = {defining_relation[4:]}$ (The Intercept is aliased with the ABC interaction)
+- $A = A \cdot I = A \cdot (ABC) = A^2BC = BC$
+- $B = B \cdot I = B \cdot (ABC) = AB^2C = AC$
+- $C = C \cdot I = C \cdot (ABC) = ABC^2 = AB$
+
+The full structure is:
+- **`I = ABC`**
+- **`A = BC`**
+- **`B = AC`**
+- **`C = AB`**
+
+**Conclusion:** This design is very efficient for *screening* (finding the most important main effects) **if** you can assume all two-way interactions are negligible.
+    """)
+
+
+# -------------------------
 # NEW PAGE: Choice-Based Conjoint Analysis
 # -------------------------
 def conjoint_analysis():
@@ -1009,6 +1124,7 @@ PAGES = {
     "Anova One-way - Introduction": anova_oneway,
     "Introduction to Factorial Designs": factorial_twolevels,
     "Factorial Designs with Three Factors and Three Levels": three_factorial,
+    "Fractional Factorial Designs (2^k-p)": fractional_factorial, # <-- NEW PAGE ADDED
     "Conjoint Analysis (Choice-Based)": conjoint_analysis,
     "Tips to Analyze the Statistical Outputs": Analysis,
 }
