@@ -338,7 +338,6 @@ def three_factorial():
     st.sidebar.markdown("---")
 
     replications = st.sidebar.slider("Replications per run", 1, 10, 2, 1)
-    # Use noise_max
     noise_sd = st.sidebar.slider("Noise σ", 0.0, noise_max, 0.5, 0.1)
     seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
 
@@ -352,7 +351,6 @@ def three_factorial():
 
     # Coefficients: 1 + 3 mains + 3 interactions = 7
     st.sidebar.header("Model coefficients")
-    # Use coef_min, coef_max, coef_step
     coef = [st.sidebar.slider('Intercept', coef_min, coef_max, 0.0, step=coef_step)]
     for k in _ensure_unique_ordered_keys(factor_name_map):
         coef.append(st.sidebar.slider(f'Main effect: {factor_name_map[k]}', coef_min, coef_max, 0.0, step=coef_step))
@@ -364,6 +362,13 @@ def three_factorial():
     df = create_factorial_dataframe(levels, FACTOR_VALUES_3, replications=replications, random_state=seed or None)
     df = compute_response(df, coef, factor_name_map, noise_sd=noise_sd, random_state=seed or None)
 
+    # --- MODIFICATION START ---
+    # Rename categorical columns to custom names for display, download, and categorical models
+    categorical_cols_to_rename = {k: v for k, v in factor_name_map.items() if k in df.columns}
+    df.rename(columns=categorical_cols_to_rename, inplace=True)
+    custom_names = list(factor_name_map.values())
+    # --- MODIFICATION END ---
+
     st.subheader('Generated Data')
     st.dataframe(df)
     st.download_button("Download CSV", data=df.to_csv(index=False), file_name="three_factorial_data.csv", mime="text/csv")
@@ -372,18 +377,18 @@ def three_factorial():
     plot_3d(df, factor_name_map)
 
     st.subheader('Analysis of Y based on Variability Source — Box Plot')
-    custom_labels = list(factor_name_map.values())
+    # This list is already custom_labels
     groupby_options = (
-        custom_labels
-        + [f"{fa} * {fb}" for fa, fb in combinations(custom_labels, 2)]
-        + [f"{custom_labels[0]} * {custom_labels[1]} * {custom_labels[2]}"]
+        custom_names
+        + [f"{fa} * {fb}" for fa, fb in combinations(custom_names, 2)]
+        + [f"{custom_names[0]} * {custom_names[1]} * {custom_names[2]}"]
     )
     groupby_label = st.selectbox('Group by', groupby_options, index=0)
     plot_boxplot(df, groupby_label, factor_name_map)
 
     st.subheader('Surface Plot')
-    f1 = st.selectbox('First Factor', custom_labels, index=0)
-    f2 = st.selectbox('Second Factor', custom_labels, index=1)
+    f1 = st.selectbox('First Factor', custom_names, index=0)
+    f2 = st.selectbox('Second Factor', custom_names, index=1)
     if f1 != f2:
         plot_surface(df, f1, f2)
     else:
@@ -398,14 +403,18 @@ def three_factorial():
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'medium', 'high') to partition variance, "
                 "which differs from the regression model above that uses **numeric** codes (-1, 0, 1).")
     try:
-        # Use C() to ensure factors are treated as categorical
-        # The '*' operator includes main effects and all interactions
-        # We use the original column names which are the keys of `factor_name_map`
-        f1, f2, f3 = factor_name_map.keys()
-        formula_anova = f"Y ~ C({f1}) * C({f2}) * C({f3})"
+        # --- MODIFICATION START ---
+        # Use C() and Q() to handle custom names with spaces
+        f1, f2, f3 = [f"C(Q('{name}'))" for name in custom_names]
+        formula_anova = f"Y ~ {f1} * {f2} * {f3}"
         model_anova = smf.ols(formula_anova, data=df).fit()
         anova_table = sm.stats.anova_lm(model_anova, typ=2)
+        
+        # Clean up index names for display
+        anova_table.index = anova_table.index.str.replace("C\(Q\('", "", regex=True).str.replace("'\)\)", "", regex=True)
+        
         st.dataframe(anova_table)
+        # --- MODIFICATION END ---
     except Exception as e:
         st.error(f"Could not generate ANOVA table: {e}")
 
@@ -413,23 +422,25 @@ def three_factorial():
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
 
+    # --- MODIFICATION START ---
     st.markdown("**Main Effects**")
-    for fac in ["Temperature", "Pressure", "Thinner"]:
+    for fac in custom_names: # Use custom names
         st.caption(f"Pairwise comparisons for {fac}")
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
         st.text(tuk.summary().as_text())
 
     st.markdown("**Two-way Interaction Cells**")
-    for fa, fb in combinations(["Temperature", "Pressure", "Thinner"], 2):
+    for fa, fb in combinations(custom_names, 2): # Use custom names
         st.caption(f"Cells for {fa} × {fb}")
         groups = df[[fa, fb]].astype(str).agg(' * '.join, axis=1)
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
         st.text(tuk.summary().as_text())
 
     st.markdown("**Three-way Interaction Cells (A × B × C)**")
-    groups_3 = df[["Temperature", "Pressure", "Thinner"]].astype(str).agg(' * '.join, axis=1)
+    groups_3 = df[custom_names].astype(str).agg(' * '.join, axis=1) # Use custom names
     tuk3 = pairwise_tukeyhsd(endog=df["Y"], groups=groups_3, alpha=0.05)
     st.text(tuk3.summary().as_text())
+    # --- MODIFICATION END ---
 
 
 def factorial_twolevels():
@@ -450,7 +461,6 @@ def factorial_twolevels():
     st.sidebar.markdown("---")
 
     replications = st.sidebar.slider("Replications per run", 1, 15, 3, 1)
-    # Use noise_max
     noise_sd = st.sidebar.slider("Noise σ", 0.0, noise_max, 0.5, 0.1)
     seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
 
@@ -461,7 +471,6 @@ def factorial_twolevels():
     }
 
     st.sidebar.header("Model coefficients")
-    # Use coef_min, coef_max, coef_step
     coef = [
         st.sidebar.slider('Intercept', coef_min, coef_max, 0.0, step=coef_step),
         st.sidebar.slider(f'Main effect: {factor_map_2["FactorA"]}', coef_min, coef_max, 0.0, step=coef_step),
@@ -472,12 +481,19 @@ def factorial_twolevels():
     levels = {'FactorA': ['low', 'high'], 'FactorB': ['low', 'high']}
     df = create_factorial_dataframe(levels, FACTOR_VALUES_2, replications=replications, random_state=seed or None)
 
-    # Rename numeric columns to custom
+    # Rename numeric columns to custom (this is for _num columns, handled by compute_response)
     for k, v in factor_map_2.items():
         if f"{k}_num" in df.columns:
             df.rename(columns={f"{k}_num": f"{v}_num"}, inplace=True)
 
-    df = compute_response(df, coef, factor_map_2, noise_sd=noise_sd, random_state=seed or None)
+    df = compute_response(df, factor_map_2, noise_sd=noise_sd, random_state=seed or None)
+
+    # --- MODIFICATION START ---
+    # Rename categorical columns to custom names for display, download, and categorical models
+    categorical_cols_to_rename = {k: v for k, v in factor_map_2.items() if k in df.columns}
+    df.rename(columns=categorical_cols_to_rename, inplace=True)
+    custom_names = list(factor_map_2.values())
+    # --- MODIFICATION END ---
 
     st.subheader('Generated Data')
     st.dataframe(df)
@@ -487,13 +503,13 @@ def factorial_twolevels():
     plot_2d(df, factor_map_2)
 
     st.subheader('Analysis of Y based on Variability Source — Box Plot')
-    custom_labels = list(factor_map_2.values())
-    groupby_options = custom_labels + [f"{custom_labels[0]} * {custom_labels[1]}"]
+    # custom_labels is already custom_names
+    groupby_options = custom_names + [f"{custom_names[0]} * {custom_names[1]}"]
     groupby_label = st.selectbox('Group by', groupby_options, index=0)
     plot_boxplot(df, groupby_label, factor_map_2)
 
     st.subheader('Surface Plot')
-    plot_surface(df, custom_labels[0], custom_labels[1])
+    plot_surface(df, custom_names[0], custom_names[1])
 
     st.subheader('Model Fitting (Response Surface)')
     results = fit_factorial_model(df, factor_map_2)
@@ -504,27 +520,36 @@ def factorial_twolevels():
     st.markdown("This model treats factors as **categories** (e.g., 'low', 'high') to partition variance, "
                 "which differs from the regression model above that uses **numeric** codes (-1, 1).")
     try:
-        # Formula for ANOVA model using the original categorical factor columns
-        # The '*' operator includes main effects and the interaction
-        formula_anova = "Y ~ C(FactorA) * C(FactorB)"
+        # --- MODIFICATION START ---
+        # Use C() and Q() to handle custom names with spaces
+        f1, f2 = [f"C(Q('{name}'))" for name in custom_names]
+        formula_anova = f"Y ~ {f1} * {f2}"
         model_anova = smf.ols(formula_anova, data=df).fit()
         anova_table = sm.stats.anova_lm(model_anova, typ=2)
+
+        # Clean up index names for display
+        anova_table.index = anova_table.index.str.replace("C\(Q\('", "", regex=True).str.replace("'\)\)", "", regex=True)
+
         st.dataframe(anova_table)
+        # --- MODIFICATION END ---
     except Exception as e:
         st.error(f"Could not generate ANOVA table: {e}")
 
     # --- Post-hoc analysis (Tukey HSD) ---
     st.subheader("Post-hoc Analysis (Tukey HSD)")
+    
+    # --- MODIFICATION START ---
     st.markdown("**Main Effects**")
-    for fac in ["FactorA", "FactorB"]:
+    for fac in custom_names: # Use custom names
         st.caption(f"Pairwise comparisons for {fac}")
         tuk = pairwise_tukeyhsd(endog=df["Y"], groups=df[fac], alpha=0.05)
         st.text(tuk.summary().as_text())
 
     st.markdown("**Interaction Cells (A × B)**")
-    groups = df[["FactorA", "FactorB"]].astype(str).agg(' * '.join, axis=1)
+    groups = df[custom_names].astype(str).agg(' * '.join, axis=1) # Use custom names
     tuk_ab = pairwise_tukeyhsd(endog=df["Y"], groups=groups, alpha=0.05)
     st.text(tuk_ab.summary().as_text())
+    # --- MODIFICATION END ---
 
 
 def anova_oneway():
@@ -578,13 +603,17 @@ def anova_oneway():
     _safe_plot(fig)
 
     # OLS summary
-    model = smf.ols(f"Y ~ C({factor_name})", data=df).fit()
+    model = smf.ols(f"Y ~ C(Q('{factor_name}'))", data=df).fit() # Added Q() for safety
     st.subheader("Linear Regression Model Summary")
     st.text(model.summary())
 
     # Variance Decomposition pies
     st.subheader("Variance Decomposition (SST vs. SSTr & SSE)")
     anova_table = sm.stats.anova_lm(model, typ=2)
+    
+    # Clean up index
+    anova_table.index = anova_table.index.str.replace("C\(Q\('", "", regex=True).str.replace("'\)\)", "", regex=True)
+
     try:
         resid_row = anova_table.index.str.contains("Residual", case=False, regex=False)
         if not resid_row.any():
@@ -980,7 +1009,7 @@ PAGES = {
     "Anova One-way - Introduction": anova_oneway,
     "Introduction to Factorial Designs": factorial_twolevels,
     "Factorial Designs with Three Factors and Three Levels": three_factorial,
-    "Conjoint Analysis (Choice-Based)": conjoint_analysis,  # NEW PAGE
+    "Conjoint Analysis (Choice-Based)": conjoint_analysis,
     "Tips to Analyze the Statistical Outputs": Analysis,
 }
 
