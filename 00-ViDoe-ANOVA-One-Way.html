@@ -1,0 +1,616 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>2. Using ViDoE to Understand One-Way ANOVA &#8212; ViDoe - Visualizing Design of Experiments</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '00-ViDoe-ANOVA-One-Way';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="3. Exploring Two-Level Factorial Designs with ViDoE" href="00-ViDoe-Introduction-Factorial.html" />
+    <link rel="prev" title="1. Introduction and Justification" href="00-ViDoe-Introduction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/INGENIERÍA-INDUSTRIAL_LOGO.png" class="logo__image only-light" alt="ViDoe - Visualizing Design of Experiments - Home"/>
+    <script>document.write(`<img src="_static/INGENIERÍA-INDUSTRIAL_LOGO.png" class="logo__image only-dark" alt="ViDoe - Visualizing Design of Experiments - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Visualizing Design of Experiments with ViDoe: An Interactive Approach
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Using ViDoE to Understand One-Way ANOVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Exploring Two-Level Factorial Designs with ViDoE</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">10. Principles of 2^k and Fractional Factorial Designs</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">11. Taguchi Methods and Robust Design</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">12. Block Designs Explained</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="03-Boxplot-by-group.html">The Usefulness of Boxplots by Group in Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="03-Surface-plot.html">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="03-regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="03-residual-analysis.html">Introduction to residual analysis</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Bibliography.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://eitt.github.io/DOE/intro.html" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://eitt.github.io/DOE/intro.html/issues/new?title=Issue%20on%20page%20%2F00-ViDoe-ANOVA-One-Way.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/00-ViDoe-ANOVA-One-Way.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Using ViDoE to Understand One-Way ANOVA</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">2.1. Educational Utilities in ViDoE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">2.3. Suggested Classroom Activity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">2.4. Interpretation Support</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p><a name="00-ViDoe-ANOVA-One-Way"></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="using-vidoe-to-understand-one-way-anova">
+<h1><span class="section-number">2. </span>Using ViDoE to Understand One-Way ANOVA<a class="headerlink" href="#using-vidoe-to-understand-one-way-anova" title="Permalink to this heading">#</a></h1>
+<p>One-Way ANOVA (Analysis of Variance) is one of the most fundamental tools in experimental design. It is used when we want to compare the means of three or more independent groups (or levels of a factor) to determine if the observed differences in sample means are statistically significant. In practice, this method is key when analyzing how different conditions (treatments, materials, times, etc.) affect a given outcome.</p>
+<p>However, interpreting ANOVA results from purely numerical outputs—such as F-values, p-values, and sum of squares—can be challenging for students. That is why <strong>ViDoE</strong> includes a dedicated, interactive module for One-Way ANOVA that helps users understand how treatment effects and residuals contribute to variation in the data.</p>
+<section id="educational-utilities-in-vidoe">
+<h2><span class="section-number">2.1. </span>Educational Utilities in ViDoE<a class="headerlink" href="#educational-utilities-in-vidoe" title="Permalink to this heading">#</a></h2>
+<p>The ViDoE platform allows learners to:</p>
+<ul class="simple">
+<li><p>Customize the <strong>name of the factor</strong> and its <strong>three levels</strong> (e.g., Temperature: Low, Medium, High).</p></li>
+<li><p>Modify the <strong>treatment effects</strong> using sliders, which dynamically update the dataset and visualizations.</p></li>
+<li><p>Observe how random noise influences the outcome variable (<code class="docutils literal notranslate"><span class="pre">Y</span></code>).</p></li>
+<li><p>Generate and download the experimental dataset in <code class="docutils literal notranslate"><span class="pre">.csv</span></code> format for offline analysis.</p></li>
+<li><p>Visualize the results with a <strong>boxplot</strong>, an <strong>ANOVA table</strong>, and a <strong>linear regression summary</strong>.</p></li>
+<li><p>See a clear representation of the <strong>regression equation</strong> and the <strong>components of variation</strong> using pie charts.</p></li>
+</ul>
+</section>
+<section id="key-figures">
+<h2><span class="section-number">2.2. </span>Key Figures<a class="headerlink" href="#key-figures" title="Permalink to this heading">#</a></h2>
+<figure class="align-default" id="fig2-1">
+<img alt="Boxplot of Y across Factor Levels" src="_images/Fig2_1_Boxplot_Y_by_Level.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 2.1 </span><span class="caption-text">This figure shows the distribution of the response variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> for each factor level. It helps visualize differences in central tendency and variation among groups.</span><a class="headerlink" href="#fig2-1" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig2-2">
+<img alt="Regression Equation Visualization" src="_images/Fig2_2_Regression_Equation.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 2.2 </span><span class="caption-text">Displays the linear regression model derived from the data using indicator variables. This aids in understanding how treatment effects modify the outcome.</span><a class="headerlink" href="#fig2-2" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="fig2-3">
+<img alt="Sum of Squares Decomposition Pie Charts" src="_images/Fig2_3_Sum_of_Squares_Pie.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 2.3 </span><span class="caption-text">Two pie charts showing:</span><a class="headerlink" href="#fig2-3" title="Permalink to this image">#</a></p>
+<div class="legend">
+<ol class="arabic simple">
+<li><p>Total Sum of Squares (SST)</p></li>
+<li><p>Partitioning of SST into Treatment (SSTr) and Error (SSE)</p></li>
+</ol>
+</div>
+</figcaption>
+</figure>
+</section>
+<section id="suggested-classroom-activity">
+<h2><span class="section-number">2.3. </span>Suggested Classroom Activity<a class="headerlink" href="#suggested-classroom-activity" title="Permalink to this heading">#</a></h2>
+<p>Students can follow these steps directly within the ViDoE app:</p>
+<ol class="arabic simple">
+<li><p>Rename the factor (e.g., “Method”) and assign new level names (e.g., “A”, “B”, “C”).</p></li>
+<li><p>Use sliders to assign meaningful treatment effects for Levels B and C.</p></li>
+<li><p>Download the dataset and perform a manual ANOVA in R or Python for comparison.</p></li>
+<li><p>Interpret the results: p-value, F-statistic, and regression coefficients.</p></li>
+<li><p>Visualize the decomposition of variation (SST, SSTr, SSE) using the pie charts.</p></li>
+<li><p>Formulate conclusions: Is the effect of the factor statistically significant?</p></li>
+</ol>
+</section>
+<section id="interpretation-support">
+<h2><span class="section-number">2.4. </span>Interpretation Support<a class="headerlink" href="#interpretation-support" title="Permalink to this heading">#</a></h2>
+<p>The module provides both <strong>statistical tables</strong> and <strong>visual guidance</strong> to support interpretation:</p>
+<ul class="simple">
+<li><p>The <strong>ANOVA table</strong> displays degrees of freedom, sum of squares, F-statistic, and p-value.</p></li>
+<li><p>The <strong>regression summary</strong> (OLS model) shows estimates and confidence intervals.</p></li>
+<li><p>The <strong>LaTeX-style equation</strong> reinforces symbolic thinking.</p></li>
+<li><p>The <strong>boxplot and pie charts</strong> simplify abstract variance decomposition.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="00-ViDoe-Introduction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Introduction and Justification</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="00-ViDoe-Introduction-Factorial.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Exploring Two-Level Factorial Designs with ViDoE</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#educational-utilities-in-vidoe">2.1. Educational Utilities in ViDoE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-figures">2.2. Key Figures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#suggested-classroom-activity">2.3. Suggested Classroom Activity</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-support">2.4. Interpretation Support</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

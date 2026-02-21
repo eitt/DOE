@@ -1,0 +1,1439 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>The Foundations of Linear Regression: Continuous vs. Discrete Predictors &#8212; ViDoe - Visualizing Design of Experiments</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'regression-model';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Introduction to residual analysis" href="residual-analysis.html" />
+    <link rel="prev" title="The Usefulness of Surface Plots in Data Analysis for the Design of Experiments" href="Surface-plot.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/INGENIERÍA-INDUSTRIAL_LOGO.png" class="logo__image only-light" alt="ViDoe - Visualizing Design of Experiments - Home"/>
+    <script>document.write(`<img src="_static/INGENIERÍA-INDUSTRIAL_LOGO.png" class="logo__image only-dark" alt="ViDoe - Visualizing Design of Experiments - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Visualizing Design of Experiments with ViDoe: An Interactive Approach
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="ViDoe-Introduction.html">Title</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ViDoe-ANOVA-One-Way.html">Title</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ViDoe-Factorial-Designs.html">Title</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova One Way</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="anova-oneway.html">One-way Analysis of Variance (ANOVA): A Historical and Practical Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="one-way-anova.html">Explaining the Python Code</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Full-Factorial designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="markdown.html">Markdown Files</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Boxplot-by-group.html">The Usefulness of Boxplots by Group in Data Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Surface-plot.html">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a></li>
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="residual-analysis.html">Introduction to residual analysis</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Bibliography.html">This is the Bibliography of this handbook</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://eitt.github.io/DOE/intro.html" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://eitt.github.io/DOE/intro.html/issues/new?title=Issue%20on%20page%20%2Fregression-model.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/regression-model.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The Foundations of Linear Regression: Continuous vs. Discrete Predictors</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simplicity-a-model-for-every-user">Simplicity: A Model for Every User</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretability-a-story-in-every-coefficient">Interpretability: A Story in Every Coefficient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-applicability-from-classrooms-to-corporations">General Applicability: From Classrooms to Corporations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions-more-than-just-a-line">Extensions: More than Just a Line</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-with-continuous-variables">Linear Regression with Continuous Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-idea">Basic Idea</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-example-simple-linear-regression">Python Example: Simple Linear Regression</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-with-discrete-predictors">Linear Regression with Discrete Predictors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Basic Idea</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-example-linear-regression-with-discrete-predictors">Python Example: Linear Regression with Discrete Predictors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-comparing-linear-regression-with-continuous-vs-discrete-predictors">Conclusion: Comparing Linear Regression with Continuous vs. Discrete Predictors</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-the-outputs-of-linear-regression-in-python-using-statsmodels">Understanding the Outputs of Linear Regression in Python using Statsmodels</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-data-generation">Example Data Generation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-data-using-pairplot-in-seaborn">Visualizing Data Using Pairplot in Seaborn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applying-linear-regression-using-statsmodels">Applying Linear Regression using Statsmodels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-the-outputs">Understanding the Outputs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analyzing-the-outputs">Analyzing the outputs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-summary">Model Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#goodness-of-fit-measures">Goodness-of-Fit Measures</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#model-fit-diagnostics">Model Fit Diagnostics</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficients">Coefficients</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#constant">Constant</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x1-variable">X1 Variable</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x2-variable">X2 Variable</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x3-variable">X3 Variable</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-interpretation">Output interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-stats-models-with-discrete-variables">Introduction to stats models with discrete variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Example Data Generation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-data-using-boxplot-and-subplots">Visualizing Data Using Boxplot and Subplots</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Applying Linear Regression using Statsmodels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-of-ols-regression-output-with-categorical-variables">Analysis of OLS Regression Output with Categorical Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Model Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Goodness-of-Fit Measures</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Model Fit Diagnostics</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Coefficients</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#intercept">Intercept</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x1-variable-categorical-low-medium">X1 Variable (Categorical: ‘Low’, ‘Medium’)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x2-variable-categorical-yes">X2 Variable (Categorical: ‘Yes’)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Output interpretation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-foundations-of-linear-regression-continuous-vs-discrete-predictors">
+<h1>The Foundations of Linear Regression: Continuous vs. Discrete Predictors<a class="headerlink" href="#the-foundations-of-linear-regression-continuous-vs-discrete-predictors" title="Link to this heading">#</a></h1>
+<p>Linear regression has become a cornerstone in statistical modeling and data analysis. Its versatility, ease of interpretation, and general applicability make it a go-to method for professionals from economics and psychology to engineering and biological sciences. This article delves into why linear regression is such a widely embraced technique and the various contexts where it finds application.</p>
+<section id="simplicity-a-model-for-every-user">
+<h2>Simplicity: A Model for Every User<a class="headerlink" href="#simplicity-a-model-for-every-user" title="Link to this heading">#</a></h2>
+<p>One of the most appealing aspects of linear regression is its simplicity. The basic formula <span class="math notranslate nohighlight">\( Y = \beta_0 + \beta_1 X + \epsilon \)</span> is straightforward to understand, even for someone who might be new to the world of statistics or data analysis. The model aims to fit the best linear relationship between the dependent variable Y and the independent variable <span class="math notranslate nohighlight">\(X\)</span>, making it intuitive and easily explainable. This simplicity ensures that the implementation of linear regression is quickly and easily understood, making it accessible for beginners and experts.</p>
+</section>
+<section id="interpretability-a-story-in-every-coefficient">
+<h2>Interpretability: A Story in Every Coefficient<a class="headerlink" href="#interpretability-a-story-in-every-coefficient" title="Link to this heading">#</a></h2>
+<p>Linear regression does not just provide a best-fit line; it also offers interpretable parameters. The coefficients <span class="math notranslate nohighlight">\( \beta_0 \)</span> and <span class="math notranslate nohighlight">\( \beta_1 \)</span> tell a clear story. The intercept <span class="math notranslate nohighlight">\(\beta_0 \)</span> gives the expected value of <span class="math notranslate nohighlight">\( Y \)</span> when <span class="math notranslate nohighlight">\( X \)</span> is zero, and the slope <span class="math notranslate nohighlight">\(\beta_1\)</span> offers the rate of change in <span class="math notranslate nohighlight">\( Y \)</span> for a one-unit change in <span class="math notranslate nohighlight">\( X \)</span>. This level of interpretability is invaluable in many fields where not just prediction but understanding the underlying phenomena is crucial. For example, understanding the rate at which a particular medicine impacts recovery can be as important as knowing its effectiveness in healthcare.</p>
+</section>
+<section id="general-applicability-from-classrooms-to-corporations">
+<h2>General Applicability: From Classrooms to Corporations<a class="headerlink" href="#general-applicability-from-classrooms-to-corporations" title="Link to this heading">#</a></h2>
+<p>Linear regression finds a home in numerous domains:</p>
+<ol class="arabic simple">
+<li><p><strong>Economics</strong>: To understand the relationship between supply and demand, inflation and unemployment, etc.</p></li>
+<li><p><strong>Healthcare</strong>: For predicting patient outcomes based on various metrics like age, blood pressure, and cholesterol levels.</p></li>
+<li><p><strong>Marketing</strong>: To analyze how different strategies affect sales or customer engagement.</p></li>
+<li><p><strong>Engineering</strong>: In quality control processes and optimization problems.</p></li>
+<li><p><strong>Natural Sciences</strong>: Such as in predicting chemical reactions or physical phenomena based on various conditions.</p></li>
+</ol>
+</section>
+<section id="extensions-more-than-just-a-line">
+<h2>Extensions: More than Just a Line<a class="headerlink" href="#extensions-more-than-just-a-line" title="Link to this heading">#</a></h2>
+<p>Although the basic model is simple, linear regression can be extended in various ways to handle more complex scenarios. Multiple linear regression includes more than one independent variable, enabling more nuanced models. Moreover, logistic regression allows us to deal with categorical dependent variables, broadening the scope further. Finally, the concept of linearity in statistics differs from other exact models, making linear regression for curve-fitting in other complex contexts where the linearity is not evident but easily modeled in statistics.</p>
+</section>
+<section id="linear-regression-with-continuous-variables">
+<h2>Linear Regression with Continuous Variables<a class="headerlink" href="#linear-regression-with-continuous-variables" title="Link to this heading">#</a></h2>
+<section id="basic-idea">
+<h3>Basic Idea<a class="headerlink" href="#basic-idea" title="Link to this heading">#</a></h3>
+<p>Linear regression aims to model the relationship between a dependent variable <span class="math notranslate nohighlight">\(Y\)</span> and one or more independent variables <span class="math notranslate nohighlight">\(X_1, X_2, \ldots, X_n\)</span>. The simplest form is the <strong>simple linear regression</strong>, which involves only one predictor. The model can be represented mathematically as:</p>
+<div class="math notranslate nohighlight">
+\[
+Y = \beta_0 + \beta_1 X + \epsilon
+\]</div>
+<p>Where <span class="math notranslate nohighlight">\( \beta_0 \)</span> is the intercept, <span class="math notranslate nohighlight">\( \beta_1 \)</span> is the slope, and <span class="math notranslate nohighlight">\( \epsilon \)</span> is the error term.</p>
+</section>
+<section id="python-example-simple-linear-regression">
+<h3>Python Example: Simple Linear Regression<a class="headerlink" href="#python-example-simple-linear-regression" title="Link to this heading">#</a></h3>
+<p>Let’s create an example using Python to illustrate simple linear regression. We’ll use <code class="docutils literal notranslate"><span class="pre">numpy</span></code> for data generation and <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> for plotting.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="c1"># Generate data</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Predictor</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Response</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Y</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Regression Line&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Intercept: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="si">}</span><span class="s1">, Slope: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="c1"># Generate data</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Predictor</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">X</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>  <span class="c1"># Response</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">Y</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="c1"># Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Data&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Regression Line&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;X&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Y&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Intercept: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">intercept_</span><span class="si">}</span><span class="s1">, Slope: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/cc2d3dfd195e0d88a0b383abd2dcb644e415d8ad8b5514509feaf7264ff2b80d.png" src="_images/cc2d3dfd195e0d88a0b383abd2dcb644e415d8ad8b5514509feaf7264ff2b80d.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Intercept: 1.7884070011865685, Slope: 3.0573492167731895
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="linear-regression-with-discrete-predictors">
+<h2>Linear Regression with Discrete Predictors<a class="headerlink" href="#linear-regression-with-discrete-predictors" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>Basic Idea<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>Discrete predictors are categorical variables that take on a limited, fixed number of values. It is relevant to highlight that the phenomena are discrete or that the modeler transforms continuous values into discrete ones. For instance, the temperature in Celsius is a continuous variable. However, in some cases, the decision-maker finds it useful to analyze temperature linked to decision variables: “low,” “Medium,” and “high.” Even though the predictors are not continuous, the modeler can still use linear regression to model the relationship. For example, suppose a variable <code class="docutils literal notranslate"><span class="pre">Education</span></code> with three levels: “High School,” “Bachelors,” and “Masters.”</p>
+</section>
+<section id="python-example-linear-regression-with-discrete-predictors">
+<h3>Python Example: Linear Regression with Discrete Predictors<a class="headerlink" href="#python-example-linear-regression-with-discrete-predictors" title="Link to this heading">#</a></h3>
+<p>Using Python, let’s simulate a scenario where salary (a continuous variable) depends on the level of education (a discrete variable).</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Generate Data</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">education_levels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;High School&#39;</span><span class="p">,</span> <span class="s1">&#39;Bachelors&#39;</span><span class="p">,</span> <span class="s1">&#39;Masters&#39;</span><span class="p">]</span>
+<span class="n">salaries</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">education_levels</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;High School&#39;</span><span class="p">:</span>
+        <span class="n">salaries</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">50000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;Bachelors&#39;</span><span class="p">:</span>
+        <span class="n">salaries</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">70000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">salaries</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">90000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Education&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">education_levels</span> <span class="o">*</span> <span class="mi">50</span><span class="p">),</span> <span class="s1">&#39;Salary&#39;</span><span class="p">:</span> <span class="n">salaries</span><span class="p">})</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Education_Level&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Education&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Education_Level&#39;</span><span class="p">]],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Salary&#39;</span><span class="p">])</span>
+
+<span class="c1"># Plot</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Education&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Salary&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Education Level&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Salary&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Generate Data</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">education_levels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;High School&#39;</span><span class="p">,</span> <span class="s1">&#39;Bachelors&#39;</span><span class="p">,</span> <span class="s1">&#39;Masters&#39;</span><span class="p">]</span>
+<span class="n">salaries</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">education_levels</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;High School&#39;</span><span class="p">:</span>
+        <span class="n">salaries</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">50000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;Bachelors&#39;</span><span class="p">:</span>
+        <span class="n">salaries</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">70000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">salaries</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">90000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Education&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">education_levels</span> <span class="o">*</span> <span class="mi">50</span><span class="p">),</span> <span class="s1">&#39;Salary&#39;</span><span class="p">:</span> <span class="n">salaries</span><span class="p">})</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Education_Level&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Education&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;category&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">cat</span><span class="o">.</span><span class="n">codes</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Education_Level&#39;</span><span class="p">]],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Salary&#39;</span><span class="p">])</span>
+
+<span class="c1"># Plot</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Education&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Salary&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Education Level&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Salary&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4c25071b1b0f3a472e87e8bedfca5374ce69603a0908996404142604ccc8b703.png" src="_images/4c25071b1b0f3a472e87e8bedfca5374ce69603a0908996404142604ccc8b703.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="conclusion-comparing-linear-regression-with-continuous-vs-discrete-predictors">
+<h2>Conclusion: Comparing Linear Regression with Continuous vs. Discrete Predictors<a class="headerlink" href="#conclusion-comparing-linear-regression-with-continuous-vs-discrete-predictors" title="Link to this heading">#</a></h2>
+<p>Both continuous and discrete predictors can be effectively used in linear regression models, but they serve different purposes:</p>
+<ol class="arabic simple">
+<li><p><strong>Continuous Predictors</strong>: These are useful when the phenomena expect a smooth and constant change in the dependent variable as the predictor changes. The key advantage is the ability to extrapolate and make predictions for any value within the range of the data.</p></li>
+<li><p><strong>Discrete Predictors</strong>: These are useful when dealing with categories or levels. They allow for jumps in the dependent variable but do not support extrapolation beyond the given categories. In these cases, the modeler does not compute the slope but the differences between the means in each category and makes a comparison with the overall average; the greater the difference, the greater the relationship between the independent variable and the dependent variable.</p></li>
+</ol>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="understanding-the-outputs-of-linear-regression-in-python-using-statsmodels">
+<h1>Understanding the Outputs of Linear Regression in Python using Statsmodels<a class="headerlink" href="#understanding-the-outputs-of-linear-regression-in-python-using-statsmodels" title="Link to this heading">#</a></h1>
+<p>When using Python, the <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> library is often the tool of choice for running linear regression models due to its extensive output summaries and diagnostic tests. This article aims to clarify how to interpret these outputs with a hands-on example.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>In this example, we will generate a dataset with one dependent variable and three independent variables. We will use the <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> library to run the linear regression model and the <code class="docutils literal notranslate"><span class="pre">seaborn</span></code> library to visualize our data.</p>
+</section>
+<section id="example-data-generation">
+<h2>Example Data Generation<a class="headerlink" href="#example-data-generation" title="Link to this heading">#</a></h2>
+<p>First, let’s generate our dataset. We will use the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> library for this.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Set seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Generate data for three independent variables</span>
+<span class="n">X1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">X3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Generate dependent variable Y</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">X1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">X2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">X3</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Create DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;X1&#39;</span><span class="p">:</span> <span class="n">X1</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">:</span> <span class="n">X2</span><span class="p">,</span> <span class="s1">&#39;X3&#39;</span><span class="p">:</span> <span class="n">X3</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="n">Y</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Set seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Generate data for three independent variables</span>
+<span class="n">X1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">X3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Generate dependent variable Y</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">X1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">X2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">5</span> <span class="o">*</span> <span class="n">X3</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Create DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;X1&#39;</span><span class="p">:</span> <span class="n">X1</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">:</span> <span class="n">X2</span><span class="p">,</span> <span class="s1">&#39;X3&#39;</span><span class="p">:</span> <span class="n">X3</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="n">Y</span><span class="p">})</span>
+
+<span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>X1</th>
+      <th>X2</th>
+      <th>X3</th>
+      <th>Y</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>100.000000</td>
+      <td>100.000000</td>
+      <td>100.000000</td>
+      <td>100.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>0.059808</td>
+      <td>0.164026</td>
+      <td>-0.177697</td>
+      <td>1.750247</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>1.012960</td>
+      <td>2.079759</td>
+      <td>2.870396</td>
+      <td>17.754295</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>-2.552990</td>
+      <td>-4.446806</td>
+      <td>-8.317778</td>
+      <td>-37.645245</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>-0.643857</td>
+      <td>-1.490860</td>
+      <td>-1.789694</td>
+      <td>-10.282711</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>0.094096</td>
+      <td>0.049310</td>
+      <td>-0.226077</td>
+      <td>2.855715</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>0.737077</td>
+      <td>1.694960</td>
+      <td>1.615970</td>
+      <td>11.722819</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>2.269755</td>
+      <td>4.766290</td>
+      <td>6.911750</td>
+      <td>42.453163</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="visualizing-data-using-pairplot-in-seaborn">
+<h2>Visualizing Data Using Pairplot in Seaborn<a class="headerlink" href="#visualizing-data-using-pairplot-in-seaborn" title="Link to this heading">#</a></h2>
+<p>We can visualize relationships between our variables using the pairplot function from <code class="docutils literal notranslate"><span class="pre">seaborn</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Generate pairplot</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The pairplot shows scatter plots between all pairs of variables, helping us visualize the linear relationships that our model has attempted to capture.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="c1"># Generate pairplot</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">kind</span><span class="o">=</span><span class="s2">&quot;reg&quot;</span><span class="p">)</span> <span class="c1">#THis example uses kind to plot the lines</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.PairGrid at 0x7eff440e0e20&gt;
+</pre></div>
+</div>
+<img alt="_images/e2e20caf98aaf7e57953428f3a8771fb6194e042ba6b8705ba775bbf35eac895.png" src="_images/e2e20caf98aaf7e57953428f3a8771fb6194e042ba6b8705ba775bbf35eac895.png" />
+</div>
+</div>
+</section>
+<section id="applying-linear-regression-using-statsmodels">
+<h2>Applying Linear Regression using Statsmodels<a class="headerlink" href="#applying-linear-regression-using-statsmodels" title="Link to this heading">#</a></h2>
+<p>To perform linear regression, we’ll use the <code class="docutils literal notranslate"><span class="pre">OLS</span></code> (Ordinary Least Squares) function from the <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> library.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+
+<span class="c1"># Prepare the feature matrix by adding a constant for the intercept term</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;X1&#39;</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">,</span> <span class="s1">&#39;X3&#39;</span><span class="p">]])</span>
+
+<span class="c1"># Create the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">],</span> <span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Display summary statistics</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+
+<span class="c1"># Prepare the feature matrix by adding a constant for the intercept term</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;X1&#39;</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">,</span> <span class="s1">&#39;X3&#39;</span><span class="p">]])</span>
+
+<span class="c1"># Create the model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">],</span> <span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Display summary statistics</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      Y   R-squared:                       0.997
+Model:                            OLS   Adj. R-squared:                  0.997
+Method:                 Least Squares   F-statistic:                 1.185e+04
+Date:                Sun, 11 Feb 2024   Prob (F-statistic):          3.53e-123
+Time:                        15:46:10   Log-Likelihood:                -133.20
+No. Observations:                 100   AIC:                             274.4
+Df Residuals:                      96   BIC:                             284.8
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          1.8091      0.094     19.204      0.000       1.622       1.996
+X1             2.9277      0.094     31.262      0.000       2.742       3.114
+X2             4.0354      0.046     88.589      0.000       3.945       4.126
+X3             5.0417      0.033    153.275      0.000       4.976       5.107
+==============================================================================
+Omnibus:                        0.370   Durbin-Watson:                   2.076
+Prob(Omnibus):                  0.831   Jarque-Bera (JB):                0.537
+Skew:                           0.070   Prob(JB):                        0.765
+Kurtosis:                       2.670   Cond. No.                         2.96
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="understanding-the-outputs">
+<h2>Understanding the Outputs<a class="headerlink" href="#understanding-the-outputs" title="Link to this heading">#</a></h2>
+<p>The output summary contains various sections, and here’s how to interpret them:</p>
+<ul class="simple">
+<li><p><strong>Dep. Variable</strong>: The dependent variable in your model (in our case, Y).</p></li>
+<li><p><strong>Model</strong>: The model used, which in this case is OLS.</p></li>
+<li><p><strong>R-squared</strong>: Proportion of variance in the dependent variable that’s explained by the independent variables. Closer to 1 is better.</p></li>
+<li><p><strong>Adj. R-squared</strong>: Adjusted R-squared takes into account the number of predictors and adjusts the metric accordingly.</p></li>
+<li><p><strong>coef</strong>: The coefficients represent the change in the dependent variable for a one-unit change in the predictor variable, assuming all other variables are held constant.</p></li>
+<li><p><strong>std err</strong>: Standard error measures the accuracy of the coefficients.</p></li>
+<li><p><strong>t</strong>: The t-value is a measure of how statistically significant the variable is in predicting the output.</p></li>
+<li><p><strong>P&gt;|t|</strong>: The p-value measures the null hypothesis that the coefficient is equal to zero (no effect).</p></li>
+</ul>
+</section>
+<section id="analyzing-the-outputs">
+<h2>Analyzing the outputs<a class="headerlink" href="#analyzing-the-outputs" title="Link to this heading">#</a></h2>
+<section id="model-summary">
+<h3>Model Summary<a class="headerlink" href="#model-summary" title="Link to this heading">#</a></h3>
+<p>The model used for the analysis is Ordinary Least Squares (OLS), which aims to minimize the sum of the squares of the residuals to estimate the coefficients of the predictors. The dependent variable is denoted by ( Y ).</p>
+<section id="goodness-of-fit-measures">
+<h4>Goodness-of-Fit Measures<a class="headerlink" href="#goodness-of-fit-measures" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>R-squared:</strong> The R-squared value is 0.997, indicating that approximately 99.7% of the variance in the dependent variable ( Y ) can be explained by the independent variables ( X1, X2, ) and ( X3 ).</p></li>
+<li><p><strong>Adjusted R-squared:</strong> The Adjusted R-squared value is also 0.997, showing a similarly high level of explanatory power even after accounting for the number of predictors.</p></li>
+<li><p><strong>F-statistic:</strong> The F-statistic value is approximately (1.185 \times 10^4 ), and its corresponding probability is virtually zero ( (3.53 \times 10^{-123}) ), indicating that the model is statistically significant.</p></li>
+</ul>
+</section>
+<section id="model-fit-diagnostics">
+<h4>Model Fit Diagnostics<a class="headerlink" href="#model-fit-diagnostics" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Durbin-Watson:</strong> A value of 2.076 suggests that there is no autocorrelation in the residuals, which is a good sign.</p></li>
+<li><p><strong>Prob(Omnibus):</strong> A value of 0.831 indicates that the residuals are normally distributed.</p></li>
+<li><p><strong>Skew and Kurtosis:</strong> These metrics further affirm the normal distribution of the residuals, with Skew close to 0 and Kurtosis around 2.67.</p></li>
+</ul>
+</section>
+</section>
+<section id="coefficients">
+<h3>Coefficients<a class="headerlink" href="#coefficients" title="Link to this heading">#</a></h3>
+<section id="constant">
+<h4>Constant<a class="headerlink" href="#constant" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Coefficient (coef):</strong> The intercept is 1.8091.</p></li>
+<li><p><strong>Standard Error (std err):</strong> The standard error of the intercept is 0.094.</p></li>
+<li><p><strong>T-value:</strong> The t-value is 19.204, and the p-value is close to 0, indicating that the intercept is statistically significant.</p></li>
+</ul>
+</section>
+<section id="x1-variable">
+<h4>X1 Variable<a class="headerlink" href="#x1-variable" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Coefficient (coef):</strong> 2.9277</p></li>
+<li><p><strong>Standard Error (std err):</strong> 0.094</p></li>
+<li><p><strong>T-value:</strong> 31.262, with a p-value close to zero, indicating statistical significance.</p></li>
+</ul>
+</section>
+<section id="x2-variable">
+<h4>X2 Variable<a class="headerlink" href="#x2-variable" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Coefficient (coef):</strong> 4.0354</p></li>
+<li><p><strong>Standard Error (std err):</strong> 0.046</p></li>
+<li><p><strong>T-value:</strong> 88.589, with a p-value close to zero, indicating statistical significance.</p></li>
+</ul>
+</section>
+<section id="x3-variable">
+<h4>X3 Variable<a class="headerlink" href="#x3-variable" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Coefficient (coef):</strong> 5.0417</p></li>
+<li><p><strong>Standard Error (std err):</strong> 0.033</p></li>
+<li><p><strong>T-value:</strong> 153.275, with a p-value close to zero, indicating statistical significance.</p></li>
+</ul>
+</section>
+</section>
+<section id="output-interpretation">
+<h3>Output interpretation<a class="headerlink" href="#output-interpretation" title="Link to this heading">#</a></h3>
+<p>The model exhibits a very high degree of fit, as evidenced by an R-squared value close to 1. All predictors ( X1, X2, ) and ( X3 ) are statistically significant with p-values close to zero. The diagnostics indicate no issues of autocorrelation or non-normality of residuals. Hence, the model appears to be well-specified and reliable for predictions.</p>
+</section>
+</section>
+<section id="introduction-to-stats-models-with-discrete-variables">
+<h2>Introduction to stats models with discrete variables<a class="headerlink" href="#introduction-to-stats-models-with-discrete-variables" title="Link to this heading">#</a></h2>
+<p>In this example, we will consider a scenario where the dependent variable is continuous, and we have two discrete independent variables. The first independent variable will have three levels, and the second will have two levels.</p>
+</section>
+<section id="id2">
+<h2>Example Data Generation<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>First, let’s generate our example dataset using the <code class="docutils literal notranslate"><span class="pre">pandas</span></code> and <code class="docutils literal notranslate"><span class="pre">numpy</span></code> libraries.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Set seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Generate data for two discrete independent variables</span>
+<span class="n">X1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Medium&#39;</span><span class="p">,</span> <span class="s1">&#39;High&#39;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;Yes&#39;</span><span class="p">,</span> <span class="s1">&#39;No&#39;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Generate dependent variable Y</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">X1</span> <span class="o">==</span> <span class="s1">&#39;High&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">X1</span> <span class="o">==</span> <span class="s1">&#39;Low&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">X2</span> <span class="o">==</span> <span class="s1">&#39;Yes&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span>
+
+<span class="c1"># Create DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;X1&#39;</span><span class="p">:</span> <span class="n">X1</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">:</span> <span class="n">X2</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="n">Y</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Set seed for reproducibility</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Generate data for two discrete independent variables</span>
+<span class="n">X1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Medium&#39;</span><span class="p">,</span> <span class="s1">&#39;High&#39;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">X2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;Yes&#39;</span><span class="p">,</span> <span class="s1">&#39;No&#39;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Generate dependent variable Y</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">X1</span> <span class="o">==</span> <span class="s1">&#39;High&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="p">(</span><span class="n">X1</span> <span class="o">==</span> <span class="s1">&#39;Low&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">X2</span> <span class="o">==</span> <span class="s1">&#39;Yes&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span>
+
+<span class="c1"># Create DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;X1&#39;</span><span class="p">:</span> <span class="n">X1</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">:</span> <span class="n">X2</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="n">Y</span><span class="p">})</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;the continuos variable is&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span> 
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;we can find the description of the discrete variables too&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">exclude</span><span class="o">=</span><span class="s2">&quot;float&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>the continuos variable is
+                Y
+count  100.000000
+mean     0.241238
+std      2.083069
+min     -3.877779
+25%     -1.389948
+50%      0.111275
+75%      1.662097
+max      4.809818
+we can find the description of the discrete variables too
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>X1</th>
+      <th>X2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>100</td>
+      <td>100</td>
+    </tr>
+    <tr>
+      <th>unique</th>
+      <td>3</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>top</th>
+      <td>Low</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <th>freq</th>
+      <td>39</td>
+      <td>57</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</section>
+<section id="visualizing-data-using-boxplot-and-subplots">
+<h2>Visualizing Data Using Boxplot and Subplots<a class="headerlink" href="#visualizing-data-using-boxplot-and-subplots" title="Link to this heading">#</a></h2>
+<p>To visualize the relationships between our variables, we can use the <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> and <code class="docutils literal notranslate"><span class="pre">seaborn</span></code> libraries to create boxplots and subplots.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;X1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Boxplot of Y across levels of X1&#39;</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;X2&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Boxplot of Y across levels of X2&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The boxplots help us visualize how the dependent variable <span class="math notranslate nohighlight">\( Y \)</span> changes across different levels of each independent variable <span class="math notranslate nohighlight">\( X1 \)</span> and <span class="math notranslate nohighlight">\( X2 \)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;X1&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Boxplot of Y across levels of X1&#39;</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;X2&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Boxplot of Y across levels of X2&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/7262ca744a072e0f5d1c4ef527b9a493567ae00f8e0ec084cc9cef9fa646662b.png" src="_images/7262ca744a072e0f5d1c4ef527b9a493567ae00f8e0ec084cc9cef9fa646662b.png" />
+</div>
+</div>
+</section>
+<section id="id3">
+<h2>Applying Linear Regression using Statsmodels<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>Before we fit the model, we need to convert our discrete variables into dummy variables. After that, we’ll use the <code class="docutils literal notranslate"><span class="pre">OLS</span></code> function from the <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> library to fit the model.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+
+<span class="c1"># Create the OLS model using formula notation</span>
+<span class="n">formula</span> <span class="o">=</span> <span class="s2">&quot;Y ~ C(X1) + C(X2)&quot;</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">formula</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Print summary statistics</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+
+<span class="c1"># Create the OLS model using formula notation</span>
+<span class="n">formula</span> <span class="o">=</span> <span class="s2">&quot;Y ~ C(X1) + C(X2)&quot;</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">formula</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="n">formula</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+
+<span class="c1"># Fit the model</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="c1"># Print summary statistics</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      Y   R-squared:                       0.772
+Model:                            OLS   Adj. R-squared:                  0.765
+Method:                 Least Squares   F-statistic:                     108.2
+Date:                Sun, 11 Feb 2024   Prob (F-statistic):           1.10e-30
+Time:                        15:46:10   Log-Likelihood:                -140.90
+No. Observations:                 100   AIC:                             289.8
+Df Residuals:                      96   BIC:                             300.2
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+===================================================================================
+                      coef    std err          t      P&gt;|t|      [0.025      0.975]
+-----------------------------------------------------------------------------------
+Intercept           2.1212      0.227      9.364      0.000       1.672       2.571
+C(X1)[T.Low]       -4.4920      0.255    -17.643      0.000      -4.997      -3.987
+C(X1)[T.Medium]    -2.3372      0.262     -8.935      0.000      -2.856      -1.818
+C(X2)[T.Yes]        1.1695      0.209      5.593      0.000       0.754       1.585
+==============================================================================
+Omnibus:                        1.042   Durbin-Watson:                   1.706
+Prob(Omnibus):                  0.594   Jarque-Bera (JB):                0.979
+Skew:                          -0.237   Prob(JB):                        0.613
+Kurtosis:                       2.896   Cond. No.                         4.76
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="analysis-of-ols-regression-output-with-categorical-variables">
+<h2>Analysis of OLS Regression Output with Categorical Variables<a class="headerlink" href="#analysis-of-ols-regression-output-with-categorical-variables" title="Link to this heading">#</a></h2>
+<section id="id4">
+<h3>Model Summary<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>The analysis uses Ordinary Least Squares (OLS) as the statistical model to understand the relationship between dependent variable <span class="math notranslate nohighlight">\( Y \)</span> and independent variables <span class="math notranslate nohighlight">\( X1 \)</span> and <span class="math notranslate nohighlight">\( X2 \)</span>.</p>
+<section id="id5">
+<h4>Goodness-of-Fit Measures<a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>R-squared:</strong> The R-squared value is 0.772, indicating that approximately 77.2% of the variance in <span class="math notranslate nohighlight">\( Y \)</span> is explained by the independent variables.</p></li>
+<li><p><strong>Adjusted R-squared:</strong> The value is 0.765, only slightly lower than R-squared, affirming a reasonably good fit.</p></li>
+<li><p><strong>F-statistic:</strong> An F-statistic of 108.2 and a probability close to zero (1.10e-30) signifies that the model is statistically significant.</p></li>
+</ul>
+</section>
+<section id="id6">
+<h4>Model Fit Diagnostics<a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Durbin-Watson:</strong> The value of 1.706 suggests a low level of autocorrelation.</p></li>
+<li><p><strong>Prob(Omnibus):</strong> A value of 0.594 and <strong>Prob(JB):</strong> a value of 0.613 both indicate that the residuals are approximately normally distributed.</p></li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h3>Coefficients<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>Coefficients represent the change in the dependent variable corresponding to a one-unit change in the predictor variable.</p>
+<section id="intercept">
+<h4>Intercept<a class="headerlink" href="#intercept" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Coefficient:</strong> 2.1212</p></li>
+<li><p><strong>Standard Error:</strong> 0.227</p></li>
+<li><p><strong>T-value:</strong> 9.364 with a p-value close to zero, indicating the intercept is statistically significant.</p></li>
+</ul>
+</section>
+<section id="x1-variable-categorical-low-medium">
+<h4>X1 Variable (Categorical: ‘Low’, ‘Medium’)<a class="headerlink" href="#x1-variable-categorical-low-medium" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>C(X1)[T.Low] Coefficient:</strong> -4.4920</p>
+<ul>
+<li><p>Represents the difference in the mean value of <span class="math notranslate nohighlight">\( Y \)</span> between ‘Low’ and the reference category.</p></li>
+</ul>
+</li>
+<li><p><strong>C(X1)[T.Medium] Coefficient:</strong> -2.3372</p>
+<ul>
+<li><p>Represents the difference in the mean value of <span class="math notranslate nohighlight">\( Y \)</span> between ‘Medium’ and the reference category.</p></li>
+</ul>
+</li>
+<li><p>Both categories have p-values close to zero, signifying that they are statistically significant.</p></li>
+</ul>
+</section>
+<section id="x2-variable-categorical-yes">
+<h4>X2 Variable (Categorical: ‘Yes’)<a class="headerlink" href="#x2-variable-categorical-yes" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>C(X2)[T.Yes] Coefficient:</strong> 1.1695</p>
+<ul>
+<li><p>Represents the difference in the mean value of <span class="math notranslate nohighlight">\( Y \)</span> between ‘Yes’ and the reference category (‘No’).</p></li>
+</ul>
+</li>
+<li><p>The p-value is close to zero, indicating that this predictor is statistically significant.</p></li>
+</ul>
+</section>
+</section>
+<section id="id8">
+<h3>Output interpretation<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p>The OLS model shows a reasonably good fit with an R-squared value of 0.772. All predictors, as well as the intercept, are statistically significant. The model diagnostics suggest that the assumptions of linearity, independence, and normality are met. Therefore, the model can be considered reliable for making predictions and for understanding the relationships among the variables.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Surface-plot.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="residual-analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Introduction to residual analysis</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simplicity-a-model-for-every-user">Simplicity: A Model for Every User</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretability-a-story-in-every-coefficient">Interpretability: A Story in Every Coefficient</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-applicability-from-classrooms-to-corporations">General Applicability: From Classrooms to Corporations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extensions-more-than-just-a-line">Extensions: More than Just a Line</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-with-continuous-variables">Linear Regression with Continuous Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-idea">Basic Idea</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-example-simple-linear-regression">Python Example: Simple Linear Regression</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#linear-regression-with-discrete-predictors">Linear Regression with Discrete Predictors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Basic Idea</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-example-linear-regression-with-discrete-predictors">Python Example: Linear Regression with Discrete Predictors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-comparing-linear-regression-with-continuous-vs-discrete-predictors">Conclusion: Comparing Linear Regression with Continuous vs. Discrete Predictors</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-the-outputs-of-linear-regression-in-python-using-statsmodels">Understanding the Outputs of Linear Regression in Python using Statsmodels</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-data-generation">Example Data Generation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-data-using-pairplot-in-seaborn">Visualizing Data Using Pairplot in Seaborn</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#applying-linear-regression-using-statsmodels">Applying Linear Regression using Statsmodels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-the-outputs">Understanding the Outputs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analyzing-the-outputs">Analyzing the outputs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-summary">Model Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#goodness-of-fit-measures">Goodness-of-Fit Measures</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#model-fit-diagnostics">Model Fit Diagnostics</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficients">Coefficients</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#constant">Constant</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x1-variable">X1 Variable</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x2-variable">X2 Variable</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x3-variable">X3 Variable</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-interpretation">Output interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-stats-models-with-discrete-variables">Introduction to stats models with discrete variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Example Data Generation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-data-using-boxplot-and-subplots">Visualizing Data Using Boxplot and Subplots</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Applying Linear Regression using Statsmodels</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-of-ols-regression-output-with-categorical-variables">Analysis of OLS Regression Output with Categorical Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">Model Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Goodness-of-Fit Measures</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">Model Fit Diagnostics</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Coefficients</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#intercept">Intercept</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x1-variable-categorical-low-medium">X1 Variable (Categorical: ‘Low’, ‘Medium’)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#x2-variable-categorical-yes">X2 Variable (Categorical: ‘Yes’)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Output interpretation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

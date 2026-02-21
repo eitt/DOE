@@ -1,0 +1,79 @@
+Traceback (most recent call last):
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/nbclient/client.py", line 1305, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/codespace/.local/lib/python3.12/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/asyncio/base_events.py", line 684, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/nbclient/client.py", line 705, in async_execute
+    await self.async_execute_cell(
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/nbclient/client.py", line 1058, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/usr/local/python/3.12.1/lib/python3.12/site-packages/nbclient/client.py", line 914, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import pandas as pd
+import numpy as np
+import itertools
+
+# 1. Define factor levels
+factors = {
+    "A": ["A1", "A2", "A3"],
+    "B": ["B1", "B2", "B3"],
+    "C": ["C1", "C2", "C3"]
+}
+
+# 2. Generate full factorial combinations
+replications = 2
+design = list(itertools.product(*factors.values())) * replications  # 3x3x3 full factorial replicated
+df = pd.DataFrame(design, columns=["A", "B", "C"])
+
+# 3. Map categorical levels to numeric effect coding (-1, 0, +1)
+coding = {
+    "A": {"A1": -1, "A2": 0, "A3": 1},
+    "B": {"B1": -1, "B2": 0, "B3": 1},
+    "C": {"C1": -1, "C2": 0, "C3": 1}
+}
+
+for col, levels in coding.items():
+    df[f"{col}_num"] = df[col].map(levels)
+
+# 4. Define simulation function with main, 2-way, 3-way effects + random noise
+def simulate_response(row):
+    intercept = 10
+    main = 3 * row["A_num"] + 2 * row["B_num"] - 1 * row["C_num"]
+    two_way = 1.5 * row["A_num"] * row["B_num"] \
+            - 2.0 * row["A_num"] * row["C_num"] \
+            + 1.0 * row["B_num"] * row["C_num"]
+    three_way = -1.2 * row["A_num"] * row["B_num"] * row["C_num"]
+    noise = np.random.normal(loc=0, scale=1)
+    return intercept + main + two_way + three_way + noise
+
+# 5. Generate the response variable Y
+df["Y"] = df.apply(simulate_response, axis=1)
+
+# 6. View the first few rows
+print(df.head())
+
+# Optional: Save to CSV
+df.to_csv("residual_analysis_3x3x3.csv", index=False)
+
+
+------------------
+
+
+[31m---------------------------------------------------------------------------[39m
+[31mModuleNotFoundError[39m                       Traceback (most recent call last)
+[36mCell[39m[36m [39m[32mIn[1][39m[32m, line 1[39m
+[32m----> [39m[32m1[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mpandas[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mpd[39;00m
+[32m      2[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mnumpy[39;00m[38;5;250m [39m[38;5;28;01mas[39;00m[38;5;250m [39m[34;01mnp[39;00m
+[32m      3[39m [38;5;28;01mimport[39;00m[38;5;250m [39m[34;01mitertools[39;00m
+
+[31mModuleNotFoundError[39m: No module named 'pandas'
+

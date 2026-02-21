@@ -1,0 +1,749 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>The Usefulness of Surface Plots in Data Analysis for the Design of Experiments &#8212; ViDoe - Visualizing Design of Experiments</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '03-Surface-plot';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="The Foundations of Linear Regression: Continuous vs. Discrete Predictors" href="03-regression-model.html" />
+    <link rel="prev" title="The Usefulness of Boxplots by Group in Data Analysis" href="03-Boxplot-by-group.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/INGENIERÍA-INDUSTRIAL_LOGO.png" class="logo__image only-light" alt="ViDoe - Visualizing Design of Experiments - Home"/>
+    <script>document.write(`<img src="_static/INGENIERÍA-INDUSTRIAL_LOGO.png" class="logo__image only-dark" alt="ViDoe - Visualizing Design of Experiments - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Visualizing Design of Experiments with ViDoe: An Interactive Approach
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Exploring Two-Level Factorial Designs with ViDoE</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
+
+
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">10. Principles of 2^k and Fractional Factorial Designs</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">11. Taguchi Methods and Robust Design</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">12. Block Designs Explained</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="03-Boxplot-by-group.html">The Usefulness of Boxplots by Group in Data Analysis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="03-regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="03-residual-analysis.html">Introduction to residual analysis</a></li>
+
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Bibliography.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://eitt.github.io/DOE/intro.html" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://eitt.github.io/DOE/intro.html/issues/new?title=Issue%20on%20page%20%2F03-Surface-plot.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/03-Surface-plot.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-interactions-between-variables">Visualizing Interactions Between Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#guiding-the-design-of-experiments">Guiding the Design of Experiments</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#facilitating-response-optimization">Facilitating Response Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enhancing-understanding-of-complex-phenomena">Enhancing Understanding of Complex Phenomena</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-examples">Visual examples</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-yield-is-independent-of-temperature-and-pressure">Example 1. Yield is independent of Temperature and pressure.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-yield-depends-on-temperature-and-pressure-but-is-linear">Example 2. Yield depends on Temperature and pressure but is linear.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-yield-depends-on-temperature-and-pressure-but-there-is-a-curvature-pressure-temperature">Example 3. Yield depends on Temperature and pressure, but there is a curvature (pressure*temperature).</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-4-yield-depends-on-temperature-and-pressure-but-there-is-a-nonlinear-nonconvex-relationship">Example 4. Yield depends on Temperature and pressure, but there is a nonlinear nonconvex relationship.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-remarks">Final remarks</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p><a name="03-Surface-plot"></a></p>
+<section class="tex2jax_ignore mathjax_ignore" id="the-usefulness-of-surface-plots-in-data-analysis-for-the-design-of-experiments">
+<h1><a class="toc-backref" href="#id1" role="doc-backlink">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a><a class="headerlink" href="#the-usefulness-of-surface-plots-in-data-analysis-for-the-design-of-experiments" title="Permalink to this heading">#</a></h1>
+<nav class="contents" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#the-usefulness-of-surface-plots-in-data-analysis-for-the-design-of-experiments" id="id1">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a></p>
+<ul>
+<li><p><a class="reference internal" href="#visualizing-interactions-between-variables" id="id2">Visualizing Interactions Between Variables</a></p></li>
+<li><p><a class="reference internal" href="#guiding-the-design-of-experiments" id="id3">Guiding the Design of Experiments</a></p></li>
+<li><p><a class="reference internal" href="#facilitating-response-optimization" id="id4">Facilitating Response Optimization</a></p></li>
+<li><p><a class="reference internal" href="#enhancing-understanding-of-complex-phenomena" id="id5">Enhancing Understanding of Complex Phenomena</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#visual-examples" id="id6">Visual examples</a></p>
+<ul>
+<li><p><a class="reference internal" href="#example-1-yield-is-independent-of-temperature-and-pressure" id="id7">Example 1. Yield is independent of Temperature and pressure.</a></p></li>
+<li><p><a class="reference internal" href="#example-2-yield-depends-on-temperature-and-pressure-but-is-linear" id="id8">Example 2. Yield depends on Temperature and pressure but is linear.</a></p></li>
+<li><p><a class="reference internal" href="#example-3-yield-depends-on-temperature-and-pressure-but-there-is-a-curvature-pressure-temperature" id="id9">Example 3. Yield depends on Temperature and pressure, but there is a curvature (pressure*temperature).</a></p></li>
+<li><p><a class="reference internal" href="#example-4-yield-depends-on-temperature-and-pressure-but-there-is-a-nonlinear-nonconvex-relationship" id="id10">Example 4. Yield depends on Temperature and pressure, but there is a nonlinear nonconvex relationship.</a></p></li>
+<li><p><a class="reference internal" href="#final-remarks" id="id11">Final remarks</a></p></li>
+</ul>
+</li>
+</ul>
+</nav>
+<p>Data visualization plays a pivotal role in data analysis, especially when it comes to the design of experiments. One form of visualization stands out in this domain: the surface plot. Surface plots provide a valuable tool for data analysis within the design of experiments. By allowing researchers to visualize the interactions between variables, guide the design process, facilitate response optimization, and enhance the understanding of complex phenomena, surface plots can significantly contribute to effective and insightful experimentation. This three-dimensional plotting technique visually represents a function of two variables: the x and y-axes are the inputs, and the z-axis is the output. This article explores the benefits and insights that surface plots can offer in experimental design and data analysis.</p>
+<section id="visualizing-interactions-between-variables">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Visualizing Interactions Between Variables</a><a class="headerlink" href="#visualizing-interactions-between-variables" title="Permalink to this heading">#</a></h2>
+<p>One of the principal benefits of surface plots is their ability to illustrate the interactions between two independent variables and their combined effect on a dependent variable. In the context of experimental design, this can help researchers understand how different factors (independent variables) interact to affect the outcome (dependent variable). The interaction usually generates a change in the slope of the surface, increasing or decreasing the function value. An important concept is curvature which refers to the nonlinear relationship between the response variable and one or more factors. Curvature can depend on several factors, including interactions between factors, nonlinear effects of individual factors, and measurement error.</p>
+<p>For instance, imagine a design of an experiment with two factors, Temperature, and pressure affecting the yield of a chemical reaction. A surface plot can show how the combination of Temperature and pressure impacts the yield. By observing the plot, researchers can identify optimal operating conditions and visually comprehend the interactions between these factors.</p>
+</section>
+<section id="guiding-the-design-of-experiments">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Guiding the Design of Experiments</a><a class="headerlink" href="#guiding-the-design-of-experiments" title="Permalink to this heading">#</a></h2>
+<p>Surface plots can play an instrumental role in the experimental design process. By offering a visual summary of the relationship between variables, they can guide researchers in selecting appropriate levels for experimental factors, leading to more efficient experimentation and more reliable results.</p>
+<p>For example, researchers might use a surface plot to identify a region of factor settings (i.e., Temperature and pressure) that maximizes the yield. In subsequent experiments, they could focus on this region to fine-tune factor settings and achieve the highest possible yield.</p>
+</section>
+<section id="facilitating-response-optimization">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Facilitating Response Optimization</a><a class="headerlink" href="#facilitating-response-optimization" title="Permalink to this heading">#</a></h2>
+<p>In many experimental design scenarios, the goal is to optimize a response — to find the factor levels that minimize or maximize a certain outcome. Surface plots can aid tremendously in this process. The ‘peaks’ and ‘valleys’ on the surface plot illustrate where the response reaches its maximum and minimum values, respectively. This visualization can facilitate the identification of optimal factor settings and thus streamline the optimization process.</p>
+</section>
+<section id="enhancing-understanding-of-complex-phenomena">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Enhancing Understanding of Complex Phenomena</a><a class="headerlink" href="#enhancing-understanding-of-complex-phenomena" title="Permalink to this heading">#</a></h2>
+<p>Finally, surface plots can enhance our understanding of complex phenomena. The three-dimensional nature of these plots provides a rich, detailed view of the relationships between variables. This visual representation helps elucidate complex interactions that may be difficult to understand through numbers or tables alone.</p>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="visual-examples">
+<h1><a class="toc-backref" href="#id6" role="doc-backlink">Visual examples</a><a class="headerlink" href="#visual-examples" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.mplot3d</span><span class="w"> </span><span class="kn">import</span> <span class="n">Axes3D</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;pandas&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<section id="example-1-yield-is-independent-of-temperature-and-pressure">
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Example 1. Yield is independent of Temperature and pressure.</a><a class="headerlink" href="#example-1-yield-is-independent-of-temperature-and-pressure" title="Permalink to this heading">#</a></h2>
+<p>In this case, the yield will be constant no matter what the temperature and pressure values are. We’ll arbitrarily set the yield to be 10: <span class="math notranslate nohighlight">\(yield = 10\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create data</span>
+<span class="n">temperature</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pressure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">)</span>
+
+<span class="n">yield_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Create surface plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">yield_value</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Pressure&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Yield&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/0f225854a28e67e59619287b079556b80163ace103a34388ade01749a48637f8.png" src="_images/0f225854a28e67e59619287b079556b80163ace103a34388ade01749a48637f8.png" />
+</div>
+</div>
+</section>
+<section id="example-2-yield-depends-on-temperature-and-pressure-but-is-linear">
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Example 2. Yield depends on Temperature and pressure but is linear.</a><a class="headerlink" href="#example-2-yield-depends-on-temperature-and-pressure-but-is-linear" title="Permalink to this heading">#</a></h2>
+<p>In this case, let’s assume <span class="math notranslate nohighlight">\(yield = 2 * temperature + 3 * pressure\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create data</span>
+<span class="n">yield_value</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">temperature</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">pressure</span>
+
+<span class="c1"># Create surface plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">yield_value</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Pressure&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Yield&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4d93abe59a74554debce02c7fbd88ecdce0cf532a146de71f3c94bab4f02d07b.png" src="_images/4d93abe59a74554debce02c7fbd88ecdce0cf532a146de71f3c94bab4f02d07b.png" />
+</div>
+</div>
+</section>
+<section id="example-3-yield-depends-on-temperature-and-pressure-but-there-is-a-curvature-pressure-temperature">
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">Example 3. Yield depends on Temperature and pressure, but there is a curvature (pressure*temperature).</a><a class="headerlink" href="#example-3-yield-depends-on-temperature-and-pressure-but-there-is-a-curvature-pressure-temperature" title="Permalink to this heading">#</a></h2>
+<p>In this case, <span class="math notranslate nohighlight">\(yield = temperature * pressure.\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create data</span>
+<span class="n">yield_value</span> <span class="o">=</span> <span class="n">temperature</span> <span class="o">*</span> <span class="n">pressure</span>
+
+<span class="c1"># Create surface plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">yield_value</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Pressure&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Yield&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/2e0ce817700f27e0598a36a3fece13af2906f509ae2a8c4de870ad82995ad86d.png" src="_images/2e0ce817700f27e0598a36a3fece13af2906f509ae2a8c4de870ad82995ad86d.png" />
+</div>
+</div>
+</section>
+<section id="example-4-yield-depends-on-temperature-and-pressure-but-there-is-a-nonlinear-nonconvex-relationship">
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Example 4. Yield depends on Temperature and pressure, but there is a nonlinear nonconvex relationship.</a><a class="headerlink" href="#example-4-yield-depends-on-temperature-and-pressure-but-there-is-a-nonlinear-nonconvex-relationship" title="Permalink to this heading">#</a></h2>
+<p>In this case, we can create a non-linear, non-convex relationship using a sin function: <span class="math notranslate nohighlight">\(yield = sin(temperature) * pressure\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create data</span>
+<span class="n">yield_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">temperature</span><span class="p">)</span> <span class="o">*</span> <span class="n">pressure</span>
+
+<span class="c1"># Create surface plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">temperature</span><span class="p">,</span> <span class="n">pressure</span><span class="p">,</span> <span class="n">yield_value</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Temperature&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Pressure&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Yield&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/aa963d6edc357deb4eae340cc35659e94236b09715d6a6918145ede51ce7a826.png" src="_images/aa963d6edc357deb4eae340cc35659e94236b09715d6a6918145ede51ce7a826.png" />
+</div>
+</div>
+</section>
+<section id="final-remarks">
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Final remarks</a><a class="headerlink" href="#final-remarks" title="Permalink to this heading">#</a></h2>
+<p>In the real world, the relationships between factors and response variables are often far more complex than the simplified examples I gave. For example, the yield of a chemical reaction may depend on not only the Temperature and pressure but also the concentration of the reactants, the presence of impurities, and the reaction time. In addition, real-world relationships are often stochastic, meaning they are not perfectly deterministic. Meaning that even if we know all of the factors that affect a response variable, we cannot perfectly predict the value of the response variable. Despite the complexity and stochasticity of real-world relationships, DOE can still be a valuable tool for understanding and optimizing these relationships. By carefully designing experiments and using statistical analysis, DOE practitioners can identify the factors that most affect a response variable and the optimal settings for these factors.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03-Boxplot-by-group.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The Usefulness of Boxplots by Group in Data Analysis</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="03-regression-model.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">The Usefulness of Surface Plots in Data Analysis for the Design of Experiments</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizing-interactions-between-variables">Visualizing Interactions Between Variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#guiding-the-design-of-experiments">Guiding the Design of Experiments</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#facilitating-response-optimization">Facilitating Response Optimization</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enhancing-understanding-of-complex-phenomena">Enhancing Understanding of Complex Phenomena</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-examples">Visual examples</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-yield-is-independent-of-temperature-and-pressure">Example 1. Yield is independent of Temperature and pressure.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-yield-depends-on-temperature-and-pressure-but-is-linear">Example 2. Yield depends on Temperature and pressure but is linear.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-yield-depends-on-temperature-and-pressure-but-there-is-a-curvature-pressure-temperature">Example 3. Yield depends on Temperature and pressure, but there is a curvature (pressure*temperature).</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-4-yield-depends-on-temperature-and-pressure-but-there-is-a-nonlinear-nonconvex-relationship">Example 4. Yield depends on Temperature and pressure, but there is a nonlinear nonconvex relationship.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#final-remarks">Final remarks</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
