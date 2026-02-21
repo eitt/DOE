@@ -6,6 +6,3 @@ statsmodels
 patsy
 plotly
 matplotlib
-jupyter-book
-ghp-import
-docutils
