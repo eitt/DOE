@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>11. Taguchi Designs &#8212; ViDoe - Visualizing Design of Experiments</title>
   
@@ -28,35 +29,39 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '05-Taguchi-Designs';</script>
@@ -160,18 +165,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -185,7 +179,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Anova One-way using ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Exploring Two-Level Factorial Designs with ViDoE</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
 <ul class="nav bd-sidenav">
@@ -216,6 +210,7 @@
 <li class="toctree-l1"><a class="reference internal" href="03-regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="03-residual-analysis.html">Introduction to residual analysis</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
@@ -249,9 +244,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -392,9 +387,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -447,7 +442,7 @@ document.write(`
                   
   <p><a name="05-Taguchi-Designs"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="taguchi-designs">
-<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">11. </span>Taguchi Designs</a><a class="headerlink" href="#taguchi-designs" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id1" role="doc-backlink"><span class="section-number">11. </span>Taguchi Designs</a><a class="headerlink" href="#taguchi-designs" title="Permalink to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
@@ -480,10 +475,10 @@ document.write(`
 </ul>
 </nav>
 <section id="introduction-to-taguchi-methods">
-<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">11.1. </span>1. Introduction to Taguchi Methods</a><a class="headerlink" href="#introduction-to-taguchi-methods" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">11.1. </span>1. Introduction to Taguchi Methods</a><a class="headerlink" href="#introduction-to-taguchi-methods" title="Permalink to this heading">#</a></h2>
 <p>Taguchi Methods, developed by Dr. Genichi Taguchi, are statistical methods, or more broadly, a quality engineering philosophy, aimed at improving the quality of manufactured goods and, more recently, also applied to engineering, biotechnology, marketing, and advertising. The core idea is to design products and processes that are robust to various uncontrollable noise factors.</p>
 <section id="philosophy-robust-design-minimizing-variation">
-<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">11.1.1. </span>Philosophy: Robust Design, Minimizing Variation</a><a class="headerlink" href="#philosophy-robust-design-minimizing-variation" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">11.1.1. </span>Philosophy: Robust Design, Minimizing Variation</a><a class="headerlink" href="#philosophy-robust-design-minimizing-variation" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Robust Design:</strong> The primary goal of Taguchi methods is to create “robust” products and processes. A robust design is one that performs consistently and reliably, even when exposed to uncontrollable variations (noise factors) in the manufacturing environment, component materials, or operating conditions. Instead of trying to eliminate all sources of variation (which can be expensive or impossible), Taguchi focuses on making the design insensitive to these variations.</p></li>
 <li><p><strong>Minimizing Variation:</strong> Taguchi emphasized that quality is related to the “loss imparted by the product to society from the time the product is shipped.” This loss includes not only manufacturing costs but also costs associated with poor performance, customer dissatisfaction, and environmental impact. He defined quality as the consistency of performance and aimed to minimize variation around a target value. The less variation a product exhibits from its target performance, the higher its quality.</p></li>
@@ -491,7 +486,7 @@ document.write(`
 </ul>
 </section>
 <section id="key-contributions-by-genichi-taguchi">
-<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">11.1.2. </span>Key Contributions by Genichi Taguchi</a><a class="headerlink" href="#key-contributions-by-genichi-taguchi" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">11.1.2. </span>Key Contributions by Genichi Taguchi</a><a class="headerlink" href="#key-contributions-by-genichi-taguchi" title="Permalink to this heading">#</a></h3>
 <p>Dr. Genichi Taguchi (1924-2012) was a Japanese engineer and statistician who made significant contributions to industrial quality control.</p>
 <ul class="simple">
 <li><p><strong>Robust Parameter Design:</strong> His most notable contribution is the development of “parameter design,” which aims to find the optimal settings of design parameters (control factors) such that the product or process is least sensitive to noise factors.</p></li>
@@ -502,10 +497,10 @@ document.write(`
 </section>
 </section>
 <section id="orthogonal-arrays-oas">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">11.2. </span>2. Orthogonal Arrays (OAs)</a><a class="headerlink" href="#orthogonal-arrays-oas" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">11.2. </span>2. Orthogonal Arrays (OAs)</a><a class="headerlink" href="#orthogonal-arrays-oas" title="Permalink to this heading">#</a></h2>
 <p>Orthogonal Arrays are a special type of fractional factorial experimental design that allows for a balanced and efficient study of multiple factors and their main effects. They are a cornerstone of Taguchi’s parameter design methodology.</p>
 <section id="concept-and-purpose">
-<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">11.2.1. </span>Concept and Purpose</a><a class="headerlink" href="#concept-and-purpose" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">11.2.1. </span>Concept and Purpose</a><a class="headerlink" href="#concept-and-purpose" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Balance and Orthogonality:</strong> OAs are balanced in the sense that each level of a factor occurs an equal number of times. They are orthogonal because the estimate of the effect of one factor is not influenced (confounded) by the estimates of the effects of other factors, at least for main effects. This property simplifies the analysis as it allows main effects to be assessed independently.</p></li>
 <li><p><strong>Efficiency:</strong> OAs allow for the simultaneous study of several factors with a minimal number of experimental runs. For example, an L8 array can study up to 7 factors, each at 2 levels, in just 8 runs. A full factorial design would require <span class="math notranslate nohighlight">\(2^7 = 128\)</span> runs.</p></li>
@@ -513,7 +508,7 @@ document.write(`
 </ul>
 </section>
 <section id="how-to-select-an-appropriate-oa">
-<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">11.2.2. </span>How to Select an Appropriate OA</a><a class="headerlink" href="#how-to-select-an-appropriate-oa" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">11.2.2. </span>How to Select an Appropriate OA</a><a class="headerlink" href="#how-to-select-an-appropriate-oa" title="Permalink to this heading">#</a></h3>
 <p>The selection of an OA depends on:</p>
 <ol class="arabic simple">
 <li><p><strong>Number of factors</strong> to be investigated.</p></li>
@@ -551,7 +546,7 @@ document.write(`
 </ol>
 </section>
 <section id="example-of-a-simple-oa-structure-l4">
-<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">11.2.3. </span>Example of a Simple OA Structure (L4)</a><a class="headerlink" href="#example-of-a-simple-oa-structure-l4" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">11.2.3. </span>Example of a Simple OA Structure (L4)</a><a class="headerlink" href="#example-of-a-simple-oa-structure-l4" title="Permalink to this heading">#</a></h3>
 <p>An L4 array is used to study up to three 2-level factors (A, B, C). The levels are typically coded as 1 (low) and 2 (high).</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -599,10 +594,10 @@ document.write(`
 </section>
 </section>
 <section id="signal-to-noise-s-n-ratios">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">11.3. </span>3. Signal-to-Noise (S/N) Ratios</a><a class="headerlink" href="#signal-to-noise-s-n-ratios" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">11.3. </span>3. Signal-to-Noise (S/N) Ratios</a><a class="headerlink" href="#signal-to-noise-s-n-ratios" title="Permalink to this heading">#</a></h2>
 <p>A key element of Taguchi’s methodology is the use of Signal-to-Noise (S/N) ratios to measure quality. The S/N ratio is a performance metric that consolidates several repetitions (or noise conditions) into a single value representing both the average performance (signal) and the variation (noise). The goal is to choose factor levels that maximize the S/N ratio, leading to a design that is robust against noise.</p>
 <section id="explanation-of-s-n-ratios-as-performance-metrics">
-<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">11.3.1. </span>Explanation of S/N Ratios as Performance Metrics</a><a class="headerlink" href="#explanation-of-s-n-ratios-as-performance-metrics" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">11.3.1. </span>Explanation of S/N Ratios as Performance Metrics</a><a class="headerlink" href="#explanation-of-s-n-ratios-as-performance-metrics" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Signal:</strong> Represents the desired target value or the intended output of the system (mean response).</p></li>
 <li><p><strong>Noise:</strong> Represents the undesirable variation in the output due to uncontrollable factors (variance or standard deviation).</p></li>
@@ -611,7 +606,7 @@ document.write(`
 <p>The objective in parameter design is to select factor levels that maximize the appropriate S/N ratio.</p>
 </section>
 <section id="common-types">
-<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">11.3.2. </span>Common Types</a><a class="headerlink" href="#common-types" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">11.3.2. </span>Common Types</a><a class="headerlink" href="#common-types" title="Permalink to this heading">#</a></h3>
 <p>Taguchi proposed different S/N ratios depending on the desired characteristic of the performance:</p>
 <ol class="arabic simple">
 <li><p><strong>Larger-the-Better (LTB):</strong> Used for characteristics where the ideal value is as large as possible (e.g., strength, yield, efficiency).
@@ -635,7 +630,7 @@ If the target is <span class="math notranslate nohighlight">\(m\)</span>, then <
 </ol>
 </section>
 <section id="how-they-are-used-to-identify-optimal-factor-levels">
-<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">11.3.3. </span>How They Are Used to Identify Optimal Factor Levels</a><a class="headerlink" href="#how-they-are-used-to-identify-optimal-factor-levels" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">11.3.3. </span>How They Are Used to Identify Optimal Factor Levels</a><a class="headerlink" href="#how-they-are-used-to-identify-optimal-factor-levels" title="Permalink to this heading">#</a></h3>
 <ol class="arabic simple">
 <li><p><strong>Calculate S/N for Each Run:</strong> For each experimental run in the OA, conduct multiple repetitions (if noise factors are being simulated) or use the single observed value (if noise is inherent). Calculate the appropriate S/N ratio for that run.</p></li>
 <li><p><strong>Average S/N for Each Factor Level:</strong> For each factor, calculate the average S/N ratio for each of its levels. For example, for factor A at level 1, average the S/N ratios from all runs where A was at level 1.</p></li>
@@ -645,7 +640,7 @@ If the target is <span class="math notranslate nohighlight">\(m\)</span>, then <
 </section>
 </section>
 <section id="steps-in-a-taguchi-experiment">
-<h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">11.4. </span>4. Steps in a Taguchi Experiment</a><a class="headerlink" href="#steps-in-a-taguchi-experiment" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">11.4. </span>4. Steps in a Taguchi Experiment</a><a class="headerlink" href="#steps-in-a-taguchi-experiment" title="Permalink to this heading">#</a></h2>
 <p>A typical Taguchi experiment follows a structured approach:</p>
 <ol class="arabic simple">
 <li><p><strong>Define the Problem and Objective:</strong> Clearly state the problem and what needs to be optimized (e.g., improve yield, reduce defects, increase product life). Identify the response variable to be measured.</p></li>
@@ -672,7 +667,7 @@ If the target is <span class="math notranslate nohighlight">\(m\)</span>, then <
 </ol>
 </section>
 <section id="simple-example">
-<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">11.5. </span>5. Simple Example</a><a class="headerlink" href="#simple-example" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">11.5. </span>5. Simple Example</a><a class="headerlink" href="#simple-example" title="Permalink to this heading">#</a></h2>
 <p>Let’s consider a simplified example: <strong>Optimizing Cake Baking</strong> to achieve a consistent height (Nominal-the-Best, assuming a target height).</p>
 <ol class="arabic">
 <li><p><strong>Objective:</strong> Bake a cake with a consistent height of 5 cm.</p></li>
@@ -888,7 +883,7 @@ By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

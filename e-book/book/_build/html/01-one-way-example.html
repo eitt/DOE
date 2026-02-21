@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>6. ANOVA One-way: An Illustrative example &#8212; ViDoe - Visualizing Design of Experiments</title>
   
@@ -28,35 +29,39 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '01-one-way-example';</script>
@@ -160,18 +165,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -185,7 +179,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Anova One-way using ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Exploring Two-Level Factorial Designs with ViDoE</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
 <ul class="current nav bd-sidenav">
@@ -216,6 +210,7 @@
 <li class="toctree-l1"><a class="reference internal" href="03-regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="03-residual-analysis.html">Introduction to residual analysis</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
@@ -249,9 +244,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -392,9 +387,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -458,7 +453,7 @@ document.write(`
                   
   <p><a name="01-one-way-example"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="anova-one-way-an-illustrative-example">
-<h1><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">6. </span>ANOVA One-way: An Illustrative example</a><a class="headerlink" href="#anova-one-way-an-illustrative-example" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id2" role="doc-backlink"><span class="section-number">6. </span>ANOVA One-way: An Illustrative example</a><a class="headerlink" href="#anova-one-way-an-illustrative-example" title="Permalink to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
@@ -520,11 +515,11 @@ document.write(`
 <li><p>Conduct a cost-effectiveness analysis based on the change in cortisol levels and the cost of each medicine.</p></li>
 </ol>
 <section id="brief-description-of-the-test">
-<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">6.1. </span>Brief Description of the Test:</a><a class="headerlink" href="#brief-description-of-the-test" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id3" role="doc-backlink"><span class="section-number">6.1. </span>Brief Description of the Test:</a><a class="headerlink" href="#brief-description-of-the-test" title="Permalink to this heading">#</a></h2>
 <p>To assess the effectiveness of the treatments, we will calculate the difference in cortisol levels (Δcortisol) for each participant as the post-treatment level minus the baseline level. A negative Δcortisol indicates a reduction in cortisol levels, hence a reduction in stress. We will use an Analysis of Variance (ANOVA) to compare the means of Δcortisol across the four groups. If the ANOVA indicates significant differences, <a class="reference external" href="https://en.wikipedia.org/wiki/Post_hoc_analysis">post-hoc tests </a> (e.g., Tukey’s HSD) will be conducted to identify which groups differ from each other.</p>
 </section>
 <section id="data">
-<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">6.2. </span>Data:</a><a class="headerlink" href="#data" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink"><span class="section-number">6.2. </span>Data:</a><a class="headerlink" href="#data" title="Permalink to this heading">#</a></h2>
 <p>We’ll assume the baseline cortisol levels are similar across all groups but expect a greater reduction in cortisol levels for the treatment groups compared to the placebo.</p>
 <ul class="simple">
 <li><p><strong>Placebo Group:</strong> Showed minimal changes in cortisol levels, with some variations reflecting the natural fluctuation of cortisol without significant intervention.</p></li>
@@ -534,11 +529,11 @@ document.write(`
 </ul>
 </section>
 <section id="statistical-analysis">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">6.3. </span>Statistical Analysis:</a><a class="headerlink" href="#statistical-analysis" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink"><span class="section-number">6.3. </span>Statistical Analysis:</a><a class="headerlink" href="#statistical-analysis" title="Permalink to this heading">#</a></h2>
 <p>To assess the effectiveness of these medicines, an ANOVA test will be performed on the ΔCortisol values to compare the means across the four groups. If the ANOVA indicates significant differences, post-hoc tests will identify the specific groups between which these differences occur. This approach allows for a comprehensive analysis of how each medicine affects cortisol levels compared to the placebo, providing insights into their relative effectiveness and guiding cost-effectiveness considerations.</p>
 </section>
 <section id="brief-description-of-the-test-for-cortisol-levels">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">6.4. </span>Brief Description of the Test for Cortisol Levels:</a><a class="headerlink" href="#brief-description-of-the-test-for-cortisol-levels" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink"><span class="section-number">6.4. </span>Brief Description of the Test for Cortisol Levels:</a><a class="headerlink" href="#brief-description-of-the-test-for-cortisol-levels" title="Permalink to this heading">#</a></h2>
 <p>The test involves:</p>
 <ol class="arabic simple">
 <li><p><strong>Collecting Baseline Data:</strong> Measuring cortisol levels before the intervention provides a baseline against which the post-treatment effects can be measured.</p></li>
@@ -549,7 +544,7 @@ document.write(`
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="data-generation-in-python">
-<h1><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">7. </span>Data generation in Python</a><a class="headerlink" href="#data-generation-in-python" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id7" role="doc-backlink"><span class="section-number">7. </span>Data generation in Python</a><a class="headerlink" href="#data-generation-in-python" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -596,295 +591,21 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Generating baseline and post-treatment cortisol levels (ng/mL)</span>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Group</th>
-      <th>Baseline Cortisol (ng/mL)</th>
-      <th>Post-Treatment Cortisol (ng/mL)</th>
-      <th>ΔCortisol</th>
-      <th>Cost</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Placebo</td>
-      <td>278.380956</td>
-      <td>264.805349</td>
-      <td>-13.575606</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Placebo</td>
-      <td>255.920052</td>
-      <td>227.699602</td>
-      <td>-28.220449</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Placebo</td>
-      <td>244.081502</td>
-      <td>237.343365</td>
-      <td>-6.738138</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>Placebo</td>
-      <td>240.582079</td>
-      <td>241.309707</td>
-      <td>0.727628</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Placebo</td>
-      <td>271.140610</td>
-      <td>259.605576</td>
-      <td>-11.535035</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>Placebo</td>
-      <td>214.291100</td>
-      <td>219.481630</td>
-      <td>5.190531</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>Placebo</td>
-      <td>242.318924</td>
-      <td>243.113647</td>
-      <td>0.794722</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>Placebo</td>
-      <td>240.878394</td>
-      <td>216.710040</td>
-      <td>-24.168354</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>Medicine A</td>
-      <td>299.197947</td>
-      <td>260.229077</td>
-      <td>-38.968871</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>Medicine A</td>
-      <td>232.654932</td>
-      <td>197.558084</td>
-      <td>-35.096849</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>Medicine A</td>
-      <td>263.110977</td>
-      <td>190.720006</td>
-      <td>-72.390971</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>Medicine A</td>
-      <td>261.461111</td>
-      <td>209.658314</td>
-      <td>-51.802797</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>Medicine A</td>
-      <td>233.142673</td>
-      <td>186.396842</td>
-      <td>-46.745831</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>Medicine A</td>
-      <td>238.706354</td>
-      <td>194.721103</td>
-      <td>-43.985251</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>Medicine A</td>
-      <td>242.120656</td>
-      <td>189.671194</td>
-      <td>-52.449463</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>Medicine A</td>
-      <td>265.909110</td>
-      <td>210.636073</td>
-      <td>-55.273036</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>Medicine B</td>
-      <td>276.215677</td>
-      <td>233.400047</td>
-      <td>-42.815630</td>
-      <td>90</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>Medicine B</td>
-      <td>215.169505</td>
-      <td>157.841250</td>
-      <td>-57.328255</td>
-      <td>90</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>Medicine B</td>
-      <td>267.957740</td>
-      <td>196.017721</td>
-      <td>-71.940019</td>
-      <td>90</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>Medicine B</td>
-      <td>236.635797</td>
-      <td>171.228488</td>
-      <td>-65.407309</td>
-      <td>90</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>Medicine B</td>
-      <td>265.581231</td>
-      <td>233.369683</td>
-      <td>-32.211548</td>
-      <td>90</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>Medicine B</td>
-      <td>220.634084</td>
-      <td>155.311009</td>
-      <td>-65.323074</td>
-      <td>90</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>Medicine B</td>
-      <td>242.034897</td>
-      <td>196.278483</td>
-      <td>-45.756414</td>
-      <td>90</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>Medicine B</td>
-      <td>300.343082</td>
-      <td>258.797509</td>
-      <td>-41.545573</td>
-      <td>90</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>Medicine C</td>
-      <td>239.028792</td>
-      <td>199.298840</td>
-      <td>-39.729952</td>
-      <td>70</td>
-    </tr>
-    <tr>
-      <th>25</th>
-      <td>Medicine C</td>
-      <td>254.728276</td>
-      <td>236.798961</td>
-      <td>-17.929315</td>
-      <td>70</td>
-    </tr>
-    <tr>
-      <th>26</th>
-      <td>Medicine C</td>
-      <td>283.195423</td>
-      <td>262.180549</td>
-      <td>-21.014875</td>
-      <td>70</td>
-    </tr>
-    <tr>
-      <th>27</th>
-      <td>Medicine C</td>
-      <td>287.479243</td>
-      <td>254.375167</td>
-      <td>-33.104076</td>
-      <td>70</td>
-    </tr>
-    <tr>
-      <th>28</th>
-      <td>Medicine C</td>
-      <td>232.341500</td>
-      <td>197.061547</td>
-      <td>-35.279953</td>
-      <td>70</td>
-    </tr>
-    <tr>
-      <th>29</th>
-      <td>Medicine C</td>
-      <td>223.011022</td>
-      <td>185.837715</td>
-      <td>-37.173307</td>
-      <td>70</td>
-    </tr>
-    <tr>
-      <th>30</th>
-      <td>Medicine C</td>
-      <td>267.997810</td>
-      <td>241.595814</td>
-      <td>-26.401996</td>
-      <td>70</td>
-    </tr>
-    <tr>
-      <th>31</th>
-      <td>Medicine C</td>
-      <td>279.698624</td>
-      <td>254.485653</td>
-      <td>-25.212972</td>
-      <td>70</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;pandas&#39;
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="example-solution">
-<h1><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">8. </span>Example solution</a><a class="headerlink" href="#example-solution" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id8" role="doc-backlink"><span class="section-number">8. </span>Example solution</a><a class="headerlink" href="#example-solution" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -899,23 +620,9 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span><span class="w"> </span><span class="nn">plotly.express</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">px</span>
-<span class="ne">----&gt; </span><span class="mi">6</span> <span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.formula.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">ols</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span><span class="w"> </span><span class="nn">scipy.stats</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">stats</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;statsmodels&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <section id="task-1-generate-pre-and-post-treatment-cortisol-levels-for-each-group">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">8.1. </span>Task 1. Generate pre- and post-treatment cortisol levels for each group.</a><a class="headerlink" href="#task-1-generate-pre-and-post-treatment-cortisol-levels-for-each-group" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink"><span class="section-number">8.1. </span>Task 1. Generate pre- and post-treatment cortisol levels for each group.</a><a class="headerlink" href="#task-1-generate-pre-and-post-treatment-cortisol-levels-for-each-group" title="Permalink to this heading">#</a></h2>
 <p>In this example we need the tool <code class="docutils literal notranslate"><span class="pre">ttest_rel</span></code> for perform paired <a class="reference external" href="https://en.wikipedia.org/wiki/Student%27s_t-test">t-test</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -974,7 +681,7 @@ Group  Medicine C got a statistical value of  7.833 and a p-value of  0.0
 </li>
 </ul>
 <section id="interpretation">
-<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">8.1.1. </span>Interpretation:</a><a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id10" role="doc-backlink"><span class="section-number">8.1.1. </span>Interpretation:</a><a class="headerlink" href="#interpretation" title="Permalink to this heading">#</a></h3>
 <p>The updated analysis clearly distinguishes the effectiveness of the medicines from the placebo:</p>
 <ul class="simple">
 <li><p>The <strong>Placebo group</strong> demonstrates no significant change in cortisol levels, which aligns with expectations for a placebo treatment.</p></li>
@@ -984,7 +691,7 @@ Group  Medicine C got a statistical value of  7.833 and a p-value of  0.0
 </section>
 </section>
 <section id="task-2-perform-a-statistical-analysis-comparing-the-change-in-cortisol-levels-across-the-four-groups">
-<h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">8.2. </span>Task 2. Perform a statistical analysis comparing the change in cortisol levels across the four groups.</a><a class="headerlink" href="#task-2-perform-a-statistical-analysis-comparing-the-change-in-cortisol-levels-across-the-four-groups" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id11" role="doc-backlink"><span class="section-number">8.2. </span>Task 2. Perform a statistical analysis comparing the change in cortisol levels across the four groups.</a><a class="headerlink" href="#task-2-perform-a-statistical-analysis-comparing-the-change-in-cortisol-levels-across-the-four-groups" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Group&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;ΔCortisol&#39;</span><span class="p">,</span>  <span class="n">data</span><span class="o">=</span><span class="n">cortisol_df</span><span class="p">)</span>
@@ -1037,7 +744,7 @@ Notes:
 </div>
 </div>
 <section id="model-summary">
-<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">8.2.1. </span>Model Summary:</a><a class="headerlink" href="#model-summary" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id12" role="doc-backlink"><span class="section-number">8.2.1. </span>Model Summary:</a><a class="headerlink" href="#model-summary" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>R-squared:</strong> 0.795 - This indicates that approximately 79.5% of the variability in the change in cortisol levels can be explained by the differences in treatment groups. It’s a measure of the model’s goodness of fit.</p></li>
 <li><p><strong>Adjusted R-squared:</strong> 0.773 - Adjusted for the number of predictors in the model, which provides a more accurate measure when comparing models with a different number of independent variables.</p></li>
@@ -1049,7 +756,7 @@ Notes:
 </ul>
 </section>
 <section id="coefficients">
-<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">8.2.2. </span>Coefficients:</a><a class="headerlink" href="#coefficients" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id13" role="doc-backlink"><span class="section-number">8.2.2. </span>Coefficients:</a><a class="headerlink" href="#coefficients" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Intercept (Medicine A baseline):</strong> -47.7040 - This coefficient represents the baseline change in cortisol levels for Medicine A (since it’s the omitted group in dummy coding), with a highly significant p-value indicating a substantial decrease in cortisol levels associated with Medicine A.</p></li>
 <li><p><strong>C(Group)[T.Medicine B]:</strong> -3.0629 - This coefficient shows the difference in the change of cortisol levels between Medicine B and Medicine A. The negative sign suggests a decrease, but the p-value of 0.527 indicates this difference is not statistically significant.</p></li>
@@ -1058,7 +765,7 @@ Notes:
 </ul>
 </section>
 <section id="diagnostics">
-<h3><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">8.2.3. </span>Diagnostics:</a><a class="headerlink" href="#diagnostics" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id14" role="doc-backlink"><span class="section-number">8.2.3. </span>Diagnostics:</a><a class="headerlink" href="#diagnostics" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Omnibus/Prob(Omnibus):</strong> Tests the hypothesis that the residuals are normally distributed. The Omnibus test statistic is 1.962 with a p-value of 0.375, suggesting no significant deviation from normality.</p></li>
 <li><p><strong>Skew:</strong> -0.536 - A measure of the symmetry of the data distribution. A value closer to 0 indicates more symmetry.</p></li>
@@ -1085,7 +792,7 @@ Residual  2556.837236  28.0        NaN           NaN
 <p>The significant F-statistic points to the effectiveness of the treatment modalities in altering cortisol levels, warranting further investigation into pairwise comparisons among the groups to identify specific differences (a.k.a., post hoc analysis). This analysis underscores the importance of the treatment effect on stress reduction as measured by changes in cortisol levels. The table presents the ANOVA (Analysis of Variance) summary, which is used to compare the means of the change in cortisol levels (ΔCortisol) across different treatment groups (C(Group)). Here’s a breakdown of the table’s components:</p>
 </section>
 <section id="components">
-<h3><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">8.2.4. </span>Components:</a><a class="headerlink" href="#components" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id15" role="doc-backlink"><span class="section-number">8.2.4. </span>Components:</a><a class="headerlink" href="#components" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>sum_sq (Sum of Squares):</strong> This measures the total variation in the dependent variable (ΔCortisol) that is explained by the model (C(Group)) and the unexplained variation (Residual).</p>
 <ul>
@@ -1105,7 +812,7 @@ Residual  2556.837236  28.0        NaN           NaN
 </section>
 </section>
 <section id="task-3-conduct-a-cost-effectiveness-analysis-based-on-the-change-in-cortisol-levels-and-the-cost-of-each-medicine">
-<h2><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">8.3. </span>Task 3. Conduct a cost-effectiveness analysis based on the change in cortisol levels and the cost of each medicine.</a><a class="headerlink" href="#task-3-conduct-a-cost-effectiveness-analysis-based-on-the-change-in-cortisol-levels-and-the-cost-of-each-medicine" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id16" role="doc-backlink"><span class="section-number">8.3. </span>Task 3. Conduct a cost-effectiveness analysis based on the change in cortisol levels and the cost of each medicine.</a><a class="headerlink" href="#task-3-conduct-a-cost-effectiveness-analysis-based-on-the-change-in-cortisol-levels-and-the-cost-of-each-medicine" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculating average ΔCortisol for each group</span>
@@ -1139,7 +846,7 @@ Residual  2556.837236  28.0        NaN           NaN
 <p>The formula for cost-effectiveness will be:
 $<span class="math notranslate nohighlight">\(CostPerUnitOfCortisolReduction = Cost / |Average ΔCortisol|\)</span>$</p>
 <section id="average-change-in-cortisol-levels-cortisol">
-<h3><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">8.3.1. </span>Average Change in Cortisol Levels (ΔCortisol):</a><a class="headerlink" href="#average-change-in-cortisol-levels-cortisol" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id17" role="doc-backlink"><span class="section-number">8.3.1. </span>Average Change in Cortisol Levels (ΔCortisol):</a><a class="headerlink" href="#average-change-in-cortisol-levels-cortisol" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Medicine A:</strong> -47.70 ng/mL</p></li>
 <li><p><strong>Medicine B:</strong> -50.77 ng/mL</p></li>
@@ -1148,7 +855,7 @@ $<span class="math notranslate nohighlight">\(CostPerUnitOfCortisolReduction = C
 </ul>
 </section>
 <section id="cost-per-unit-of-cortisol-reduction">
-<h3><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">8.3.2. </span>Cost per Unit of Cortisol Reduction:</a><a class="headerlink" href="#cost-per-unit-of-cortisol-reduction" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id18" role="doc-backlink"><span class="section-number">8.3.2. </span>Cost per Unit of Cortisol Reduction:</a><a class="headerlink" href="#cost-per-unit-of-cortisol-reduction" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Medicine A:</strong> 2.10 (Cost per ng/mL of cortisol reduction)</p></li>
 <li><p><strong>Medicine B:</strong> 1.77 (Cost per ng/mL of cortisol reduction)</p></li>
@@ -1157,7 +864,7 @@ $<span class="math notranslate nohighlight">\(CostPerUnitOfCortisolReduction = C
 </ul>
 </section>
 <section id="id1">
-<h3><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">8.3.3. </span>Interpretation:</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id19" role="doc-backlink"><span class="section-number">8.3.3. </span>Interpretation:</a><a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Medicine A and B</strong> effectively reduce cortisol levels. Medicine B is slightly more cost-effective than Medicine A based on the cortisol reduction cost per unit.</p></li>
 <li><p><strong>Medicine C</strong> shows a moderate reduction in cortisol levels and is less cost-effective than Medicines A and B when considering the cost per unit of cortisol reduction.
@@ -1168,7 +875,7 @@ $<span class="math notranslate nohighlight">\(CostPerUnitOfCortisolReduction = C
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="note">
-<h1><a class="toc-backref" href="#id20" role="doc-backlink"><span class="section-number">9. </span>Note.</a><a class="headerlink" href="#note" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id20" role="doc-backlink"><span class="section-number">9. </span>Note.</a><a class="headerlink" href="#note" title="Permalink to this heading">#</a></h1>
 <p>After analyzing a randomly generated dataset, please note that replication of the data frame will result in a different value, but the analysis process remains the same.</p>
 </section>
 
@@ -1290,7 +997,7 @@ By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

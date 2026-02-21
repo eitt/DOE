@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>The Foundations of Linear Regression: Continuous vs. Discrete Predictors &#8212; ViDoe - Visualizing Design of Experiments</title>
   
@@ -28,35 +29,39 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '03-regression-model';</script>
@@ -160,18 +165,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -184,28 +178,29 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Anova One-way using ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Exploring Two-Level Factorial Designs with ViDoE</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova One-Way</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">3. Anova One-way Foundations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">4. Explaining the Python Code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">5. ANOVA One-way: An Illustrative example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
 
 
 
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">9. Principles of 2^k and Fractional Factorial Designs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">10. Principles of 2^k and Fractional Factorial Designs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">10. Taguchi Methods and Robust Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">11. Taguchi Methods and Robust Design</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">11. Block Designs Explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">12. Block Designs Explained</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
 <ul class="current nav bd-sidenav">
@@ -215,6 +210,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="03-residual-analysis.html">Introduction to residual analysis</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
@@ -248,9 +244,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -391,9 +387,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -489,7 +485,7 @@ document.write(`
                   
   <p><a name="03-regression-model"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="the-foundations-of-linear-regression-continuous-vs-discrete-predictors">
-<h1><a class="toc-backref" href="#id9" role="doc-backlink">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a><a class="headerlink" href="#the-foundations-of-linear-regression-continuous-vs-discrete-predictors" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id9" role="doc-backlink">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a><a class="headerlink" href="#the-foundations-of-linear-regression-continuous-vs-discrete-predictors" title="Permalink to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
@@ -568,15 +564,15 @@ document.write(`
 </nav>
 <p>Linear regression has become a cornerstone in statistical modeling and data analysis. Its versatility, ease of interpretation, and general applicability make it a go-to method for professionals from economics and psychology to engineering and biological sciences. This article delves into why linear regression is such a widely embraced technique and the various contexts where it finds application.</p>
 <section id="simplicity-a-model-for-every-user">
-<h2><a class="toc-backref" href="#id10" role="doc-backlink">Simplicity: A Model for Every User</a><a class="headerlink" href="#simplicity-a-model-for-every-user" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id10" role="doc-backlink">Simplicity: A Model for Every User</a><a class="headerlink" href="#simplicity-a-model-for-every-user" title="Permalink to this heading">#</a></h2>
 <p>One of the most appealing aspects of linear regression is its simplicity. The basic formula <span class="math notranslate nohighlight">\( Y = \beta_0 + \beta_1 X + \epsilon \)</span> is straightforward to understand, even for someone who might be new to the world of statistics or data analysis. The model aims to fit the best linear relationship between the dependent variable Y and the independent variable <span class="math notranslate nohighlight">\(X\)</span>, making it intuitive and easily explainable. This simplicity ensures that the implementation of linear regression is quickly and easily understood, making it accessible for beginners and experts.</p>
 </section>
 <section id="interpretability-a-story-in-every-coefficient">
-<h2><a class="toc-backref" href="#id11" role="doc-backlink">Interpretability: A Story in Every Coefficient</a><a class="headerlink" href="#interpretability-a-story-in-every-coefficient" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Interpretability: A Story in Every Coefficient</a><a class="headerlink" href="#interpretability-a-story-in-every-coefficient" title="Permalink to this heading">#</a></h2>
 <p>Linear regression does not just provide a best-fit line; it also offers interpretable parameters. The coefficients <span class="math notranslate nohighlight">\( \beta_0 \)</span> and <span class="math notranslate nohighlight">\( \beta_1 \)</span> tell a clear story. The intercept <span class="math notranslate nohighlight">\(\beta_0 \)</span> gives the expected value of <span class="math notranslate nohighlight">\( Y \)</span> when <span class="math notranslate nohighlight">\( X \)</span> is zero, and the slope <span class="math notranslate nohighlight">\(\beta_1\)</span> offers the rate of change in <span class="math notranslate nohighlight">\( Y \)</span> for a one-unit change in <span class="math notranslate nohighlight">\( X \)</span>. This level of interpretability is invaluable in many fields where not just prediction but understanding the underlying phenomena is crucial. For example, understanding the rate at which a particular medicine impacts recovery can be as important as knowing its effectiveness in healthcare.</p>
 </section>
 <section id="general-applicability-from-classrooms-to-corporations">
-<h2><a class="toc-backref" href="#id12" role="doc-backlink">General Applicability: From Classrooms to Corporations</a><a class="headerlink" href="#general-applicability-from-classrooms-to-corporations" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id12" role="doc-backlink">General Applicability: From Classrooms to Corporations</a><a class="headerlink" href="#general-applicability-from-classrooms-to-corporations" title="Permalink to this heading">#</a></h2>
 <p>Linear regression finds a home in numerous domains:</p>
 <ol class="arabic simple">
 <li><p><strong>Economics</strong>: To understand the relationship between supply and demand, inflation and unemployment, etc.</p></li>
@@ -587,13 +583,13 @@ document.write(`
 </ol>
 </section>
 <section id="extensions-more-than-just-a-line">
-<h2><a class="toc-backref" href="#id13" role="doc-backlink">Extensions: More than Just a Line</a><a class="headerlink" href="#extensions-more-than-just-a-line" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Extensions: More than Just a Line</a><a class="headerlink" href="#extensions-more-than-just-a-line" title="Permalink to this heading">#</a></h2>
 <p>Although the basic model is simple, linear regression can be extended in various ways to handle more complex scenarios. Multiple linear regression includes more than one independent variable, enabling more nuanced models. Moreover, logistic regression allows us to deal with categorical dependent variables, broadening the scope further. Finally, the concept of linearity in statistics differs from other exact models, making linear regression for curve-fitting in other complex contexts where the linearity is not evident but easily modeled in statistics.</p>
 </section>
 <section id="linear-regression-with-continuous-variables">
-<h2><a class="toc-backref" href="#id14" role="doc-backlink">Linear Regression with Continuous Variables</a><a class="headerlink" href="#linear-regression-with-continuous-variables" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Linear Regression with Continuous Variables</a><a class="headerlink" href="#linear-regression-with-continuous-variables" title="Permalink to this heading">#</a></h2>
 <section id="basic-idea">
-<h3><a class="toc-backref" href="#id15" role="doc-backlink">Basic Idea</a><a class="headerlink" href="#basic-idea" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id15" role="doc-backlink">Basic Idea</a><a class="headerlink" href="#basic-idea" title="Permalink to this heading">#</a></h3>
 <p>Linear regression aims to model the relationship between a dependent variable <span class="math notranslate nohighlight">\(Y\)</span> and one or more independent variables <span class="math notranslate nohighlight">\(X_1, X_2, \ldots, X_n\)</span>. The simplest form is the <strong>simple linear regression</strong>, which involves only one predictor. The model can be represented mathematically as:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -602,7 +598,7 @@ Y = \beta_0 + \beta_1 X + \epsilon
 <p>Where <span class="math notranslate nohighlight">\( \beta_0 \)</span> is the intercept, <span class="math notranslate nohighlight">\( \beta_1 \)</span> is the slope, and <span class="math notranslate nohighlight">\( \epsilon \)</span> is the error term.</p>
 </section>
 <section id="python-example-simple-linear-regression">
-<h3><a class="toc-backref" href="#id16" role="doc-backlink">Python Example: Simple Linear Regression</a><a class="headerlink" href="#python-example-simple-linear-regression" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Python Example: Simple Linear Regression</a><a class="headerlink" href="#python-example-simple-linear-regression" title="Permalink to this heading">#</a></h3>
 <p>Let’s create an example using Python to illustrate simple linear regression. We’ll use <code class="docutils literal notranslate"><span class="pre">numpy</span></code> for data generation and <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> for plotting.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -658,8 +654,14 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/6e810656b5a58177806116a938019ac131573872da9c1be18fec98f310d9d692.png" src="_images/6e810656b5a58177806116a938019ac131573872da9c1be18fec98f310d9d692.png" />
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Intercept: 1.7884070011865685, Slope: 3.0573492167731895
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;numpy&#39;
 </pre></div>
 </div>
 </div>
@@ -667,13 +669,13 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </section>
 </section>
 <section id="linear-regression-with-discrete-predictors">
-<h2><a class="toc-backref" href="#id17" role="doc-backlink">Linear Regression with Discrete Predictors</a><a class="headerlink" href="#linear-regression-with-discrete-predictors" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id17" role="doc-backlink">Linear Regression with Discrete Predictors</a><a class="headerlink" href="#linear-regression-with-discrete-predictors" title="Permalink to this heading">#</a></h2>
 <section id="id1">
-<h3><a class="toc-backref" href="#id18" role="doc-backlink">Basic Idea</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Basic Idea</a><a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <p>Discrete predictors are categorical variables that take on a limited, fixed number of values. It is relevant to highlight that the phenomena are discrete or that the modeler transforms continuous values into discrete ones. For instance, the temperature in Celsius is a continuous variable. However, in some cases, the decision-maker finds it useful to analyze temperature linked to decision variables: “low,” “Medium,” and “high.” Even though the predictors are not continuous, the modeler can still use linear regression to model the relationship. For example, suppose a variable <code class="docutils literal notranslate"><span class="pre">Education</span></code> with three levels: “High School,” “Bachelors,” and “Masters.”</p>
 </section>
 <section id="python-example-linear-regression-with-discrete-predictors">
-<h3><a class="toc-backref" href="#id19" role="doc-backlink">Python Example: Linear Regression with Discrete Predictors</a><a class="headerlink" href="#python-example-linear-regression-with-discrete-predictors" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id19" role="doc-backlink">Python Example: Linear Regression with Discrete Predictors</a><a class="headerlink" href="#python-example-linear-regression-with-discrete-predictors" title="Permalink to this heading">#</a></h3>
 <p>Using Python, let’s simulate a scenario where salary (a continuous variable) depends on the level of education (a discrete variable).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
@@ -739,13 +741,13 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/32d9bd89917fbd66a5d1c7d9dd56ee1524950300ad5599497c9d3681dbb62902.png" src="_images/32d9bd89917fbd66a5d1c7d9dd56ee1524950300ad5599497c9d3681dbb62902.png" />
+<img alt="_images/486ff1ffffec86340ddc5f24c3522c5087c130fee07bc020d42cfa50b48b7dfb.png" src="_images/486ff1ffffec86340ddc5f24c3522c5087c130fee07bc020d42cfa50b48b7dfb.png" />
 </div>
 </div>
 </section>
 </section>
 <section id="conclusion-comparing-linear-regression-with-continuous-vs-discrete-predictors">
-<h2><a class="toc-backref" href="#id20" role="doc-backlink">Conclusion: Comparing Linear Regression with Continuous vs. Discrete Predictors</a><a class="headerlink" href="#conclusion-comparing-linear-regression-with-continuous-vs-discrete-predictors" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id20" role="doc-backlink">Conclusion: Comparing Linear Regression with Continuous vs. Discrete Predictors</a><a class="headerlink" href="#conclusion-comparing-linear-regression-with-continuous-vs-discrete-predictors" title="Permalink to this heading">#</a></h2>
 <p>Both continuous and discrete predictors can be effectively used in linear regression models, but they serve different purposes:</p>
 <ol class="arabic simple">
 <li><p><strong>Continuous Predictors</strong>: These are useful when the phenomena expect a smooth and constant change in the dependent variable as the predictor changes. The key advantage is the ability to extrapolate and make predictions for any value within the range of the data.</p></li>
@@ -754,14 +756,14 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="understanding-the-outputs-of-linear-regression-in-python-using-statsmodels">
-<h1><a class="toc-backref" href="#id21" role="doc-backlink">Understanding the Outputs of Linear Regression in Python using Statsmodels</a><a class="headerlink" href="#understanding-the-outputs-of-linear-regression-in-python-using-statsmodels" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id21" role="doc-backlink">Understanding the Outputs of Linear Regression in Python using Statsmodels</a><a class="headerlink" href="#understanding-the-outputs-of-linear-regression-in-python-using-statsmodels" title="Permalink to this heading">#</a></h1>
 <p>When using Python, the <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> library is often the tool of choice for running linear regression models due to its extensive output summaries and diagnostic tests. This article aims to clarify how to interpret these outputs with a hands-on example.</p>
 <section id="introduction">
-<h2><a class="toc-backref" href="#id22" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id22" role="doc-backlink">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>In this example, we will generate a dataset with one dependent variable and three independent variables. We will use the <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> library to run the linear regression model and the <code class="docutils literal notranslate"><span class="pre">seaborn</span></code> library to visualize our data.</p>
 </section>
 <section id="example-data-generation">
-<h2><a class="toc-backref" href="#id23" role="doc-backlink">Example Data Generation</a><a class="headerlink" href="#example-data-generation" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id23" role="doc-backlink">Example Data Generation</a><a class="headerlink" href="#example-data-generation" title="Permalink to this heading">#</a></h2>
 <p>First, let’s generate our dataset. We will use the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> library for this.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -892,7 +894,7 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </div>
 </section>
 <section id="visualizing-data-using-pairplot-in-seaborn">
-<h2><a class="toc-backref" href="#id24" role="doc-backlink">Visualizing Data Using Pairplot in Seaborn</a><a class="headerlink" href="#visualizing-data-using-pairplot-in-seaborn" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id24" role="doc-backlink">Visualizing Data Using Pairplot in Seaborn</a><a class="headerlink" href="#visualizing-data-using-pairplot-in-seaborn" title="Permalink to this heading">#</a></h2>
 <p>We can visualize relationships between our variables using the pairplot function from <code class="docutils literal notranslate"><span class="pre">seaborn</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 
@@ -911,15 +913,19 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.PairGrid at 0x7ab4a6e62930&gt;
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/codespace/.local/lib/python3.10/site-packages/seaborn/axisgrid.py:118: UserWarning: The figure layout has changed to tight
+  self._figure.tight_layout(*args, **kwargs)
 </pre></div>
 </div>
-<img alt="_images/a0bbc2235977f762e556a405bb0a54bcda51b2fcd5f22375c852918dcf8a7e22.png" src="_images/a0bbc2235977f762e556a405bb0a54bcda51b2fcd5f22375c852918dcf8a7e22.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.PairGrid at 0x7f0e3e929780&gt;
+</pre></div>
+</div>
+<img alt="_images/3156baf0d32823717a33d0a4ff4ac58ae2be25de7118e12cd14311bc3c7f1b59.png" src="_images/3156baf0d32823717a33d0a4ff4ac58ae2be25de7118e12cd14311bc3c7f1b59.png" />
 </div>
 </div>
 </section>
 <section id="applying-linear-regression-using-statsmodels">
-<h2><a class="toc-backref" href="#id25" role="doc-backlink">Applying Linear Regression using Statsmodels</a><a class="headerlink" href="#applying-linear-regression-using-statsmodels" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id25" role="doc-backlink">Applying Linear Regression using Statsmodels</a><a class="headerlink" href="#applying-linear-regression-using-statsmodels" title="Permalink to this heading">#</a></h2>
 <p>To perform linear regression, we’ll use the <code class="docutils literal notranslate"><span class="pre">OLS</span></code> (Ordinary Least Squares) function from the <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> library.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
 
@@ -955,21 +961,40 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="c1"># Prepare the feature matrix by adding a constant for the intercept term</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;X1&#39;</span><span class="p">,</span> <span class="s1">&#39;X2&#39;</span><span class="p">,</span> <span class="s1">&#39;X3&#39;</span><span class="p">]])</span>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                      Y   R-squared:                       0.997
+Model:                            OLS   Adj. R-squared:                  0.997
+Method:                 Least Squares   F-statistic:                 1.185e+04
+Date:                Mon, 11 Sep 2023   Prob (F-statistic):          3.53e-123
+Time:                        08:42:45   Log-Likelihood:                -133.20
+No. Observations:                 100   AIC:                             274.4
+Df Residuals:                      96   BIC:                             284.8
+Df Model:                           3                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          1.8091      0.094     19.204      0.000       1.622       1.996
+X1             2.9277      0.094     31.262      0.000       2.742       3.114
+X2             4.0354      0.046     88.589      0.000       3.945       4.126
+X3             5.0417      0.033    153.275      0.000       4.976       5.107
+==============================================================================
+Omnibus:                        0.370   Durbin-Watson:                   2.076
+Prob(Omnibus):                  0.831   Jarque-Bera (JB):                0.537
+Skew:                           0.070   Prob(JB):                        0.765
+Kurtosis:                       2.670   Cond. No.                         2.96
+==============================================================================
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;statsmodels&#39;
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 </pre></div>
 </div>
 </div>
 </div>
 </section>
 <section id="understanding-the-outputs">
-<h2><a class="toc-backref" href="#id26" role="doc-backlink">Understanding the Outputs</a><a class="headerlink" href="#understanding-the-outputs" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id26" role="doc-backlink">Understanding the Outputs</a><a class="headerlink" href="#understanding-the-outputs" title="Permalink to this heading">#</a></h2>
 <p>The output summary contains various sections, and here’s how to interpret them:</p>
 <ul class="simple">
 <li><p><strong>Dep. Variable</strong>: The dependent variable in your model (in our case, Y).</p></li>
@@ -983,12 +1008,12 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </ul>
 </section>
 <section id="analyzing-the-outputs">
-<h2><a class="toc-backref" href="#id27" role="doc-backlink">Analyzing the outputs</a><a class="headerlink" href="#analyzing-the-outputs" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id27" role="doc-backlink">Analyzing the outputs</a><a class="headerlink" href="#analyzing-the-outputs" title="Permalink to this heading">#</a></h2>
 <section id="model-summary">
-<h3><a class="toc-backref" href="#id28" role="doc-backlink">Model Summary</a><a class="headerlink" href="#model-summary" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id28" role="doc-backlink">Model Summary</a><a class="headerlink" href="#model-summary" title="Permalink to this heading">#</a></h3>
 <p>The model used for the analysis is Ordinary Least Squares (OLS), which aims to minimize the sum of the squares of the residuals to estimate the coefficients of the predictors. The dependent variable is denoted by ( Y ).</p>
 <section id="goodness-of-fit-measures">
-<h4><a class="toc-backref" href="#id29" role="doc-backlink">Goodness-of-Fit Measures</a><a class="headerlink" href="#goodness-of-fit-measures" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id29" role="doc-backlink">Goodness-of-Fit Measures</a><a class="headerlink" href="#goodness-of-fit-measures" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>R-squared:</strong> The R-squared value is 0.997, indicating that approximately 99.7% of the variance in the dependent variable ( Y ) can be explained by the independent variables ( X1, X2, ) and ( X3 ).</p></li>
 <li><p><strong>Adjusted R-squared:</strong> The Adjusted R-squared value is also 0.997, showing a similarly high level of explanatory power even after accounting for the number of predictors.</p></li>
@@ -996,7 +1021,7 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </ul>
 </section>
 <section id="model-fit-diagnostics">
-<h4><a class="toc-backref" href="#id30" role="doc-backlink">Model Fit Diagnostics</a><a class="headerlink" href="#model-fit-diagnostics" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id30" role="doc-backlink">Model Fit Diagnostics</a><a class="headerlink" href="#model-fit-diagnostics" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>Durbin-Watson:</strong> A value of 2.076 suggests that there is no autocorrelation in the residuals, which is a good sign.</p></li>
 <li><p><strong>Prob(Omnibus):</strong> A value of 0.831 indicates that the residuals are normally distributed.</p></li>
@@ -1005,9 +1030,9 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </section>
 </section>
 <section id="coefficients">
-<h3><a class="toc-backref" href="#id31" role="doc-backlink">Coefficients</a><a class="headerlink" href="#coefficients" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id31" role="doc-backlink">Coefficients</a><a class="headerlink" href="#coefficients" title="Permalink to this heading">#</a></h3>
 <section id="constant">
-<h4><a class="toc-backref" href="#id32" role="doc-backlink">Constant</a><a class="headerlink" href="#constant" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id32" role="doc-backlink">Constant</a><a class="headerlink" href="#constant" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>Coefficient (coef):</strong> The intercept is 1.8091.</p></li>
 <li><p><strong>Standard Error (std err):</strong> The standard error of the intercept is 0.094.</p></li>
@@ -1015,7 +1040,7 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </ul>
 </section>
 <section id="x1-variable">
-<h4><a class="toc-backref" href="#id33" role="doc-backlink">X1 Variable</a><a class="headerlink" href="#x1-variable" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id33" role="doc-backlink">X1 Variable</a><a class="headerlink" href="#x1-variable" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>Coefficient (coef):</strong> 2.9277</p></li>
 <li><p><strong>Standard Error (std err):</strong> 0.094</p></li>
@@ -1023,7 +1048,7 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </ul>
 </section>
 <section id="x2-variable">
-<h4><a class="toc-backref" href="#id34" role="doc-backlink">X2 Variable</a><a class="headerlink" href="#x2-variable" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id34" role="doc-backlink">X2 Variable</a><a class="headerlink" href="#x2-variable" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>Coefficient (coef):</strong> 4.0354</p></li>
 <li><p><strong>Standard Error (std err):</strong> 0.046</p></li>
@@ -1031,7 +1056,7 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </ul>
 </section>
 <section id="x3-variable">
-<h4><a class="toc-backref" href="#id35" role="doc-backlink">X3 Variable</a><a class="headerlink" href="#x3-variable" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id35" role="doc-backlink">X3 Variable</a><a class="headerlink" href="#x3-variable" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>Coefficient (coef):</strong> 5.0417</p></li>
 <li><p><strong>Standard Error (std err):</strong> 0.033</p></li>
@@ -1040,16 +1065,16 @@ Y = \beta_0 + \beta_1 X + \epsilon
 </section>
 </section>
 <section id="output-interpretation">
-<h3><a class="toc-backref" href="#id36" role="doc-backlink">Output interpretation</a><a class="headerlink" href="#output-interpretation" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id36" role="doc-backlink">Output interpretation</a><a class="headerlink" href="#output-interpretation" title="Permalink to this heading">#</a></h3>
 <p>The model exhibits a very high degree of fit, as evidenced by an R-squared value close to 1. All predictors ( X1, X2, ) and ( X3 ) are statistically significant with p-values close to zero. The diagnostics indicate no issues of autocorrelation or non-normality of residuals. Hence, the model appears to be well-specified and reliable for predictions.</p>
 </section>
 </section>
 <section id="introduction-to-stats-models-with-discrete-variables">
-<h2><a class="toc-backref" href="#id37" role="doc-backlink">Introduction to stats models with discrete variables</a><a class="headerlink" href="#introduction-to-stats-models-with-discrete-variables" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id37" role="doc-backlink">Introduction to stats models with discrete variables</a><a class="headerlink" href="#introduction-to-stats-models-with-discrete-variables" title="Permalink to this heading">#</a></h2>
 <p>In this example, we will consider a scenario where the dependent variable is continuous, and we have two discrete independent variables. The first independent variable will have three levels, and the second will have two levels.</p>
 </section>
 <section id="id2">
-<h2><a class="toc-backref" href="#id38" role="doc-backlink">Example Data Generation</a><a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id38" role="doc-backlink">Example Data Generation</a><a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h2>
 <p>First, let’s generate our example dataset using the <code class="docutils literal notranslate"><span class="pre">pandas</span></code> and <code class="docutils literal notranslate"><span class="pre">numpy</span></code> libraries.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -1155,7 +1180,7 @@ we can find the description of the discrete variables too
 </div>
 </section>
 <section id="visualizing-data-using-boxplot-and-subplots">
-<h2><a class="toc-backref" href="#id39" role="doc-backlink">Visualizing Data Using Boxplot and Subplots</a><a class="headerlink" href="#visualizing-data-using-boxplot-and-subplots" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id39" role="doc-backlink">Visualizing Data Using Boxplot and Subplots</a><a class="headerlink" href="#visualizing-data-using-boxplot-and-subplots" title="Permalink to this heading">#</a></h2>
 <p>To visualize the relationships between our variables, we can use the <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> and <code class="docutils literal notranslate"><span class="pre">seaborn</span></code> libraries to create boxplots and subplots.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
@@ -1197,7 +1222,7 @@ we can find the description of the discrete variables too
 </div>
 </section>
 <section id="id3">
-<h2><a class="toc-backref" href="#id40" role="doc-backlink">Applying Linear Regression using Statsmodels</a><a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id40" role="doc-backlink">Applying Linear Regression using Statsmodels</a><a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h2>
 <p>Before we fit the model, we need to convert our discrete variables into dummy variables. After that, we’ll use the <code class="docutils literal notranslate"><span class="pre">OLS</span></code> function from the <code class="docutils literal notranslate"><span class="pre">statsmodels</span></code> library to fit the model.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
 
@@ -1262,12 +1287,12 @@ Notes:
 </div>
 </section>
 <section id="analysis-of-ols-regression-output-with-categorical-variables">
-<h2><a class="toc-backref" href="#id41" role="doc-backlink">Analysis of OLS Regression Output with Categorical Variables</a><a class="headerlink" href="#analysis-of-ols-regression-output-with-categorical-variables" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id41" role="doc-backlink">Analysis of OLS Regression Output with Categorical Variables</a><a class="headerlink" href="#analysis-of-ols-regression-output-with-categorical-variables" title="Permalink to this heading">#</a></h2>
 <section id="id4">
-<h3><a class="toc-backref" href="#id42" role="doc-backlink">Model Summary</a><a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id42" role="doc-backlink">Model Summary</a><a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
 <p>The analysis uses Ordinary Least Squares (OLS) as the statistical model to understand the relationship between dependent variable <span class="math notranslate nohighlight">\( Y \)</span> and independent variables <span class="math notranslate nohighlight">\( X1 \)</span> and <span class="math notranslate nohighlight">\( X2 \)</span>.</p>
 <section id="id5">
-<h4><a class="toc-backref" href="#id43" role="doc-backlink">Goodness-of-Fit Measures</a><a class="headerlink" href="#id5" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id43" role="doc-backlink">Goodness-of-Fit Measures</a><a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>R-squared:</strong> The R-squared value is 0.772, indicating that approximately 77.2% of the variance in <span class="math notranslate nohighlight">\( Y \)</span> is explained by the independent variables.</p></li>
 <li><p><strong>Adjusted R-squared:</strong> The value is 0.765, only slightly lower than R-squared, affirming a reasonably good fit.</p></li>
@@ -1275,7 +1300,7 @@ Notes:
 </ul>
 </section>
 <section id="id6">
-<h4><a class="toc-backref" href="#id44" role="doc-backlink">Model Fit Diagnostics</a><a class="headerlink" href="#id6" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id44" role="doc-backlink">Model Fit Diagnostics</a><a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>Durbin-Watson:</strong> The value of 1.706 suggests a low level of autocorrelation.</p></li>
 <li><p><strong>Prob(Omnibus):</strong> A value of 0.594 and <strong>Prob(JB):</strong> a value of 0.613 both indicate that the residuals are approximately normally distributed.</p></li>
@@ -1283,10 +1308,10 @@ Notes:
 </section>
 </section>
 <section id="id7">
-<h3><a class="toc-backref" href="#id45" role="doc-backlink">Coefficients</a><a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id45" role="doc-backlink">Coefficients</a><a class="headerlink" href="#id7" title="Permalink to this heading">#</a></h3>
 <p>Coefficients represent the change in the dependent variable corresponding to a one-unit change in the predictor variable.</p>
 <section id="intercept">
-<h4><a class="toc-backref" href="#id46" role="doc-backlink">Intercept</a><a class="headerlink" href="#intercept" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id46" role="doc-backlink">Intercept</a><a class="headerlink" href="#intercept" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>Coefficient:</strong> 2.1212</p></li>
 <li><p><strong>Standard Error:</strong> 0.227</p></li>
@@ -1294,7 +1319,7 @@ Notes:
 </ul>
 </section>
 <section id="x1-variable-categorical-low-medium">
-<h4><a class="toc-backref" href="#id47" role="doc-backlink">X1 Variable (Categorical: ‘Low’, ‘Medium’)</a><a class="headerlink" href="#x1-variable-categorical-low-medium" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id47" role="doc-backlink">X1 Variable (Categorical: ‘Low’, ‘Medium’)</a><a class="headerlink" href="#x1-variable-categorical-low-medium" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>C(X1)[T.Low] Coefficient:</strong> -4.4920</p>
 <ul>
@@ -1310,7 +1335,7 @@ Notes:
 </ul>
 </section>
 <section id="x2-variable-categorical-yes">
-<h4><a class="toc-backref" href="#id48" role="doc-backlink">X2 Variable (Categorical: ‘Yes’)</a><a class="headerlink" href="#x2-variable-categorical-yes" title="Link to this heading">#</a></h4>
+<h4><a class="toc-backref" href="#id48" role="doc-backlink">X2 Variable (Categorical: ‘Yes’)</a><a class="headerlink" href="#x2-variable-categorical-yes" title="Permalink to this heading">#</a></h4>
 <ul class="simple">
 <li><p><strong>C(X2)[T.Yes] Coefficient:</strong> 1.1695</p>
 <ul>
@@ -1322,7 +1347,7 @@ Notes:
 </section>
 </section>
 <section id="id8">
-<h3><a class="toc-backref" href="#id49" role="doc-backlink">Output interpretation</a><a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id49" role="doc-backlink">Output interpretation</a><a class="headerlink" href="#id8" title="Permalink to this heading">#</a></h3>
 <p>The OLS model shows a reasonably good fit with an R-squared value of 0.772. All predictors, as well as the intercept, are statistically significant. The model diagnostics suggest that the assumptions of linearity, independence, and normality are met. Therefore, the model can be considered reliable for making predictions and for understanding the relationships among the variables.</p>
 </section>
 </section>
@@ -1478,7 +1503,7 @@ By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

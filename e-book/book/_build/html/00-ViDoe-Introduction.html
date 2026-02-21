@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>1. Introduction and Justification &#8212; ViDoe - Visualizing Design of Experiments</title>
   
@@ -28,35 +29,39 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '00-ViDoe-Introduction';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -158,18 +163,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -183,7 +177,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">1. Introduction and Justification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Anova One-way using ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Exploring Two-Level Factorial Designs with ViDoE</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
 <ul class="nav bd-sidenav">
@@ -214,6 +208,7 @@
 <li class="toctree-l1"><a class="reference internal" href="03-regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="03-residual-analysis.html">Introduction to residual analysis</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
@@ -247,9 +242,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -417,14 +412,13 @@ document.write(`
                   
   <p><a name="00-ViDoe-Introduction"></a></p>
 <section id="introduction-and-justification">
-<h1><span class="section-number">1. </span>Introduction and Justification<a class="headerlink" href="#introduction-and-justification" title="Link to this heading">#</a></h1>
-<p>Understanding the principles behind the design of experiments (DoE) is a fundamental skill in quantitative disciplines, yet it remains difficult for many students—especially when the learning process depends solely on abstract mathematical representations. Research shows that abstract thinking, particularly in mathematics, often creates barriers related to cognitive load, limited exposure to proofs, and challenges in transitioning from computational to conceptual reasoning <span id="id1">[<a class="reference internal" href="#id24" title="J. Agrawal and L. L. Morin. Evidence-based practices: applications of concrete representational abstract framework across math concepts for students with mathematics disabilities. Learning Disabilities Research and Practice, 2016. doi:10.1111/ldrp.12093.">Agrawal and Morin, 2016</a>]</span>.</p>
+<h1><span class="section-number">1. </span>Introduction and Justification<a class="headerlink" href="#introduction-and-justification" title="Permalink to this heading">#</a></h1>
+<p>Understanding the principles behind the design of experiments (DoE) is a fundamental skill in quantitative disciplines, yet it remains difficult for many students—especially when the learning process depends solely on abstract mathematical representations. Research shows that abstract thinking, particularly in mathematics, often creates barriers related to cognitive load, limited exposure to proofs, and challenges in transitioning from computational to conceptual reasoning <span id="id1">[<a class="reference internal" href="Bibliography.html#id20" title="J. Agrawal and L. L. Morin. Evidence-based practices: applications of concrete representational abstract framework across math concepts for students with mathematics disabilities. Learning Disabilities Research and Practice, 2016. doi:10.1111/ldrp.12093.">Agrawal and Morin, 2016</a>]</span>.</p>
 <p>To address these difficulties, ViDoe (<em>Visualizing Design of Experiments</em>) was developed as an open-source educational platform that bridges the gap between statistical theory and interactive learning. Built using Python and libraries like Streamlit, Plotly, NumPy, Seaborn, and Statsmodels, ViDoe allows students and instructors to explore experimental design through visualization, data interaction, and code-based experimentation.</p>
-<p>The platform was designed with the understanding that <strong>visual representation significantly improves conceptual learning</strong>. Visual aids—such as plots, sliders, and real-time feedback—help learners construct mental models, enhance memory retention, and engage actively with content <span id="id2">[<a class="reference internal" href="#id25" title="S. H. H. Alshatri, K. Wakil, K. Jamal, and R. Bakhtyar. Teaching aids effectiveness in learning mathematics. International Journal of Educational Research Review, 2019. doi:10.24331/ijere.573949.">Alshatri <em>et al.</em>, 2019</a>]</span>. These visual supports are particularly valuable when interpreting statistical outputs like p-values or confidence intervals, where students often struggle to grasp implications without context.</p>
-<p>Information and communication technologies (ICT) have shown clear benefits in making learning more accessible and engaging. The use of such technologies promotes student-centered models and supports autonomy and critical thinking <span id="id3">[<a class="reference internal" href="#id26" title="A. Cueva and E. Inga. Information and communication technologies for education considering the flipped learning model. Education Sciences, 2022. doi:10.3390/educsci12030207.">Cueva and Inga, 2022</a>]</span>, <span id="id4">[<a class="reference internal" href="#id27" title="N. Dahal, N. K. Manandhar, L. Luitel, B. C. Luitel, B. P. Pant, and I. M. Shrestha. Ict tools for remote teaching and learning mathematics: a proposal for autonomy and engagements. Advances in Mobile Learning Educational Research, 2(1):289–296, 2022. doi:10.25082/AMLER.2022.01.013.">Dahal <em>et al.</em>, 2022</a>]</span>. In alignment with these pedagogical shifts, ViDoe integrates a digital handbook—built in Markdown and Jupyter Book format—that guides learners through each module with Python examples and hands-on activities.</p>
+<p>The platform was designed with the understanding that <strong>visual representation significantly improves conceptual learning</strong>. Visual aids—such as plots, sliders, and real-time feedback—help learners construct mental models, enhance memory retention, and engage actively with content <span id="id2">[<a class="reference internal" href="Bibliography.html#id21" title="S. H. H. Alshatri, K. Wakil, K. Jamal, and R. Bakhtyar. Teaching aids effectiveness in learning mathematics. International Journal of Educational Research Review, 2019. doi:10.24331/ijere.573949.">Alshatri <em>et al.</em>, 2019</a>]</span>. These visual supports are particularly valuable when interpreting statistical outputs like p-values or confidence intervals, where students often struggle to grasp implications without context.</p>
+<p>Information and communication technologies (ICT) have shown clear benefits in making learning more accessible and engaging. The use of such technologies promotes student-centered models and supports autonomy and critical thinking <span id="id3">[<a class="reference internal" href="Bibliography.html#id22" title="A. Cueva and E. Inga. Information and communication technologies for education considering the flipped learning model. Education Sciences, 2022. doi:10.3390/educsci12030207.">Cueva and Inga, 2022</a>]</span>, <span id="id4">[<a class="reference internal" href="Bibliography.html#id23" title="N. Dahal, N. K. Manandhar, L. Luitel, B. C. Luitel, B. P. Pant, and I. M. Shrestha. Ict tools for remote teaching and learning mathematics: a proposal for autonomy and engagements. Advances in Mobile Learning Educational Research, 2(1):289–296, 2022. doi:10.25082/AMLER.2022.01.013.">Dahal <em>et al.</em>, 2022</a>]</span>. In alignment with these pedagogical shifts, ViDoe integrates a digital handbook—built in Markdown and Jupyter Book format—that guides learners through each module with Python examples and hands-on activities.</p>
 <p>While ViDoe is not intended to replace comprehensive theoretical texts like Montgomery’s <em>Design and Analysis of Experiments</em>, it serves as a <strong>didactic bridge</strong>. Its goal is to make the abstraction process in DoE more approachable through structured interaction and practical insight. The application was implemented between 2023-Q1 and 2023-Q4 with undergraduate students from Universidad Autónoma de Bucaramanga and Universidad Industrial de Santander, who later incorporated it into final projects and peer-led study sessions. This e-book offers a guided exploration of the ViDoe platform and serves as a stepping stone for further learning in experimental design and applied statistics.</p>
 <div class="docutils container" id="id5">
-<div role="list" class="citation-list">
 <div class="citation" id="id24" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>J. Agrawal and L. L. Morin. Evidence-based practices: applications of concrete representational abstract framework across math concepts for students with mathematics disabilities. <em>Learning Disabilities Research and Practice</em>, 2016. <a class="reference external" href="https://doi.org/10.1111/ldrp.12093">doi:10.1111/ldrp.12093</a>.</p>
@@ -519,7 +513,7 @@ By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

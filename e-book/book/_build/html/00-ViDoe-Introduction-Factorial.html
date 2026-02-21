@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>3. Exploring Two-Level Factorial Designs with ViDoE &#8212; ViDoe - Visualizing Design of Experiments</title>
   
@@ -28,35 +29,39 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '00-ViDoe-Introduction-Factorial';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -158,18 +163,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -248,9 +242,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -391,9 +385,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -436,11 +430,11 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="exploring-two-level-factorial-designs-with-vidoe">
-<h1><span class="section-number">3. </span>Exploring Two-Level Factorial Designs with ViDoE<a class="headerlink" href="#exploring-two-level-factorial-designs-with-vidoe" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">3. </span>Exploring Two-Level Factorial Designs with ViDoE<a class="headerlink" href="#exploring-two-level-factorial-designs-with-vidoe" title="Permalink to this heading">#</a></h1>
 <p>Factorial designs are one of the most efficient and informative experimental strategies when studying the effect of multiple variables. Unlike one-factor-at-a-time approaches, factorial designs explore main effects and interactions between two or more factors simultaneously, allowing for a richer understanding of cause-effect relationships.</p>
 <p>ViDoE includes a dynamic module to interactively explore full factorial designs with two factors at two levels each (2×2). This setup enables users to model not only the independent effects of each factor but also the interaction term, which is often critical in real-world experimentation.</p>
 <section id="educational-utilities-in-vidoe">
-<h2><span class="section-number">3.1. </span>Educational Utilities in ViDoE<a class="headerlink" href="#educational-utilities-in-vidoe" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">3.1. </span>Educational Utilities in ViDoE<a class="headerlink" href="#educational-utilities-in-vidoe" title="Permalink to this heading">#</a></h2>
 <p>The factorial module in ViDoE allows learners to:</p>
 <ul class="simple">
 <li><p>Define custom names for the two factors (e.g., “Temperature” and “Pressure”).</p></li>
@@ -453,30 +447,30 @@ document.write(`
 <p>By interacting with this module, students can build an intuitive understanding of how factors combine to influence an outcome—something often obscured in static, textbook examples.</p>
 </section>
 <section id="key-figures">
-<h2><span class="section-number">3.2. </span>Key Figures<a class="headerlink" href="#key-figures" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">3.2. </span>Key Figures<a class="headerlink" href="#key-figures" title="Permalink to this heading">#</a></h2>
 <section id="figure-3-1-factor-space">
-<h3><span class="section-number">3.2.1. </span>Figure 3.1 - Factor Space<a class="headerlink" href="#figure-3-1-factor-space" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">3.2.1. </span>Figure 3.1 - Factor Space<a class="headerlink" href="#figure-3-1-factor-space" title="Permalink to this heading">#</a></h3>
 <p><img alt="Fig3.1 - Factor Space" src="workspaces/DOE/e-book/book/Fig3_1_Factor_Space.png" /></p>
 <p><strong>Description</strong>: A scatter plot showing the combinations of the two factors (each with two levels), with the response <code class="docutils literal notranslate"><span class="pre">Y</span></code> represented by color or marker size. This helps visualize the experimental domain.</p>
 </section>
 <section id="figure-3-2-boxplot-of-y-grouped-by-factor">
-<h3><span class="section-number">3.2.2. </span>Figure 3.2 - Boxplot of Y Grouped by Factor<a class="headerlink" href="#figure-3-2-boxplot-of-y-grouped-by-factor" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">3.2.2. </span>Figure 3.2 - Boxplot of Y Grouped by Factor<a class="headerlink" href="#figure-3-2-boxplot-of-y-grouped-by-factor" title="Permalink to this heading">#</a></h3>
 <p><img alt="Fig3.2 - Boxplot Y by Factor" src="workspaces/DOE/e-book/book/Fig3_2_Boxplot_Y_by_Factor.png" /></p>
 <p><strong>Description</strong>: Boxplots of the response variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> grouped by one or both factors, showing main effect trends and hinting at interaction presence.</p>
 </section>
 <section id="figure-3-3-surface-plot-of-y">
-<h3><span class="section-number">3.2.3. </span>Figure 3.3 - Surface Plot of Y<a class="headerlink" href="#figure-3-3-surface-plot-of-y" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">3.2.3. </span>Figure 3.3 - Surface Plot of Y<a class="headerlink" href="#figure-3-3-surface-plot-of-y" title="Permalink to this heading">#</a></h3>
 <p><img alt="Fig3.3 - Surface Plot Y" src="workspaces/DOE/e-book/book/Fig3_3_Surface_Plot_Y.png" /></p>
 <p><strong>Description</strong>: A 3D surface plot representing the response variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> across the full factorial combination space. Useful for visualizing interaction curvature.</p>
 </section>
 <section id="figure-3-4-regression-equation">
-<h3><span class="section-number">3.2.4. </span>Figure 3.4 - Regression Equation<a class="headerlink" href="#figure-3-4-regression-equation" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">3.2.4. </span>Figure 3.4 - Regression Equation<a class="headerlink" href="#figure-3-4-regression-equation" title="Permalink to this heading">#</a></h3>
 <p><img alt="Fig3.4 - Regression Equation" src="workspaces/DOE/e-book/book/Fig3_4_Regression_Equation.png" /></p>
 <p><strong>Description</strong>: Visual representation of the estimated linear regression model with coefficients for each main and interaction effect, based on the simulated data.</p>
 </section>
 </section>
 <section id="suggested-classroom-activity">
-<h2><span class="section-number">3.3. </span>Suggested Classroom Activity<a class="headerlink" href="#suggested-classroom-activity" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">3.3. </span>Suggested Classroom Activity<a class="headerlink" href="#suggested-classroom-activity" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
 <li><p>Rename the two factors (e.g., “Speed” and “Pressure”) and define their levels.</p></li>
 <li><p>Use sliders to assign different effects to Factor A, Factor B, and their interaction.</p></li>
@@ -488,7 +482,7 @@ document.write(`
 </ol>
 </section>
 <section id="interpretation-support">
-<h2><span class="section-number">3.4. </span>Interpretation Support<a class="headerlink" href="#interpretation-support" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">3.4. </span>Interpretation Support<a class="headerlink" href="#interpretation-support" title="Permalink to this heading">#</a></h2>
 <p>The factorial module in ViDoE helps learners interpret:</p>
 <ul class="simple">
 <li><p>Main effects: how each factor independently affects the outcome.</p></li>
@@ -597,7 +591,7 @@ By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

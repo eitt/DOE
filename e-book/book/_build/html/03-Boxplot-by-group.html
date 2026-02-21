@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>The Usefulness of Boxplots by Group in Data Analysis &#8212; ViDoe - Visualizing Design of Experiments</title>
   
@@ -28,40 +29,44 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '03-Boxplot-by-group';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="The Usefulness of Surface Plots in Data Analysis for the Design of Experiments" href="03-Surface-plot.html" />
-    <link rel="prev" title="11. Block Designs" href="04-block-designs.html" />
+    <link rel="prev" title="12. Block Designs" href="04-block-designs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -158,18 +163,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -182,28 +176,29 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">ViDoe</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction.html">1. Introduction and Justification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Anova One-way using ViDoe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-ANOVA-One-Way.html">2. Using ViDoE to Understand One-Way ANOVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Introduction-Factorial.html">3. Exploring Two-Level Factorial Designs with ViDoE</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova One-Way</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Anova Analysis</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">3. Anova One-way Foundations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">4. Explaining the Python Code</a></li>
-<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">5. ANOVA One-way: An Illustrative example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-anova-oneway.html">4. Anova One-way Foundations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-anova.html">5. Explaining the Python Code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01-one-way-example.html">6. ANOVA One-way: An Illustrative example</a></li>
 
 
 
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Factorial Experimental Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">9. Principles of 2^k and Fractional Factorial Designs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="00-ViDoe-Factorial-Designs.html">10. Principles of 2^k and Fractional Factorial Designs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Taguchi Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">10. Taguchi Methods and Robust Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="05-Taguchi-Designs.html">11. Taguchi Methods and Robust Design</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Block Designs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">11. Block Designs Explained</a></li>
+<li class="toctree-l1"><a class="reference internal" href="04-block-designs.html">12. Block Designs Explained</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Outputs Analysis</span></p>
 <ul class="current nav bd-sidenav">
@@ -213,6 +208,7 @@
 <li class="toctree-l1"><a class="reference internal" href="03-regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="03-residual-analysis.html">Introduction to residual analysis</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
@@ -246,9 +242,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -389,9 +385,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -430,7 +426,7 @@ document.write(`
                   
   <p><a name="03-Boxplot-by-group"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="the-usefulness-of-boxplots-by-group-in-data-analysis">
-<h1><a class="toc-backref" href="#id25" role="doc-backlink">The Usefulness of Boxplots by Group in Data Analysis</a><a class="headerlink" href="#the-usefulness-of-boxplots-by-group-in-data-analysis" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id25" role="doc-backlink">The Usefulness of Boxplots by Group in Data Analysis</a><a class="headerlink" href="#the-usefulness-of-boxplots-by-group-in-data-analysis" title="Permalink to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
@@ -459,9 +455,22 @@ document.write(`
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1">#Import packages</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;pandas&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <section id="comparison-of-distributions">
-<h2><a class="toc-backref" href="#id26" role="doc-backlink">Comparison of Distributions</a><a class="headerlink" href="#comparison-of-distributions" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id26" role="doc-backlink">Comparison of Distributions</a><a class="headerlink" href="#comparison-of-distributions" title="Permalink to this heading">#</a></h2>
 <p>By grouping the data and creating boxplots for each group, you can easily compare the distributions of the variable across different categories. This comparison allows you to identify data similarities, differences, or variations between groups. For example, you can determine if there are differences in income distributions between different occupations or variations in customer satisfaction scores across different regions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -478,12 +487,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/c9f05af4f955851330d05501252e6c3b19f47c9dedd3d60475481130b1194b40.png" src="_images/c9f05af4f955851330d05501252e6c3b19f47c9dedd3d60475481130b1194b40.png" />
+<img alt="_images/23898a09ca6863f19de745e9e0d42237443be1d465003ee42ba6e95291e0f7f0.png" src="_images/23898a09ca6863f19de745e9e0d42237443be1d465003ee42ba6e95291e0f7f0.png" />
 </div>
 </div>
 </section>
 <section id="identifying-outliers">
-<h2><a class="toc-backref" href="#id27" role="doc-backlink">Identifying Outliers</a><a class="headerlink" href="#identifying-outliers" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id27" role="doc-backlink">Identifying Outliers</a><a class="headerlink" href="#identifying-outliers" title="Permalink to this heading">#</a></h2>
 <p>Boxplots display outliers as individual data points beyond the whiskers, representing the typical values range. Outliers can indicate anomalies or extreme values that deviate significantly from the rest of the data. By creating boxplots by group, you can quickly identify if certain categories have more outliers or if specific groups exhibit extreme values. This information can help uncover interesting patterns or potential data quality issues <span id="id1">[<a class="reference internal" href="Bibliography.html#id7" title="Duraj Agnieszka and Ludwicka Magdalena. Detection of outliers in the financial time series using arima models. 2018 Applications of Electromagnetics in Modern Techniques and Medicine (PTZE), pages 49-52, 2018.">Agnieszka and Magdalena, 2018</a>]</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -501,12 +510,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/984d03d0ab17fb5b90efe6774d492cb4c8193e0c70346ec154093e5a3bc88c66.png" src="_images/984d03d0ab17fb5b90efe6774d492cb4c8193e0c70346ec154093e5a3bc88c66.png" />
+<img alt="_images/571c2a2b6c2b575f9f41e539ac7815fbfc718972ce8a23f4d9b320969adf2abd.png" src="_images/571c2a2b6c2b575f9f41e539ac7815fbfc718972ce8a23f4d9b320969adf2abd.png" />
 </div>
 </div>
 </section>
 <section id="assessing-skewness-and-symmetry">
-<h2><a class="toc-backref" href="#id28" role="doc-backlink">Assessing Skewness and Symmetry</a><a class="headerlink" href="#assessing-skewness-and-symmetry" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id28" role="doc-backlink">Assessing Skewness and Symmetry</a><a class="headerlink" href="#assessing-skewness-and-symmetry" title="Permalink to this heading">#</a></h2>
 <p>The boxplot’s visual representation allows you to assess the symmetry and skewness of the distribution within each group. By examining the relative positions of the median, lower quartile (25th percentile), and upper quartile (75th percentile), you can gain insights into the shape of the distribution. For instance, if the median is closer to the lower or upper quartile, it indicates skewness in that group’s data, suggesting a non-normal distribution.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -523,12 +532,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/2fdffc998fc74a1b94e01cf7e5b96ab0207869be1a3225d5ba1754b8b49ef4c1.png" src="_images/2fdffc998fc74a1b94e01cf7e5b96ab0207869be1a3225d5ba1754b8b49ef4c1.png" />
+<img alt="_images/b4683d060e8ab19975f5f62eb273b1ff435ae38e0aebb190a0659d5698741ca3.png" src="_images/b4683d060e8ab19975f5f62eb273b1ff435ae38e0aebb190a0659d5698741ca3.png" />
 </div>
 </div>
 </section>
 <section id="detecting-shifts-or-changes">
-<h2><a class="toc-backref" href="#id29" role="doc-backlink">Detecting Shifts or Changes</a><a class="headerlink" href="#detecting-shifts-or-changes" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id29" role="doc-backlink">Detecting Shifts or Changes</a><a class="headerlink" href="#detecting-shifts-or-changes" title="Permalink to this heading">#</a></h2>
 <p>Comparing boxplots across different groups or categories can help you identify shifts or changes in the distribution of a variable. If the medians or quartiles vary noticeably between groups, it suggests differences in the central tendency or spread of the data. This insight can be particularly valuable when analyzing trends over time, geographic regions, or different experimental conditions.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -545,12 +554,12 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/026cffbe37e65c0cc6c6b4a8b2e6362798e571b20b7d92c3fa01f626bee98562.png" src="_images/026cffbe37e65c0cc6c6b4a8b2e6362798e571b20b7d92c3fa01f626bee98562.png" />
+<img alt="_images/069a2a4de00af8788eacd9f3e9735c6fbfbbc66fc7def8479dfe4217ded31262.png" src="_images/069a2a4de00af8788eacd9f3e9735c6fbfbbc66fc7def8479dfe4217ded31262.png" />
 </div>
 </div>
 </section>
 <section id="exploring-relationships-between-variables">
-<h2><a class="toc-backref" href="#id30" role="doc-backlink">Exploring Relationships between Variables</a><a class="headerlink" href="#exploring-relationships-between-variables" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id30" role="doc-backlink">Exploring Relationships between Variables</a><a class="headerlink" href="#exploring-relationships-between-variables" title="Permalink to this heading">#</a></h2>
 <p>Boxplots can be employed to explore relationships between a continuous variable and one or more categorical variables. By creating boxplots for different categories or groups, you can examine how the distribution of the continuous variable varies across the categorical variables. This analysis can provide initial insights into potential relationships and guide further investigations, such as conducting statistical tests or developing predictive models.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -570,11 +579,10 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/cca669f7359ebbef15fa1d486ffb03882defce5a9ff42a072a87d64858795511.png" src="_images/cca669f7359ebbef15fa1d486ffb03882defce5a9ff42a072a87d64858795511.png" />
+<img alt="_images/54a0afb7ead0b124c5cb2adde319ac5d02e1f9a9eb5f92217389c368f1cdb6bd.png" src="_images/54a0afb7ead0b124c5cb2adde319ac5d02e1f9a9eb5f92217389c368f1cdb6bd.png" />
 </div>
 </div>
 <div class="docutils container" id="id2">
-<div role="list" class="citation-list">
 <div class="citation" id="id8" role="doc-biblioentry">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>Duraj Agnieszka and Ludwicka Magdalena. Detection of outliers in the financial time series using arima models. <em>2018 Applications of Electromagnetics in Modern Techniques and Medicine (PTZE)</em>, pages 49–52, 2018.</p>
@@ -620,7 +628,7 @@ document.write(`
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">11. </span>Block Designs</p>
+        <p class="prev-next-title"><span class="section-number">12. </span>Block Designs</p>
       </div>
     </a>
     <a class="right-next"
@@ -677,7 +685,7 @@ By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

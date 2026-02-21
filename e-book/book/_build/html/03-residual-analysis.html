@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>Introduction to residual analysis &#8212; ViDoe - Visualizing Design of Experiments</title>
   
@@ -28,35 +29,39 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '03-residual-analysis';</script>
@@ -160,18 +165,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -250,9 +244,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -393,9 +387,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -468,7 +462,7 @@ document.write(`
                   
   <p><a name="03-residual-analysis"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-residual-analysis">
-<h1><a class="toc-backref" href="#id7" role="doc-backlink">Introduction to residual analysis</a><a class="headerlink" href="#introduction-to-residual-analysis" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id7" role="doc-backlink">Introduction to residual analysis</a><a class="headerlink" href="#introduction-to-residual-analysis" title="Permalink to this heading">#</a></h1>
 <nav class="contents" id="contents">
 <p class="topic-title">Contents</p>
 <ul class="simple">
@@ -521,13 +515,13 @@ document.write(`
 </nav>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="residual-analysis-in-a-333-factorial-design">
-<h1><a class="toc-backref" href="#id8" role="doc-backlink">Residual Analysis in a 3×3×3 Factorial Design</a><a class="headerlink" href="#residual-analysis-in-a-333-factorial-design" title="Link to this heading">#</a></h1>
+<h1><a class="toc-backref" href="#id8" role="doc-backlink">Residual Analysis in a 3×3×3 Factorial Design</a><a class="headerlink" href="#residual-analysis-in-a-333-factorial-design" title="Permalink to this heading">#</a></h1>
 <p>This notebook illustrates how to generate, fit, and evaluate models in a three-factor factorial design where each factor has three levels and two replications. The objective is to evaluate model adequacy using residual analysis, focusing on <strong>normality</strong>, <strong>randomness</strong>, and <strong>homoscedasticity</strong>.</p>
 <section id="experimental-design-setup">
-<h2><a class="toc-backref" href="#id9" role="doc-backlink">1. Experimental Design Setup</a><a class="headerlink" href="#experimental-design-setup" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id9" role="doc-backlink">1. Experimental Design Setup</a><a class="headerlink" href="#experimental-design-setup" title="Permalink to this heading">#</a></h2>
 <p>We define three factors: A, B, and C, each at three levels (<code class="docutils literal notranslate"><span class="pre">-1</span></code>, <code class="docutils literal notranslate"><span class="pre">0</span></code>, <code class="docutils literal notranslate"><span class="pre">+1</span></code>) using effect coding. The full factorial design includes all <span class="math notranslate nohighlight">\( 3^3 = 27 \)</span> treatment combinations, each replicated twice (54 total observations). The response variable is generated using a known model with additive and interaction terms, plus Gaussian noise.</p>
 <section id="response-model">
-<h3><a class="toc-backref" href="#id10" role="doc-backlink">Response model:</a><a class="headerlink" href="#response-model" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Response model:</a><a class="headerlink" href="#response-model" title="Permalink to this heading">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 Y = \beta_0 + \beta_A A + \beta_B B + \beta_C C + \beta_{AB} AB + \beta_{AC} AC + \beta_{BC} BC + \beta_{ABC} ABC + \varepsilon
@@ -584,12 +578,14 @@ Y = \beta_0 + \beta_A A + \beta_B B + \beta_C C + \beta_{AB} AB + \beta_{AC} AC 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>    A   B   C  A_num  B_num  C_num         Y
-0  A1  B1  C1     -1     -1     -1  8.308682
-1  A1  B1  C2     -1     -1      0  6.744027
-2  A1  B1  C3     -1     -1      1  3.674295
-3  A1  B2  C1     -1      0     -1  6.360846
-4  A1  B2  C2     -1      0      0  7.596931
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;pandas&#39;
 </pre></div>
 </div>
 </div>
@@ -597,9 +593,9 @@ Y = \beta_0 + \beta_A A + \beta_B B + \beta_C C + \beta_{AB} AB + \beta_{AC} AC 
 </section>
 </section>
 <section id="model-1-main-effects-only">
-<h2><a class="toc-backref" href="#id11" role="doc-backlink">Model 1 – Main Effects Only</a><a class="headerlink" href="#model-1-main-effects-only" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id11" role="doc-backlink">Model 1 – Main Effects Only</a><a class="headerlink" href="#model-1-main-effects-only" title="Permalink to this heading">#</a></h2>
 <section id="model">
-<h3><a class="toc-backref" href="#id12" role="doc-backlink">Model:</a><a class="headerlink" href="#model" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Model:</a><a class="headerlink" href="#model" title="Permalink to this heading">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 Y = \mu + \alpha_A + \alpha_B + \alpha_C + \varepsilon
@@ -607,7 +603,7 @@ Y = \mu + \alpha_A + \alpha_B + \alpha_C + \varepsilon
 <p>We fit a linear model including only the main effects of the factors (A, B, C). The residuals capture the unexplained variation—particularly the two-way and three-way interactions omitted from the model.</p>
 </section>
 <section id="residual-diagnostics">
-<h3><a class="toc-backref" href="#id13" role="doc-backlink">Residual Diagnostics:</a><a class="headerlink" href="#residual-diagnostics" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id13" role="doc-backlink">Residual Diagnostics:</a><a class="headerlink" href="#residual-diagnostics" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Histogram</strong>: A symmetric bell shape suggests approximate normality.</p></li>
 <li><p><strong>Q-Q Plot</strong>: Points should lie on the diagonal line. Deviations at the tails indicate skewness or kurtosis.</p></li>
@@ -615,7 +611,7 @@ Y = \mu + \alpha_A + \alpha_B + \alpha_C + \varepsilon
 </ul>
 </section>
 <section id="interpretation">
-<h3><a class="toc-backref" href="#id14" role="doc-backlink">Interpretation:</a><a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id14" role="doc-backlink">Interpretation:</a><a class="headerlink" href="#interpretation" title="Permalink to this heading">#</a></h3>
 <p>If residuals exhibit non-normality or structure:</p>
 <ul class="simple">
 <li><p>It suggests model misspecification, likely due to missing interaction terms.</p></li>
@@ -647,30 +643,30 @@ Y = \mu + \alpha_A + \alpha_B + \alpha_C + \varepsilon
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                      Y   R-squared:                       0.646
-Model:                            OLS   Adj. R-squared:                  0.601
-Method:                 Least Squares   F-statistic:                     14.28
-Date:                Tue, 24 Jun 2025   Prob (F-statistic):           3.47e-09
-Time:                        23:34:22   Log-Likelihood:                -119.92
-No. Observations:                  54   AIC:                             253.8
-Df Residuals:                      47   BIC:                             267.8
+Dep. Variable:                      Y   R-squared:                       0.638
+Model:                            OLS   Adj. R-squared:                  0.592
+Method:                 Least Squares   F-statistic:                     13.79
+Date:                Tue, 24 Jun 2025   Prob (F-statistic):           5.75e-09
+Time:                        23:24:53   Log-Likelihood:                -120.58
+No. Observations:                  54   AIC:                             255.2
+Df Residuals:                      47   BIC:                             269.1
 Df Model:                           6                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P&gt;|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-Intercept      6.3216      0.860      7.347      0.000       4.591       8.053
-A[T.A2]        3.1762      0.797      3.987      0.000       1.573       4.779
-A[T.A3]        5.5178      0.797      6.926      0.000       3.915       7.120
-B[T.B2]        1.6933      0.797      2.125      0.039       0.091       3.296
-B[T.B3]        4.2196      0.797      5.297      0.000       2.617       5.822
-C[T.C2]       -1.2451      0.797     -1.563      0.125      -2.848       0.358
-C[T.C3]       -2.3828      0.797     -2.991      0.004      -3.985      -0.780
+Intercept      6.1270      0.871      7.035      0.000       4.375       7.879
+A[T.A2]        2.4912      0.806      3.089      0.003       0.869       4.113
+A[T.A3]        6.1622      0.806      7.642      0.000       4.540       7.784
+B[T.B2]        1.7806      0.806      2.208      0.032       0.158       3.403
+B[T.B3]        3.4230      0.806      4.245      0.000       1.801       5.045
+C[T.C2]       -1.0958      0.806     -1.359      0.181      -2.718       0.526
+C[T.C3]       -1.9047      0.806     -2.362      0.022      -3.527      -0.282
 ==============================================================================
-Omnibus:                        9.417   Durbin-Watson:                   2.028
-Prob(Omnibus):                  0.009   Jarque-Bera (JB):                8.841
-Skew:                          -0.868   Prob(JB):                       0.0120
-Kurtosis:                       3.958   Cond. No.                         5.14
+Omnibus:                       11.136   Durbin-Watson:                   1.982
+Prob(Omnibus):                  0.004   Jarque-Bera (JB):               11.096
+Skew:                          -0.960   Prob(JB):                      0.00390
+Kurtosis:                       4.117   Cond. No.                         5.14
 ==============================================================================
 
 Notes:
@@ -678,10 +674,10 @@ Notes:
 
 ANOVA Table (Main Effects Only):
               sum_sq    df          F        PR(&gt;F)
-A         276.101423   2.0  24.168204  6.049483e-08
-B         162.324674   2.0  14.208894  1.491646e-05
-C          51.134662   2.0   4.476011  1.661992e-02
-Residual  268.467755  47.0        NaN           NaN
+A         345.926115   2.0  29.556104  4.884431e-09
+B         105.511210   2.0   9.014932  4.854538e-04
+C          32.897238   2.0   2.810757  7.030096e-02
+Residual  275.045175  47.0        NaN           NaN
 </pre></div>
 </div>
 </div>
@@ -720,8 +716,8 @@ Residual  268.467755  47.0        NaN           NaN
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/f1c8be5614d531272d2d37c0754d74f65e18b1f15487eedc291e2005044d3a7a.png" src="_images/f1c8be5614d531272d2d37c0754d74f65e18b1f15487eedc291e2005044d3a7a.png" />
-<img alt="_images/94367083e019af83fe811b14565209b2777b21db6659c401f29d08fd1448bc1a.png" src="_images/94367083e019af83fe811b14565209b2777b21db6659c401f29d08fd1448bc1a.png" />
+<img alt="_images/47af1e4a99b818103bf7952ac361e5dbf0fbe02c217a50190cf461df677cf466.png" src="_images/47af1e4a99b818103bf7952ac361e5dbf0fbe02c217a50190cf461df677cf466.png" />
+<img alt="_images/006a5ef30bd7d4cd1002a5cc8de0890e1598c8c901e227f4ee3842960d482f27.png" src="_images/006a5ef30bd7d4cd1002a5cc8de0890e1598c8c901e227f4ee3842960d482f27.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -748,14 +744,14 @@ Residual  268.467755  47.0        NaN           NaN
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapiro-Wilk test: statistic = 0.9416, p-value = 0.0109
-D’Agostino-Pearson test: statistic = 9.4172, p-value = 0.0090
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapiro-Wilk test: statistic = 0.9349, p-value = 0.0057
+D’Agostino-Pearson test: statistic = 11.1362, p-value = 0.0038
 Breusch–Pagan test for homoscedasticity:
-  Lagrange multiplier statistic: 11.6795
-  p-value: 0.0695
-  f-value: 2.1618
-  f p-value: 0.0637
-Durbin–Watson statistic: 2.0277
+  Lagrange multiplier statistic: 15.0926
+  p-value: 0.0195
+  f-value: 3.0386
+  f p-value: 0.0136
+Durbin–Watson statistic: 1.9816
 </pre></div>
 </div>
 </div>
@@ -763,9 +759,9 @@ Durbin–Watson statistic: 2.0277
 </section>
 </section>
 <section id="model-2-main-effects-two-way-interactions">
-<h2><a class="toc-backref" href="#id15" role="doc-backlink">Model 2 – Main Effects + Two-Way Interactions</a><a class="headerlink" href="#model-2-main-effects-two-way-interactions" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id15" role="doc-backlink">Model 2 – Main Effects + Two-Way Interactions</a><a class="headerlink" href="#model-2-main-effects-two-way-interactions" title="Permalink to this heading">#</a></h2>
 <section id="id1">
-<h3><a class="toc-backref" href="#id16" role="doc-backlink">Model:</a><a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id16" role="doc-backlink">Model:</a><a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{BC} + \varepsilon
@@ -773,7 +769,7 @@ Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{B
 <p>This model captures second-order interactions. It typically reduces residual structure and improves model fit.</p>
 </section>
 <section id="id2">
-<h3><a class="toc-backref" href="#id17" role="doc-backlink">Residual Diagnostics:</a><a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id17" role="doc-backlink">Residual Diagnostics:</a><a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Histogram</strong>: Should approximate normality more closely.</p></li>
 <li><p><strong>Q-Q Plot</strong>: Deviations reduce, especially at the tails.</p></li>
@@ -781,7 +777,7 @@ Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{B
 </ul>
 </section>
 <section id="id3">
-<h3><a class="toc-backref" href="#id18" role="doc-backlink">Interpretation:</a><a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id18" role="doc-backlink">Interpretation:</a><a class="headerlink" href="#id3" title="Permalink to this heading">#</a></h3>
 <p>Better residual behavior suggests that two-way interactions are meaningful contributors to explaining variation. Ignoring them in prior models masked this signal in the residuals.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -808,56 +804,56 @@ Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{B
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                      Y   R-squared:                       0.928
-Model:                            OLS   Adj. R-squared:                  0.891
-Method:                 Least Squares   F-statistic:                     25.00
-Date:                Tue, 24 Jun 2025   Prob (F-statistic):           7.74e-15
-Time:                        23:34:23   Log-Likelihood:                -76.968
-No. Observations:                  54   AIC:                             191.9
-Df Residuals:                      35   BIC:                             229.7
+Dep. Variable:                      Y   R-squared:                       0.929
+Model:                            OLS   Adj. R-squared:                  0.893
+Method:                 Least Squares   F-statistic:                     25.48
+Date:                Tue, 24 Jun 2025   Prob (F-statistic):           5.74e-15
+Time:                        23:26:13   Log-Likelihood:                -76.539
+No. Observations:                  54   AIC:                             191.1
+Df Residuals:                      35   BIC:                             228.9
 Df Model:                          18                                         
 Covariance Type:            nonrobust                                         
 ===================================================================================
                       coef    std err          t      P&gt;|t|      [0.025      0.975]
 -----------------------------------------------------------------------------------
-Intercept           7.0024      0.742      9.443      0.000       5.497       8.508
-A[T.A2]             3.6639      0.932      3.932      0.000       1.772       5.556
-A[T.A3]             6.5906      0.932      7.073      0.000       4.699       8.482
-B[T.B2]            -0.5831      0.932     -0.626      0.535      -2.475       1.308
-B[T.B3]            -1.9142      0.932     -2.054      0.047      -3.806      -0.023
-C[T.C2]             0.3803      0.932      0.408      0.686      -1.511       2.272
-C[T.C3]            -1.2434      0.932     -1.335      0.191      -3.135       0.648
-A[T.A2]:B[T.B2]     1.5694      1.021      1.538      0.133      -0.503       3.641
-A[T.A3]:B[T.B2]     2.9562      1.021      2.896      0.006       0.884       5.028
-A[T.A2]:B[T.B3]     3.4337      1.021      3.364      0.002       1.362       5.506
-A[T.A3]:B[T.B3]     6.4622      1.021      6.331      0.000       4.390       8.534
-A[T.A2]:C[T.C2]    -2.2921      1.021     -2.246      0.031      -4.364      -0.220
-A[T.A3]:C[T.C2]    -5.0014      1.021     -4.900      0.000      -7.074      -2.929
-A[T.A2]:C[T.C3]    -4.1743      1.021     -4.090      0.000      -6.246      -2.102
-A[T.A3]:C[T.C3]    -7.6355      1.021     -7.481      0.000      -9.708      -5.563
-B[T.B2]:C[T.C2]     0.0368      1.021      0.036      0.971      -2.035       2.109
-B[T.B3]:C[T.C2]     2.3804      1.021      2.332      0.026       0.308       4.453
-B[T.B2]:C[T.C3]     2.2667      1.021      2.221      0.033       0.195       4.339
-B[T.B3]:C[T.C3]     6.1249      1.021      6.001      0.000       4.053       8.197
+Intercept           6.9770      0.736      9.484      0.000       5.484       8.470
+A[T.A2]             3.2664      0.924      3.534      0.001       1.390       5.143
+A[T.A3]             6.7429      0.924      7.295      0.000       4.866       8.620
+B[T.B2]            -1.1779      0.924     -1.274      0.211      -3.054       0.699
+B[T.B3]            -2.9521      0.924     -3.194      0.003      -4.829      -1.075
+C[T.C2]            -0.4034      0.924     -0.436      0.665      -2.280       1.473
+C[T.C3]             0.2802      0.924      0.303      0.764      -1.596       2.157
+A[T.A2]:B[T.B2]     2.3526      1.013      2.323      0.026       0.297       4.408
+A[T.A3]:B[T.B2]     3.5528      1.013      3.509      0.001       1.497       5.609
+A[T.A2]:B[T.B3]     3.6677      1.013      3.622      0.001       1.612       5.723
+A[T.A3]:B[T.B3]     6.7092      1.013      6.626      0.000       4.654       8.765
+A[T.A2]:C[T.C2]    -2.9164      1.013     -2.880      0.007      -4.972      -0.861
+A[T.A3]:C[T.C2]    -3.7711      1.013     -3.724      0.001      -5.827      -1.715
+A[T.A2]:C[T.C3]    -5.4294      1.013     -5.362      0.000      -7.485      -3.374
+A[T.A3]:C[T.C3]    -8.2332      1.013     -8.131      0.000     -10.289      -6.177
+B[T.B2]:C[T.C2]     1.2941      1.013      1.278      0.210      -0.762       3.350
+B[T.B3]:C[T.C2]     3.3163      1.013      3.275      0.002       1.261       5.372
+B[T.B2]:C[T.C3]     1.6757      1.013      1.655      0.107      -0.380       3.731
+B[T.B3]:C[T.C3]     5.4321      1.013      5.364      0.000       3.376       7.488
 ==============================================================================
-Omnibus:                        0.520   Durbin-Watson:                   2.033
-Prob(Omnibus):                  0.771   Jarque-Bera (JB):                0.220
-Skew:                          -0.153   Prob(JB):                        0.896
-Kurtosis:                       3.062   Cond. No.                         18.1
+Omnibus:                        1.504   Durbin-Watson:                   1.754
+Prob(Omnibus):                  0.472   Jarque-Bera (JB):                1.106
+Skew:                           0.350   Prob(JB):                        0.575
+Kurtosis:                       3.023   Cond. No.                         18.1
 ==============================================================================
 
 Notes:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
 
 ANOVA Table (Main Effects + Two-Way Interactions):
-              sum_sq    df          F        PR(&gt;F)
-A         276.101423   2.0  88.340159  2.097889e-14
-B         162.324674   2.0  51.936666  3.352438e-11
-C          51.134662   2.0  16.360814  9.626344e-06
-A:B        62.873964   4.0  10.058434  1.582250e-05
-A:C        90.907242   4.0  14.543134  4.316714e-07
-B:C        59.991437   4.0   9.597294  2.394811e-05
-Residual   54.695112  35.0        NaN           NaN
+              sum_sq    df           F        PR(&gt;F)
+A         345.926115   2.0  112.455753  5.777560e-16
+B         105.511210   2.0   34.300222  5.654087e-09
+C          32.897238   2.0   10.694433  2.373051e-04
+A:B        68.265036   4.0   11.096005  6.436581e-06
+A:C       105.737024   4.0   17.186816  6.947684e-08
+B:C        47.211212   4.0    7.673853  1.503186e-04
+Residual   53.831902  35.0         NaN           NaN
 </pre></div>
 </div>
 </div>
@@ -896,8 +892,8 @@ Residual   54.695112  35.0        NaN           NaN
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/691e45780962329260ab404f3f0f7a81104e704e0d6a26ded3b8f06bd0a92756.png" src="_images/691e45780962329260ab404f3f0f7a81104e704e0d6a26ded3b8f06bd0a92756.png" />
-<img alt="_images/dcd3b322d74015b32f189289666ff4f984c52d8d939882dbbc7d53346e07d209.png" src="_images/dcd3b322d74015b32f189289666ff4f984c52d8d939882dbbc7d53346e07d209.png" />
+<img alt="_images/24f080d65e79fe2994ce1a01d18bde8e521f55331cb9ddf3ae60322c825f17ab.png" src="_images/24f080d65e79fe2994ce1a01d18bde8e521f55331cb9ddf3ae60322c825f17ab.png" />
+<img alt="_images/4b790aa4f6e68ed5ff78d1ac6267edf4513fbb451831f5a0bba3bd62e777d7f4.png" src="_images/4b790aa4f6e68ed5ff78d1ac6267edf4513fbb451831f5a0bba3bd62e777d7f4.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -924,14 +920,14 @@ Residual   54.695112  35.0        NaN           NaN
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapiro-Wilk test: statistic = 0.9716, p-value = 0.2273
-D’Agostino-Pearson test: statistic = 0.5195, p-value = 0.7712
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapiro-Wilk test: statistic = 0.9782, p-value = 0.4257
+D’Agostino-Pearson test: statistic = 1.5036, p-value = 0.4715
 Breusch–Pagan test for homoscedasticity:
-  Lagrange multiplier statistic: 23.4862
-  p-value: 0.1726
-  f-value: 1.4966
-  f p-value: 0.1502
-Durbin–Watson statistic: 2.0325
+  Lagrange multiplier statistic: 20.3447
+  p-value: 0.3137
+  f-value: 1.1754
+  f p-value: 0.3309
+Durbin–Watson statistic: 1.7541
 </pre></div>
 </div>
 </div>
@@ -939,9 +935,9 @@ Durbin–Watson statistic: 2.0325
 </section>
 </section>
 <section id="model-3-full-model-with-three-way-interaction">
-<h2><a class="toc-backref" href="#id19" role="doc-backlink">Model 3 – Full Model with Three-Way Interaction</a><a class="headerlink" href="#model-3-full-model-with-three-way-interaction" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id19" role="doc-backlink">Model 3 – Full Model with Three-Way Interaction</a><a class="headerlink" href="#model-3-full-model-with-three-way-interaction" title="Permalink to this heading">#</a></h2>
 <section id="id4">
-<h3><a class="toc-backref" href="#id20" role="doc-backlink">Model:</a><a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id20" role="doc-backlink">Model:</a><a class="headerlink" href="#id4" title="Permalink to this heading">#</a></h3>
 <div class="math notranslate nohighlight">
 \[
 Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{BC} + \alpha_{ABC} + \varepsilon
@@ -949,7 +945,7 @@ Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{B
 <p>All effects included. This model is <strong>saturated</strong> (fully parameterized).</p>
 </section>
 <section id="id5">
-<h3><a class="toc-backref" href="#id21" role="doc-backlink">Residual Diagnostics:</a><a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id21" role="doc-backlink">Residual Diagnostics:</a><a class="headerlink" href="#id5" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Histogram</strong>: Residuals are minimal and approximately centered at zero.</p></li>
 <li><p><strong>Q-Q Plot</strong>: Close fit to diagonal line, indicating normality.</p></li>
@@ -957,7 +953,7 @@ Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{B
 </ul>
 </section>
 <section id="id6">
-<h3><a class="toc-backref" href="#id22" role="doc-backlink">Interpretation:</a><a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id22" role="doc-backlink">Interpretation:</a><a class="headerlink" href="#id6" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Residuals show <strong>no strong evidence of non-normality or pattern</strong>, indicating a well-fitting model.</p></li>
 <li><p>Any remaining deviation is likely due to <strong>random noise</strong> (as expected under the simulation).</p></li>
@@ -990,50 +986,50 @@ Y = \mu + \alpha_A + \alpha_B + \alpha_C + \alpha_{AB} + \alpha_{AC} + \alpha_{B
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>                            OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                      Y   R-squared:                       0.952
-Model:                            OLS   Adj. R-squared:                  0.906
-Method:                 Least Squares   F-statistic:                     20.67
-Date:                Tue, 24 Jun 2025   Prob (F-statistic):           6.18e-12
-Time:                        23:34:23   Log-Likelihood:                -65.867
-No. Observations:                  54   AIC:                             185.7
-Df Residuals:                      27   BIC:                             239.4
+Dep. Variable:                      Y   R-squared:                       0.964
+Model:                            OLS   Adj. R-squared:                  0.929
+Method:                 Least Squares   F-statistic:                     27.72
+Date:                Tue, 24 Jun 2025   Prob (F-statistic):           1.59e-13
+Time:                        23:28:54   Log-Likelihood:                -58.323
+No. Observations:                  54   AIC:                             170.6
+Df Residuals:                      27   BIC:                             224.3
 Df Model:                          26                                         
 Covariance Type:            nonrobust                                         
 ===========================================================================================
                               coef    std err          t      P&gt;|t|      [0.025      0.975]
 -------------------------------------------------------------------------------------------
-Intercept                   8.0755      0.819      9.855      0.000       6.394       9.757
-A[T.A2]:B[B1]               2.3431      1.159      2.022      0.053      -0.035       4.721
-A[T.A3]:B[B1]               4.6923      1.159      4.049      0.000       2.315       7.070
-A[T.A2]:B[B2]               5.3886      1.159      4.650      0.000       3.011       7.766
-A[T.A3]:B[B2]               9.6421      1.159      8.321      0.000       7.264      12.020
-A[T.A2]:B[B3]               8.2632      1.159      7.131      0.000       5.886      10.641
-A[T.A3]:B[B3]              14.8558      1.159     12.820      0.000      12.478      17.234
-A[A1]:C[T.C2]              -1.1000      1.159     -0.949      0.351      -3.478       1.278
-A[A2]:C[T.C2]              -1.2869      1.159     -1.111      0.277      -3.665       1.091
-A[A3]:C[T.C2]              -3.7658      1.159     -3.250      0.003      -6.143      -1.388
-A[A1]:C[T.C3]              -2.9824      1.159     -2.574      0.016      -5.360      -0.605
-A[A2]:C[T.C3]              -5.2992      1.159     -4.573      0.000      -7.677      -2.922
-A[A3]:C[T.C3]              -7.2586      1.159     -6.264      0.000      -9.636      -4.881
-B[T.B2]:C[C1]              -1.7397      1.159     -1.501      0.145      -4.117       0.638
-B[T.B3]:C[C1]              -3.9768      1.159     -3.432      0.002      -6.354      -1.599
-B[T.B2]:C[C2]               0.2143      1.159      0.185      0.855      -2.163       2.592
-B[T.B3]:C[C2]               0.9272      1.159      0.800      0.431      -1.451       3.305
-B[T.B2]:C[C3]               2.0795      1.159      1.795      0.084      -0.298       4.457
-B[T.B3]:C[C3]               5.8124      1.159      5.016      0.000       3.435       8.190
-A[T.A2]:B[T.B2]:C[T.C2]    -2.4260      2.318     -1.047      0.304      -7.181       2.329
-A[T.A3]:B[T.B2]:C[T.C2]    -3.3257      2.318     -1.435      0.163      -8.081       1.430
-A[T.A2]:B[T.B3]:C[T.C2]    -3.8895      2.318     -1.678      0.105      -8.645       0.866
-A[T.A3]:B[T.B3]:C[T.C2]    -3.6811      2.318     -1.588      0.124      -8.436       1.074
-A[T.A2]:B[T.B2]:C[T.C3]    -2.0024      2.318     -0.864      0.395      -6.758       2.753
-A[T.A3]:B[T.B2]:C[T.C3]    -2.6551      2.318     -1.146      0.262      -7.410       2.100
-A[T.A2]:B[T.B3]:C[T.C3]    -3.5697      2.318     -1.540      0.135      -8.325       1.186
-A[T.A3]:B[T.B3]:C[T.C3]    -7.4229      2.318     -3.203      0.003     -12.178      -2.668
+Intercept                   8.1883      0.713     11.491      0.000       6.726       9.650
+A[T.A2]:B[B1]               1.8727      1.008      1.858      0.074      -0.195       3.940
+A[T.A3]:B[B1]               4.5027      1.008      4.468      0.000       2.435       6.570
+A[T.A2]:B[B2]               5.2280      1.008      5.188      0.000       3.160       7.296
+A[T.A3]:B[B2]              10.5466      1.008     10.466      0.000       8.479      12.614
+A[T.A2]:B[B3]               8.7188      1.008      8.652      0.000       6.651      10.786
+A[T.A3]:B[B3]              15.4414      1.008     15.323      0.000      13.374      17.509
+A[A1]:C[T.C2]              -1.7401      1.008     -1.727      0.096      -3.808       0.328
+A[A2]:C[T.C2]              -2.4925      1.008     -2.473      0.020      -4.560      -0.425
+A[A3]:C[T.C2]              -3.6650      1.008     -3.637      0.001      -5.733      -1.597
+A[A1]:C[T.C3]              -2.0169      1.008     -2.001      0.055      -4.085       0.051
+A[A2]:C[T.C3]              -5.4292      1.008     -5.388      0.000      -7.497      -3.361
+A[A3]:C[T.C3]              -5.3757      1.008     -5.335      0.000      -7.443      -3.308
+B[T.B2]:C[C1]              -2.3424      1.008     -2.324      0.028      -4.410      -0.275
+B[T.B3]:C[C1]              -5.4214      1.008     -5.380      0.000      -7.489      -3.354
+B[T.B2]:C[C2]               0.2986      1.008      0.296      0.769      -1.769       2.366
+B[T.B3]:C[C2]               0.5581      1.008      0.554      0.584      -1.510       2.626
+B[T.B2]:C[C3]               1.4800      1.008      1.469      0.153      -0.588       3.548
+B[T.B3]:C[C3]               4.7554      1.008      4.719      0.000       2.688       6.823
+A[T.A2]:B[T.B2]:C[T.C2]    -2.0356      2.015     -1.010      0.321      -6.171       2.100
+A[T.A3]:B[T.B2]:C[T.C2]    -2.0053      2.015     -0.995      0.329      -6.141       2.130
+A[T.A2]:B[T.B3]:C[T.C2]    -4.4563      2.015     -2.211      0.036      -8.592      -0.321
+A[T.A3]:B[T.B3]:C[T.C2]    -3.5333      2.015     -1.753      0.091      -7.669       0.602
+A[T.A2]:B[T.B2]:C[T.C3]    -0.9724      2.015     -0.482      0.633      -5.108       3.163
+A[T.A3]:B[T.B2]:C[T.C3]    -5.4679      2.015     -2.713      0.011      -9.603      -1.333
+A[T.A2]:B[T.B3]:C[T.C3]    -5.0789      2.015     -2.520      0.018      -9.214      -0.944
+A[T.A3]:B[T.B3]:C[T.C3]    -9.1551      2.015     -4.542      0.000     -13.290      -5.020
 ==============================================================================
-Omnibus:                        2.878   Durbin-Watson:                   2.017
-Prob(Omnibus):                  0.237   Jarque-Bera (JB):                2.385
-Skew:                          -0.000   Prob(JB):                        0.303
-Kurtosis:                       4.030   Cond. No.                         33.6
+Omnibus:                        0.231   Durbin-Watson:                   1.729
+Prob(Omnibus):                  0.891   Jarque-Bera (JB):                0.004
+Skew:                           0.000   Prob(JB):                        0.998
+Kurtosis:                       3.042   Cond. No.                         33.6
 ==============================================================================
 
 Notes:
@@ -1041,8 +1037,8 @@ Notes:
 
 ANOVA Table (Full Model with Three-Way Interaction):
               sum_sq    df          F        PR(&gt;F)
-A:B:C     721.771867  26.0  20.672963  6.181833e-12
-Residual   36.256647  27.0        NaN           NaN
+A:B:C     731.961193  26.0  27.722607  1.590763e-13
+Residual   27.418545  27.0        NaN           NaN
 </pre></div>
 </div>
 </div>
@@ -1081,8 +1077,8 @@ Residual   36.256647  27.0        NaN           NaN
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/31ca81c9e2ff46f48ec40ad1152454c0b3d31c4763fa707f3f4228ba4a4c5d3a.png" src="_images/31ca81c9e2ff46f48ec40ad1152454c0b3d31c4763fa707f3f4228ba4a4c5d3a.png" />
-<img alt="_images/01985e73bdc15415771964da74fcc5ae041b07d795f95e40454497227004e6a3.png" src="_images/01985e73bdc15415771964da74fcc5ae041b07d795f95e40454497227004e6a3.png" />
+<img alt="_images/be6d1e14977ebadfa003315b4e5b630c21bba700ec21c41789565f2c292fa8de.png" src="_images/be6d1e14977ebadfa003315b4e5b630c21bba700ec21c41789565f2c292fa8de.png" />
+<img alt="_images/96ced35f553fa9ce260913dad72453e7d3fd7a739d562b7c7005880aca02d99b.png" src="_images/96ced35f553fa9ce260913dad72453e7d3fd7a739d562b7c7005880aca02d99b.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1108,13 +1104,13 @@ Residual   36.256647  27.0        NaN           NaN
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapiro-Wilk test: statistic=0.9841, p-value=0.6909
-D’Agostino-Pearson test: statistic=2.8785, p-value=0.2371
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Shapiro-Wilk test: statistic=0.9949, p-value=0.9984
+D’Agostino-Pearson test: statistic=0.2307, p-value=0.8910
 Breusch–Pagan Lagrange multiplier statistic: 54.0000
 Breusch–Pagan p-value: 0.0010
-Breusch–Pagan f-value: 8693224065188643294242930688.0000
+Breusch–Pagan f-value: 6049100036518463198612946944.0000
 Breusch–Pagan f p-value: 0.0000
-Durbin–Watson statistic: 2.0173
+Durbin–Watson statistic: 1.7287
 </pre></div>
 </div>
 </div>
@@ -1122,7 +1118,7 @@ Durbin–Watson statistic: 2.0173
 </section>
 </section>
 <section id="comparing-the-three-models-assumptions-analysis">
-<h2><a class="toc-backref" href="#id23" role="doc-backlink">Comparing the Three Models: Assumptions Analysis</a><a class="headerlink" href="#comparing-the-three-models-assumptions-analysis" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id23" role="doc-backlink">Comparing the Three Models: Assumptions Analysis</a><a class="headerlink" href="#comparing-the-three-models-assumptions-analysis" title="Permalink to this heading">#</a></h2>
 <p>Evaluating the residuals of a model is crucial to assess its statistical validity. Below, we compare three models of increasing complexity using four criteria:</p>
 <ol class="arabic simple">
 <li><p><strong>Normality of residuals</strong></p></li>
@@ -1130,7 +1126,7 @@ Durbin–Watson statistic: 2.0173
 <li><p><strong>Randomness (independence of residuals)</strong></p></li>
 </ol>
 <section id="normality-shapirowilk-and-dagostinopearson-tests">
-<h3><a class="toc-backref" href="#id24" role="doc-backlink">1. Normality: Shapiro–Wilk and D’Agostino–Pearson Tests</a><a class="headerlink" href="#normality-shapirowilk-and-dagostinopearson-tests" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id24" role="doc-backlink">1. Normality: Shapiro–Wilk and D’Agostino–Pearson Tests</a><a class="headerlink" href="#normality-shapirowilk-and-dagostinopearson-tests" title="Permalink to this heading">#</a></h3>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Model</p></th>
@@ -1163,7 +1159,7 @@ Model 1 violates the normality assumption, which may affect p-value validity. Mo
 </section>
 <hr class="docutils" />
 <section id="homoscedasticity-breuschpagan-test">
-<h3><a class="toc-backref" href="#id25" role="doc-backlink">2. Homoscedasticity: Breusch–Pagan Test</a><a class="headerlink" href="#homoscedasticity-breuschpagan-test" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id25" role="doc-backlink">2. Homoscedasticity: Breusch–Pagan Test</a><a class="headerlink" href="#homoscedasticity-breuschpagan-test" title="Permalink to this heading">#</a></h3>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Model</p></th>
@@ -1192,7 +1188,7 @@ Model 2 is the only model that satisfies the equal variance assumption. Model 1 
 </section>
 <hr class="docutils" />
 <section id="randomness-durbinwatson-statistic">
-<h3><a class="toc-backref" href="#id26" role="doc-backlink">3. Randomness: Durbin–Watson Statistic</a><a class="headerlink" href="#randomness-durbinwatson-statistic" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id26" role="doc-backlink">3. Randomness: Durbin–Watson Statistic</a><a class="headerlink" href="#randomness-durbinwatson-statistic" title="Permalink to this heading">#</a></h3>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Model</p></th>
@@ -1221,7 +1217,7 @@ All three models show reasonably random residual patterns. While Model 2 and 3 a
 </section>
 <hr class="docutils" />
 <section id="summary-of-assumption-validity">
-<h3><a class="toc-backref" href="#id27" role="doc-backlink">Summary of Assumption Validity</a><a class="headerlink" href="#summary-of-assumption-validity" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id27" role="doc-backlink">Summary of Assumption Validity</a><a class="headerlink" href="#summary-of-assumption-validity" title="Permalink to this heading">#</a></h3>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Model</p></th>
@@ -1255,7 +1251,7 @@ All three models show reasonably random residual patterns. While Model 2 and 3 a
 </div>
 </section>
 <section id="final-interpretation">
-<h3><a class="toc-backref" href="#id28" role="doc-backlink">Final Interpretation</a><a class="headerlink" href="#final-interpretation" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id28" role="doc-backlink">Final Interpretation</a><a class="headerlink" href="#final-interpretation" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><strong>Model 1</strong> underfits the data. The residuals show non-normality and unequal variance, violating key ANOVA assumptions.</p></li>
 <li><p><strong>Model 2</strong> offers a balanced trade-off between parsimony and assumption satisfaction. It is statistically and practically the best fitting model.</p></li>
@@ -1265,7 +1261,7 @@ All three models show reasonably random residual patterns. While Model 2 and 3 a
 </section>
 </section>
 <section id="why-residual-normality-matters">
-<h2><a class="toc-backref" href="#id29" role="doc-backlink">Why Residual Normality Matters</a><a class="headerlink" href="#why-residual-normality-matters" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id29" role="doc-backlink">Why Residual Normality Matters</a><a class="headerlink" href="#why-residual-normality-matters" title="Permalink to this heading">#</a></h2>
 <p>In ANOVA and linear modeling, normality of residuals is important because:</p>
 <ul class="simple">
 <li><p>It <strong>justifies</strong> the use of the F-distribution for hypothesis testing.</p></li>
@@ -1273,7 +1269,7 @@ All three models show reasonably random residual patterns. While Model 2 and 3 a
 <li><p>It <strong>supports the validity</strong> of conclusions about factor effects.</p></li>
 </ul>
 <section id="when-normality-is-violated">
-<h3><a class="toc-backref" href="#id30" role="doc-backlink">When normality is violated:</a><a class="headerlink" href="#when-normality-is-violated" title="Link to this heading">#</a></h3>
+<h3><a class="toc-backref" href="#id30" role="doc-backlink">When normality is violated:</a><a class="headerlink" href="#when-normality-is-violated" title="Permalink to this heading">#</a></h3>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Situation</p></th>
@@ -1432,7 +1428,7 @@ By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>

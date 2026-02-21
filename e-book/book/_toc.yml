@@ -1,7 +1,8 @@
 # Table of contents
 # Learn more at https://jupyterbook.org/customize/toc.html
 
-# 1. pip install -U jupyter-book
+# 0. pip uninstall -y jupyter-book
+# 1. pip install -U "jupyter-book==0.15.1"
 # 2. jupyter-book build e-book/book
 # 3. pip install --user ghp-import
 # 4. python3 -m ghp_import -n -p -f e-book/book/_build/html

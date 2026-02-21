@@ -1,12 +1,13 @@
 
+
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
     <title>2. Using ViDoE to Understand One-Way ANOVA &#8212; ViDoe - Visualizing Design of Experiments</title>
   
@@ -28,35 +29,39 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js?v=36754332"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '00-ViDoe-ANOVA-One-Way';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -158,18 +163,7 @@
   
   
 </a></div>
-        <div class="sidebar-primary-item">
-
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
-        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -214,6 +208,7 @@
 <li class="toctree-l1"><a class="reference internal" href="03-regression-model.html">The Foundations of Linear Regression: Continuous vs. Discrete Predictors</a></li>
 
 <li class="toctree-l1"><a class="reference internal" href="03-residual-analysis.html">Introduction to residual analysis</a></li>
+
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Extras</span></p>
 <ul class="nav bd-sidenav">
@@ -247,9 +242,9 @@
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</button></div>
+</label></div>
       
     </div>
   
@@ -390,9 +385,9 @@ document.write(`
   </button>
 `);
 </script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</button>
+</label>
 </div></div>
       
     </div>
@@ -430,11 +425,11 @@ document.write(`
                   
   <p><a name="00-ViDoe-ANOVA-One-Way"></a></p>
 <section class="tex2jax_ignore mathjax_ignore" id="using-vidoe-to-understand-one-way-anova">
-<h1><span class="section-number">2. </span>Using ViDoE to Understand One-Way ANOVA<a class="headerlink" href="#using-vidoe-to-understand-one-way-anova" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">2. </span>Using ViDoE to Understand One-Way ANOVA<a class="headerlink" href="#using-vidoe-to-understand-one-way-anova" title="Permalink to this heading">#</a></h1>
 <p>One-Way ANOVA (Analysis of Variance) is one of the most fundamental tools in experimental design. It is used when we want to compare the means of three or more independent groups (or levels of a factor) to determine if the observed differences in sample means are statistically significant. In practice, this method is key when analyzing how different conditions (treatments, materials, times, etc.) affect a given outcome.</p>
 <p>However, interpreting ANOVA results from purely numerical outputs—such as F-values, p-values, and sum of squares—can be challenging for students. That is why <strong>ViDoE</strong> includes a dedicated, interactive module for One-Way ANOVA that helps users understand how treatment effects and residuals contribute to variation in the data.</p>
 <section id="educational-utilities-in-vidoe">
-<h2><span class="section-number">2.1. </span>Educational Utilities in ViDoE<a class="headerlink" href="#educational-utilities-in-vidoe" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.1. </span>Educational Utilities in ViDoE<a class="headerlink" href="#educational-utilities-in-vidoe" title="Permalink to this heading">#</a></h2>
 <p>The ViDoE platform allows learners to:</p>
 <ul class="simple">
 <li><p>Customize the <strong>name of the factor</strong> and its <strong>three levels</strong> (e.g., Temperature: Low, Medium, High).</p></li>
@@ -446,23 +441,23 @@ document.write(`
 </ul>
 </section>
 <section id="key-figures">
-<h2><span class="section-number">2.2. </span>Key Figures<a class="headerlink" href="#key-figures" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.2. </span>Key Figures<a class="headerlink" href="#key-figures" title="Permalink to this heading">#</a></h2>
 <figure class="align-default" id="fig2-1">
 <img alt="Boxplot of Y across Factor Levels" src="_images/Fig2_1_Boxplot_Y_by_Level.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 2.1 </span><span class="caption-text">This figure shows the distribution of the response variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> for each factor level. It helps visualize differences in central tendency and variation among groups.</span><a class="headerlink" href="#fig2-1" title="Link to this image">#</a></p>
+<p><span class="caption-number">Fig. 2.1 </span><span class="caption-text">This figure shows the distribution of the response variable <code class="docutils literal notranslate"><span class="pre">Y</span></code> for each factor level. It helps visualize differences in central tendency and variation among groups.</span><a class="headerlink" href="#fig2-1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <figure class="align-default" id="fig2-2">
 <img alt="Regression Equation Visualization" src="_images/Fig2_2_Regression_Equation.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 2.2 </span><span class="caption-text">Displays the linear regression model derived from the data using indicator variables. This aids in understanding how treatment effects modify the outcome.</span><a class="headerlink" href="#fig2-2" title="Link to this image">#</a></p>
+<p><span class="caption-number">Fig. 2.2 </span><span class="caption-text">Displays the linear regression model derived from the data using indicator variables. This aids in understanding how treatment effects modify the outcome.</span><a class="headerlink" href="#fig2-2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 <figure class="align-default" id="fig2-3">
 <img alt="Sum of Squares Decomposition Pie Charts" src="_images/Fig2_3_Sum_of_Squares_Pie.png" />
 <figcaption>
-<p><span class="caption-number">Fig. 2.3 </span><span class="caption-text">Two pie charts showing:</span><a class="headerlink" href="#fig2-3" title="Link to this image">#</a></p>
+<p><span class="caption-number">Fig. 2.3 </span><span class="caption-text">Two pie charts showing:</span><a class="headerlink" href="#fig2-3" title="Permalink to this image">#</a></p>
 <div class="legend">
 <ol class="arabic simple">
 <li><p>Total Sum of Squares (SST)</p></li>
@@ -473,7 +468,7 @@ document.write(`
 </figure>
 </section>
 <section id="suggested-classroom-activity">
-<h2><span class="section-number">2.3. </span>Suggested Classroom Activity<a class="headerlink" href="#suggested-classroom-activity" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.3. </span>Suggested Classroom Activity<a class="headerlink" href="#suggested-classroom-activity" title="Permalink to this heading">#</a></h2>
 <p>Students can follow these steps directly within the ViDoE app:</p>
 <ol class="arabic simple">
 <li><p>Rename the factor (e.g., “Method”) and assign new level names (e.g., “A”, “B”, “C”).</p></li>
@@ -485,7 +480,7 @@ document.write(`
 </ol>
 </section>
 <section id="interpretation-support">
-<h2><span class="section-number">2.4. </span>Interpretation Support<a class="headerlink" href="#interpretation-support" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">2.4. </span>Interpretation Support<a class="headerlink" href="#interpretation-support" title="Permalink to this heading">#</a></h2>
 <p>The module provides both <strong>statistical tables</strong> and <strong>visual guidance</strong> to support interpretation:</p>
 <ul class="simple">
 <li><p>The <strong>ANOVA table</strong> displays degrees of freedom, sum of squares, F-statistic, and p-value.</p></li>
@@ -588,7 +583,7 @@ By Leonardo H. Talero-Sarmiento, Henry Lamos-Diaz, Juan D. Marquez-Gonzalez
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2022.
       <br/>
     
   </p>
