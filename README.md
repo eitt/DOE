@@ -1,132 +1,150 @@
-# **DOE - Interactive Design of Experiments**
-🚀 **An illustrative web-based application for Design of Experiments (DOE) analysis, built with Streamlit.** This tool enables users to explore **factorial designs, fractional factorial designs, one-way ANOVA, conjoint analysis, and regression analysis** interactively, with real-time data visualization and statistical modeling.
+# DOE – Interactive Design of Experiments
 
-## 📌 **Features**
-✅ **Factorial Design Analysis**
-- **Two-level factorial designs** (2 factors, 2 levels)
-- **Three-factor factorial designs** (3 factors, 3 levels)
-- **Fully customizable factor names and levels**
-- **Interactive data generation with user-defined coefficients**
-- **Boxplots, surface plots, and regression models**
-
-✅ **Advanced Designs & Analysis**
-- **Fractional Factorial Designs ($2^{k-p}$):** Explore Resolution III, IV, and V designs with 3D cube visualizations and aliasing structures.
-- **Choice-Based Conjoint Analysis:** Interactive choice tasks to estimate part-worth utilities using Logistic Regression (Logit).
-- **Post-hoc Analysis (Tukey HSD):** Filtered pairwise comparisons and Minitab-style grouping summaries.
-
-✅ **Effect Significance Visualizations**
-- **Pareto Plots:** Visually identify the most significant main effects and interactions.
-- **Daniel Plots (Normal Plots):** Distinguish real factor impacts from random noise.
-
-✅ **One-Way ANOVA Analysis**
-- **Three-level factor design (15 replications per level)**
-- **Customizable factor names and level names**
-- **Boxplot visualization of factor effects**
-- **ANOVA table & linear regression summary**
-- **Graphical representation of Sum of Squares (SST, SSTR, SSE)**
-
-✅ **Statistical Outputs & Exports**
-- **Regression equations displayed in clean format**
-- **ANOVA summary table and OLS regression model results**
-- **Download generated datasets and full Tukey HSD reports in CSV format**
+An illustrative web-based application for Design of Experiments (DOE) analysis built with Streamlit. The application enables interactive exploration of factorial designs, fractional factorial designs, one-way ANOVA, conjoint analysis, and regression modeling, with real-time visualization and statistical output.
 
 ---
 
-## 📂 **Installation**
-To run this Streamlit app locally, follow these steps:
+## Overview
 
-### 1️⃣ **Clone this repository**
+This project provides an educational and exploratory environment for understanding experimental design and statistical inference. Users can define factors, adjust model coefficients, generate synthetic data, and immediately inspect statistical and graphical outputs.
+
+---
+
+## Features
+
+### Factorial Design Analysis
+
+* Two-level factorial designs (2 factors, 2 levels)
+* Three-factor factorial designs (3 factors, 3 levels)
+* Customizable factor and level names
+* Interactive data generation with user-defined coefficients
+* Boxplots, surface plots, and regression modeling
+
+### Advanced Designs and Analysis
+
+* Fractional factorial designs (2^(k−p)):
+
+  * Resolution III, IV, and V designs
+  * 3D cube visualizations
+  * Aliasing structure inspection
+
+* Choice-based conjoint analysis:
+
+  * Interactive choice tasks
+  * Part-worth utility estimation using logistic regression
+
+* Post-hoc analysis (Tukey HSD):
+
+  * Pairwise comparisons
+  * Grouping summaries in Minitab-style format
+
+### Effect Significance Visualizations
+
+* Pareto plots for identifying dominant main and interaction effects
+* Daniel (normal) plots for distinguishing active effects from noise
+
+### One-Way ANOVA
+
+* Three-level factor design (15 replications per level)
+* Customizable factor and level names
+* Boxplot visualization of group effects
+* ANOVA table and linear regression summary
+* Graphical representation of SST, SSTR, and SSE
+
+### Statistical Outputs and Export
+
+* Regression equations in readable mathematical form
+* ANOVA summary tables and OLS model results
+* CSV export for generated datasets and Tukey HSD reports
+
+---
+
+## Installation
+
+### 1. Clone the repository
+
 ```bash
-git clone [https://github.com/yourusername/doe.git](https://github.com/yourusername/doe.git)
+git clone https://github.com/yourusername/doe.git
 cd doe
-
 ```
 
-### 2️⃣ **Install required dependencies**
+### 2. Install dependencies
 
-Make sure you have Python **3.10 or 3.11** installed, then run:
+Use Python 3.10 or 3.11.
 
 ```bash
 pip install -r requirements.txt
-
 ```
 
-### 3️⃣ **Run the app**
+### 3. Run the application
 
 ```bash
 streamlit run mainapp.py
-
 ```
 
 ---
 
-## 🛠 **How to Use the App**
+## Usage Guide
 
-### **📊 Factorial Designs**
+### Factorial Designs
 
-1. **Navigate to the Factorial Design section**.
-2. **Define factor names** (e.g., Temperature, Pressure, Thinner).
-3. **Set levels (e.g., Low, Medium, High)**.
-4. **Adjust coefficients to explore different effects**.
-5. **Visualize results** (boxplots, surface plots, Pareto/Daniel plots, regression model).
+1. Navigate to the **Factorial Design** section.
+2. Define factor names (e.g., Temperature, Pressure, Thinner).
+3. Specify factor levels (e.g., Low, Medium, High).
+4. Adjust model coefficients to simulate different effect structures.
+5. Inspect visual outputs (boxplots, surface plots, Pareto plots, Daniel plots) and regression summaries.
 
-### **📈 One-Way ANOVA & Post-Hoc**
+### One-Way ANOVA and Post-Hoc Analysis
 
-1. **Go to the One-Way ANOVA section**.
-2. **Enter a custom factor name** (e.g., Material Type).
-3. **Rename levels (e.g., Plastic, Metal, Wood)**.
-4. **Adjust coefficients to set the effect of each level**.
-5. **View the ANOVA table, regression model, and Tukey HSD groupings**.
+1. Open the **One-Way ANOVA** section.
+2. Define the factor name (e.g., Material Type).
+3. Rename levels (e.g., Plastic, Metal, Wood).
+4. Set level coefficients to control effect magnitude.
+5. Review the ANOVA table, regression output, and Tukey HSD groupings.
 
-### **📉 Fractional & Conjoint**
+### Fractional Factorial and Conjoint Analysis
 
-* **Fractional Factorial:** Select your design (, , etc.) to view the required runs, the aliasing structure, and the 3D factor space.
-* **Conjoint Analysis:** Complete the interactive A/B choices to generate a dataset, then view the Logistic Regression odds ratios.
+* Fractional factorial:
+  Select the design configuration to review required runs, aliasing structure, and 3D factor space representation.
 
-### **📥 Download Data**
+* Conjoint analysis:
+  Complete the interactive choice tasks. The application generates a dataset and estimates logistic regression coefficients with corresponding odds ratios.
 
-* Every dataset generated in the app, as well as full Post-Hoc comparison tables, **can be exported as CSV files**.
+### Data Export
 
----
-
-## 🚀 **Deployment on Streamlit Cloud**
-
-To deploy this app smoothly on **Streamlit Cloud**, follow these steps:
-
-1. **Keep `requirements.txt` lightweight and bounded:** include only required runtime packages and use version ranges (for example `streamlit>=1.33,<2`) instead of hard pins for every package. This reduces dependency-resolution failures and long install times on Streamlit Cloud.
-2. **Push your repository to GitHub**.
-3. **Go to [Streamlit Cloud](https://share.streamlit.io/).**
-4. **Create a new app** and connect it to your GitHub repo.
-5. **Set the entry point as `mainapp.py`.**
-6. **Deploy and share your interactive DOE tool! 🎉**
-
-### ✅ Streamlit deployment stability tips (to avoid install failures)
-
-- Use a supported Python runtime (`python-3.11`) in `runtime.txt`.
-- Avoid unnecessary heavy packages (for this app, `matplotlib` is not required).
-- If deployment starts failing after package updates, clear app cache and redeploy.
-- Keep package bounds compatible (example: `statsmodels>=0.14,<1` with `numpy>=1.24,<3`).
+All generated datasets and post-hoc comparison tables can be exported as CSV files directly from the interface.
 
 ---
 
-## 📝 **Future Enhancements**
+## Deployment on Streamlit Cloud
 
-🔹 **Response surface methodology (RSM)** optimizations.
+To deploy on Streamlit Cloud:
 
-🔹 **Custom data input support** for analyzing real-world user experiments.
+1. Keep `requirements.txt` minimal and use bounded version ranges (e.g., `streamlit>=1.33,<2`).
+2. Push the repository to GitHub.
+3. Create a new application in Streamlit Cloud.
+4. Set the entry point to `mainapp.py`.
+5. Deploy the application.
 
-For any questions, open an **issue** or reach out to us.
+### Deployment Stability Recommendations
+
+* Use a supported runtime (e.g., `python-3.11` in `runtime.txt`).
+* Avoid unnecessary heavy dependencies.
+* Clear cache and redeploy if dependency conflicts arise.
+* Maintain compatible version ranges (e.g., `statsmodels>=0.14,<1` with `numpy>=1.24,<3`).
 
 ---
 
-## 📬 **Contact**
+## Future Enhancements
 
-💡 **Developed by:** Leonardo H. Talero-Sarmiento
-
-🌐 **Profile:** [View Apolo Profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)
+* Response Surface Methodology (RSM) extensions.
+* Support for user-uploaded experimental datasets.
 
 ---
 
-🎯 **Start exploring the power of Design of Experiments with this interactive tool! 🚀**
+## Contact
 
-```
+Developed by Leonardo H. Talero-Sarmiento
+
+Profile: [https://apolo.unab.edu.co/en/persons/leonardo-talero](https://apolo.unab.edu.co/en/persons/leonardo-talero)
+
