@@ -44,7 +44,7 @@ cd doe
 
 ### 2️⃣ **Install required dependencies**
 
-Make sure you have Python **3.9 or 3.10** installed, then run:
+Make sure you have Python **3.10 or 3.11** installed, then run:
 
 ```bash
 pip install -r requirements.txt
@@ -93,12 +93,19 @@ streamlit run mainapp.py
 
 To deploy this app smoothly on **Streamlit Cloud**, follow these steps:
 
-1. **Clean your `requirements.txt`:** Ensure your requirements file *only* contains the packages needed for the app (e.g., `streamlit`, `pandas`, `numpy`, `scipy`, `statsmodels`, `plotly`). **Do not include strict version numbers (like `==1.24.3`) or heavy documentation packages (like `jupyter-book`)**, as these will cause the Streamlit Cloud deployment to time out and crash.
+1. **Keep `requirements.txt` lightweight and bounded:** include only required runtime packages and use version ranges (for example `streamlit>=1.33,<2`) instead of hard pins for every package. This reduces dependency-resolution failures and long install times on Streamlit Cloud.
 2. **Push your repository to GitHub**.
-3. **Go to [Streamlit Cloud**](https://share.streamlit.io/).
+3. **Go to [Streamlit Cloud](https://share.streamlit.io/).**
 4. **Create a new app** and connect it to your GitHub repo.
-5. **Set the entry point as `mainapp.py**`.
+5. **Set the entry point as `mainapp.py`.**
 6. **Deploy and share your interactive DOE tool! 🎉**
+
+### ✅ Streamlit deployment stability tips (to avoid install failures)
+
+- Use a supported Python runtime (`python-3.11`) in `runtime.txt`.
+- Avoid unnecessary heavy packages (for this app, `matplotlib` is not required).
+- If deployment starts failing after package updates, clear app cache and redeploy.
+- Keep package bounds compatible (example: `statsmodels>=0.14,<1` with `numpy>=1.24,<3`).
 
 ---
 
@@ -123,4 +130,3 @@ For any questions, open an **issue** or reach out to us.
 🎯 **Start exploring the power of Design of Experiments with this interactive tool! 🚀**
 
 ```
-
