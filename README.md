@@ -114,6 +114,13 @@ streamlit run mainapp.py
 
 All generated datasets and post-hoc comparison tables can be exported as CSV files directly from the interface.
 
+### Streamlit deployment stability tips (to avoid install failures)
+
+- Use a supported Python runtime (`python-3.11`) in `runtime.txt`.
+- Avoid unnecessary heavy packages (for this app, `matplotlib` is not required).
+- If deployment starts failing after package updates, clear app cache and redeploy.
+- Keep package bounds compatible (example: `statsmodels>=0.14,<1` with `numpy>=1.24,<3`).
+
 ---
 
 ## Deployment on Streamlit Cloud
