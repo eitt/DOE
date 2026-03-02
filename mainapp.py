@@ -1126,6 +1126,17 @@ def posthoc_live_three_tests():
     st.markdown(
         "Move the three treatment sliders to recompute one-way ANOVA and all post-hoc tests in real time."
     )
+    with st.expander("Formulas for the Three Post-hoc Tests", expanded=True):
+        st.markdown("**LSD (Fisher)**")
+        st.latex(r"t_{ij}=\frac{|\bar{Y}_i-\bar{Y}_j|}{\sqrt{MSE\left(\frac{1}{n_i}+\frac{1}{n_j}\right)}}")
+        st.latex(r"LSD_{ij}=t_{1-\alpha/2,\;df_e}\sqrt{MSE\left(\frac{1}{n_i}+\frac{1}{n_j}\right)}")
+        st.latex(r"\text{Reject }H_0\text{ if }|\bar{Y}_i-\bar{Y}_j|>LSD_{ij}")
+        st.markdown("**Tukey HSD (balanced n)**")
+        st.latex(r"q_{ij}=\frac{|\bar{Y}_i-\bar{Y}_j|}{\sqrt{MSE/n}}")
+        st.latex(r"\text{Reject }H_0\text{ if }q_{ij}>q_{1-\alpha;\,k,df_e}")
+        st.markdown("**Duncan Multiple Range**")
+        st.latex(r"q_{ij}^{(r)}=\frac{|\bar{Y}_i-\bar{Y}_j|}{\sqrt{\frac{MSE}{2}\left(\frac{1}{n_i}+\frac{1}{n_j}\right)}}")
+        st.latex(r"\alpha_r=1-(1-\alpha)^{r-1},\quad \text{Reject if }q_{ij}^{(r)}>q_{1-\alpha_r;\,r,df_e}")
 
     st.sidebar.header("Simulation controls")
     replications = st.sidebar.slider("Replications per treatment", 5, 200, 30, 1)
@@ -1192,6 +1203,19 @@ def posthoc_live_three_tests():
     except Exception as e:
         duncan_error = str(e)
 
+    mean_lookup = group_summary["Mean"].to_dict()
+    n_lookup = group_summary["N"].to_dict()
+    lsd_t_crit = stats.t.ppf(1 - alpha / 2, df_error) if df_error > 0 else np.nan
+    tukey_q_crit = np.nan
+    if hasattr(stats, 'studentized_range') and df_error > 0:
+        try:
+            tukey_q_crit = stats.studentized_range.ppf(1 - alpha, len(names), df_error)
+        except Exception:
+            tukey_q_crit = np.nan
+
+    def _fmt_num(v, digits=3):
+        return f"{v:.{digits}f}" if np.isfinite(v) else "NA"
+
     summary_cols = st.columns(3)
     for idx, g in enumerate(names):
         summary_cols[idx].metric(f"Sample mean: {g}", f"{group_summary.loc[g, 'Mean']:.3f}")
@@ -1257,6 +1281,36 @@ def posthoc_live_three_tests():
     )
 
     with tab_lsd:
+        st.markdown("**Live Substituted Equations (updates with sliders)**")
+        lsd_eq_rows = []
+        for _, row in lsd_df.iterrows():
+            g1 = row["group1"]
+            g2 = row["group2"]
+            m_i = float(mean_lookup[g1])
+            m_j = float(mean_lookup[g2])
+            n_i = float(n_lookup[g1])
+            n_j = float(n_lookup[g2])
+            se_ij = np.sqrt(mse * (1.0 / n_i + 1.0 / n_j))
+            t_ij = abs(m_i - m_j) / se_ij if se_ij > 0 else np.nan
+            lsd_ij = lsd_t_crit * se_ij if np.isfinite(lsd_t_crit) else np.nan
+            is_sig = np.isfinite(lsd_ij) and abs(m_i - m_j) > lsd_ij
+            lsd_eq_rows.append({
+                "Comparison": f"{g1} vs {g2}",
+                "t_ij": (
+                    f"|{_fmt_num(m_i)}-{_fmt_num(m_j)}| / "
+                    f"sqrt({_fmt_num(mse)}*(1/{int(n_i)}+1/{int(n_j)})) = {_fmt_num(t_ij)}"
+                ),
+                "LSD_ij": (
+                    f"{_fmt_num(lsd_t_crit)} * sqrt({_fmt_num(mse)}*(1/{int(n_i)}+1/{int(n_j)})) = "
+                    f"{_fmt_num(lsd_ij)}"
+                ),
+                "Decision": (
+                    f"|Delta|={_fmt_num(abs(m_i-m_j))} {'>' if is_sig else '<='} "
+                    f"{_fmt_num(lsd_ij)} -> {'Sig' if is_sig else 'NS'}"
+                )
+            })
+        st.dataframe(pd.DataFrame(lsd_eq_rows))
+
         st.markdown("**Significant Pairwise Differences**")
         if lsd_sig.empty:
             st.info(f"No significant pairwise differences for LSD at alpha = {alpha:.2f}.")
@@ -1277,6 +1331,28 @@ def posthoc_live_three_tests():
         )
 
     with tab_tukey:
+        st.markdown("**Live Substituted Equations (updates with sliders)**")
+        tukey_eq_rows = []
+        for _, row in tuk_pair_df.iterrows():
+            g1 = row["group1"]
+            g2 = row["group2"]
+            m_i = float(mean_lookup[g1])
+            m_j = float(mean_lookup[g2])
+            se_t = np.sqrt(mse / replications) if replications > 0 else np.nan
+            q_ij = abs(m_i - m_j) / se_t if np.isfinite(se_t) and se_t > 0 else np.nan
+            sig_from_rule = np.isfinite(tukey_q_crit) and np.isfinite(q_ij) and q_ij > tukey_q_crit
+            sig_final = sig_from_rule if np.isfinite(tukey_q_crit) else _to_bool(row["reject"])
+            tukey_eq_rows.append({
+                "Comparison": f"{g1} vs {g2}",
+                "q_ij": f"|{_fmt_num(m_i)}-{_fmt_num(m_j)}| / sqrt({_fmt_num(mse)}/{replications}) = {_fmt_num(q_ij)}",
+                "q_critical": f"q_(1-alpha;k={len(names)},df={int(df_error)}) = {_fmt_num(tukey_q_crit)}",
+                "Decision": (
+                    f"{_fmt_num(q_ij)} {'>' if sig_final else '<='} {_fmt_num(tukey_q_crit)} -> "
+                    f"{'Sig' if sig_final else 'NS'}"
+                ) if np.isfinite(tukey_q_crit) else f"Using statsmodels reject -> {'Sig' if sig_final else 'NS'}"
+            })
+        st.dataframe(pd.DataFrame(tukey_eq_rows))
+
         st.markdown("**Significant Pairwise Differences**")
         if tuk_sig.empty:
             st.info(f"No significant pairwise differences for Tukey at alpha = {alpha:.2f}.")
@@ -1300,6 +1376,41 @@ def posthoc_live_three_tests():
         if duncan_error is not None:
             st.error(f"Could not compute Duncan test: {duncan_error}")
         else:
+            st.markdown("**Live Substituted Equations (updates with sliders)**")
+            duncan_eq_rows = []
+            for _, row in duncan_df.iterrows():
+                g1 = row["group1"]
+                g2 = row["group2"]
+                r = int(row["range_r"])
+                m_i = float(mean_lookup[g1])
+                m_j = float(mean_lookup[g2])
+                n_i = float(n_lookup[g1])
+                n_j = float(n_lookup[g2])
+                alpha_r = 1 - (1 - alpha) ** (r - 1)
+                se_q = np.sqrt((mse / 2.0) * (1.0 / n_i + 1.0 / n_j))
+                q_ij = abs(m_i - m_j) / se_q if se_q > 0 else np.nan
+                q_crit_r = (
+                    stats.studentized_range.ppf(1 - alpha_r, r, df_error)
+                    if hasattr(stats, 'studentized_range') and df_error > 0 else np.nan
+                )
+                is_sig = np.isfinite(q_ij) and np.isfinite(q_crit_r) and q_ij > q_crit_r
+                duncan_eq_rows.append({
+                    "Comparison": f"{g1} vs {g2}",
+                    "q_ij^(r)": (
+                        f"|{_fmt_num(m_i)}-{_fmt_num(m_j)}| / "
+                        f"sqrt(({_fmt_num(mse)}/2)*(1/{int(n_i)}+1/{int(n_j)})) = {_fmt_num(q_ij)}"
+                    ),
+                    "q_critical^(r)": (
+                        f"alpha_r=1-(1-{alpha:.2f})^({r}-1)={_fmt_num(alpha_r,4)}; "
+                        f"q_(1-alpha_r;r={r},df={int(df_error)})={_fmt_num(q_crit_r)}"
+                    ),
+                    "Decision": (
+                        f"{_fmt_num(q_ij)} {'>' if is_sig else '<='} {_fmt_num(q_crit_r)} -> "
+                        f"{'Sig' if is_sig else 'NS'}"
+                    )
+                })
+            st.dataframe(pd.DataFrame(duncan_eq_rows))
+
             st.markdown("**Significant Pairwise Differences**")
             if duncan_sig.empty:
                 st.info(f"No significant pairwise differences for Duncan at alpha = {alpha:.2f}.")
