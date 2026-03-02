@@ -495,6 +495,136 @@ def _format_tukey_summary_for_display(tukey_result, data_df, group_col, response
     
     return group_stats.sort_values('Mean', ascending=False).reset_index(drop=True)
 
+def _format_generic_grouping_summary(data_df, group_col, comparisons_df, response_col='Y', reject_col='reject'):
+    """Build grouping letters from a generic pairwise comparison table."""
+    group_stats = data_df.groupby(group_col)[response_col].agg(['mean', 'count']).reset_index()
+    group_stats.rename(columns={'mean': 'Mean', 'count': 'N', group_col: 'Group'}, inplace=True)
+    group_stats['Mean'] = group_stats['Mean'].round(2)
+
+    sig_df = comparisons_df[comparisons_df[reject_col]].copy()
+    sorted_groups = group_stats.sort_values('Mean', ascending=False)['Group'].tolist()
+    group_letters = {group: [] for group in sorted_groups}
+    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    letter_groups = []
+    current_letter_index = 0
+
+    for i, group1 in enumerate(sorted_groups):
+        is_grouped = any(group1 in letter_group for letter_group in letter_groups)
+        if is_grouped:
+            continue
+        new_letter_group = {group1}
+        for group2 in sorted_groups[i + 1:]:
+            is_non_significant_with_all = True
+            for member in new_letter_group:
+                is_diff = not sig_df[
+                    ((sig_df['group1'] == group2) & (sig_df['group2'] == member)) |
+                    ((sig_df['group1'] == member) & (sig_df['group2'] == group2))
+                ].empty
+                if is_diff:
+                    is_non_significant_with_all = False
+                    break
+            if is_non_significant_with_all:
+                new_letter_group.add(group2)
+        letter_groups.append(new_letter_group)
+
+    letter_groups.sort(key=lambda g: min(sorted_groups.index(m) for m in g))
+    for letter_group in letter_groups:
+        letter = letters[current_letter_index]
+        for group in letter_group:
+            group_letters[group].append(letter)
+        current_letter_index += 1
+
+    group_stats['Grouping'] = group_stats['Group'].map(lambda g: "".join(group_letters[g]))
+    return group_stats.sort_values('Mean', ascending=False).reset_index(drop=True)
+
+def _pairwise_matrix_from_results(comparisons_df, ordered_groups):
+    """Return a symmetric Sig/NS matrix from pairwise results."""
+    matrix = pd.DataFrame("", index=ordered_groups, columns=ordered_groups)
+    for g in ordered_groups:
+        matrix.loc[g, g] = "-"
+    for _, row in comparisons_df.iterrows():
+        g1 = row['group1']
+        g2 = row['group2']
+        label = "Sig" if bool(row['reject']) else "NS"
+        matrix.loc[g1, g2] = label
+        matrix.loc[g2, g1] = label
+    return matrix
+
+def _compute_lsd_pairwise(df, group_col, response_col='Y', alpha=0.05):
+    """Fisher's LSD pairwise tests using pooled ANOVA MSE."""
+    model = smf.ols(f"{response_col} ~ C(Q('{group_col}'))", data=df).fit()
+    anova_tbl = sm.stats.anova_lm(model, typ=2)
+    resid_idx = anova_tbl.index.str.contains("Residual", case=False, regex=False)
+    sse = float(anova_tbl.loc[resid_idx, 'sum_sq'].iloc[0])
+    df_error = float(anova_tbl.loc[resid_idx, 'df'].iloc[0])
+    mse = sse / df_error if df_error > 0 else np.nan
+
+    gstats = df.groupby(group_col)[response_col].agg(['mean', 'count']).reset_index()
+    rows = []
+    for i in range(len(gstats)):
+        for j in range(i + 1, len(gstats)):
+            gi = gstats.iloc[i]
+            gj = gstats.iloc[j]
+            diff = float(gi['mean'] - gj['mean'])
+            se = np.sqrt(mse * (1.0 / float(gi['count']) + 1.0 / float(gj['count'])))
+            t_stat = diff / se if se > 0 else np.nan
+            p_val = 2 * (1 - stats.t.cdf(abs(t_stat), df=df_error)) if np.isfinite(t_stat) else np.nan
+            t_crit = stats.t.ppf(1 - alpha / 2, df=df_error) if df_error > 0 else np.nan
+            lsd_crit = t_crit * se if np.isfinite(t_crit) and np.isfinite(se) else np.nan
+            reject = bool(abs(diff) > lsd_crit) if np.isfinite(lsd_crit) else False
+            rows.append({
+                'group1': gi[group_col],
+                'group2': gj[group_col],
+                'mean_diff': round(diff, 4),
+                'SE': round(float(se), 4) if np.isfinite(se) else np.nan,
+                't_stat': round(float(t_stat), 4) if np.isfinite(t_stat) else np.nan,
+                'p_value': round(float(p_val), 6) if np.isfinite(p_val) else np.nan,
+                'LSD_critical_diff': round(float(lsd_crit), 4) if np.isfinite(lsd_crit) else np.nan,
+                'reject': reject
+            })
+    return pd.DataFrame(rows), mse, df_error
+
+def _compute_duncan_pairwise(df, group_col, response_col='Y', alpha=0.05):
+    """
+    Duncan's Multiple Range Test using rank distance r and studentized range.
+    """
+    if not hasattr(stats, 'studentized_range'):
+        raise RuntimeError("scipy.stats.studentized_range is unavailable in this environment.")
+
+    model = smf.ols(f"{response_col} ~ C(Q('{group_col}'))", data=df).fit()
+    anova_tbl = sm.stats.anova_lm(model, typ=2)
+    resid_idx = anova_tbl.index.str.contains("Residual", case=False, regex=False)
+    sse = float(anova_tbl.loc[resid_idx, 'sum_sq'].iloc[0])
+    df_error = float(anova_tbl.loc[resid_idx, 'df'].iloc[0])
+    mse = sse / df_error if df_error > 0 else np.nan
+
+    gstats = df.groupby(group_col)[response_col].agg(['mean', 'count']).reset_index()
+    gstats = gstats.sort_values('mean', ascending=False).reset_index(drop=True)
+    rows = []
+    for i in range(len(gstats)):
+        for j in range(i + 1, len(gstats)):
+            gi = gstats.iloc[i]
+            gj = gstats.iloc[j]
+            r = j - i + 1
+            diff = float(gi['mean'] - gj['mean'])
+            se_q = np.sqrt((mse / 2.0) * (1.0 / float(gi['count']) + 1.0 / float(gj['count'])))
+            q_stat = abs(diff) / se_q if se_q > 0 else np.nan
+            alpha_r = 1 - (1 - alpha) ** (r - 1)
+            q_crit = stats.studentized_range.ppf(1 - alpha_r, r, df_error) if df_error > 0 else np.nan
+            p_val = 1 - stats.studentized_range.cdf(q_stat, r, df_error) if np.isfinite(q_stat) else np.nan
+            reject = bool(q_stat > q_crit) if np.isfinite(q_stat) and np.isfinite(q_crit) else False
+            rows.append({
+                'group1': gi[group_col],
+                'group2': gj[group_col],
+                'range_r': int(r),
+                'mean_diff': round(diff, 4),
+                'q_stat': round(float(q_stat), 4) if np.isfinite(q_stat) else np.nan,
+                'q_critical': round(float(q_crit), 4) if np.isfinite(q_crit) else np.nan,
+                'p_value': round(float(p_val), 6) if np.isfinite(p_val) else np.nan,
+                'reject': reject
+            })
+    return pd.DataFrame(rows), mse, df_error
+
 
 # -------------------------
 # Pages
@@ -964,6 +1094,83 @@ def anova_oneway():
         mime="text/csv",
         key=f"download_tukey_full_{factor_name}"
     )
+
+
+def posthoc_live_three_tests():
+    st.title("Post-hoc Live Analyzer: LSD, Tukey, and Duncan")
+    st.markdown("By **Leonardo H. Talero-Sarmiento** "
+                "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
+
+    st.sidebar.header("Simulation controls")
+    replications = st.sidebar.slider("Replications per treatment", 5, 150, 25, 1)
+    noise_sd = st.sidebar.slider("Within-treatment sigma", 0.0, 10.0, 1.0, 0.1)
+    alpha = st.sidebar.slider("Significance level (alpha)", 0.01, 0.10, 0.05, 0.01)
+    seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
+
+    st.sidebar.header("Treatment labels")
+    g1_name = st.sidebar.text_input("Treatment 1 label", "Treatment A")
+    g2_name = st.sidebar.text_input("Treatment 2 label", "Treatment B")
+    g3_name = st.sidebar.text_input("Treatment 3 label", "Treatment C")
+
+    st.sidebar.header("Treatment mean sliders")
+    m1 = st.sidebar.slider(f"Mean for {g1_name}", -100.0, 100.0, 20.0, 0.1)
+    m2 = st.sidebar.slider(f"Mean for {g2_name}", -100.0, 100.0, 23.0, 0.1)
+    m3 = st.sidebar.slider(f"Mean for {g3_name}", -100.0, 100.0, 27.0, 0.1)
+
+    rng = np.random.default_rng(seed=seed or None)
+    means_map = {g1_name: m1, g2_name: m2, g3_name: m3}
+    df = pd.DataFrame({
+        "Treatment": np.repeat([g1_name, g2_name, g3_name], replications)
+    })
+    df["Y"] = df["Treatment"].map(means_map).astype(float) + rng.normal(0, noise_sd, len(df))
+
+    st.subheader("Generated Data")
+    st.dataframe(df)
+    st.download_button(
+        "Download CSV",
+        data=df.to_csv(index=False),
+        file_name="posthoc_live_data.csv",
+        mime="text/csv"
+    )
+
+    st.subheader("ANOVA Table (One-way)")
+    model = smf.ols("Y ~ C(Treatment)", data=df).fit()
+    anova_tbl = sm.stats.anova_lm(model, typ=2)
+    st.dataframe(anova_tbl)
+
+    ordered_groups = df.groupby("Treatment")["Y"].mean().sort_values(ascending=False).index.tolist()
+
+    st.subheader("LSD (Fisher) Pairwise Comparisons")
+    lsd_df, lsd_mse, lsd_df_error = _compute_lsd_pairwise(df, group_col="Treatment", response_col="Y", alpha=alpha)
+    st.caption(f"Pooled error terms: MSE = {lsd_mse:.4f}, df_error = {lsd_df_error:.0f}")
+    st.dataframe(lsd_df)
+    st.markdown("**LSD Comparison Matrix (Sig/NS)**")
+    st.dataframe(_pairwise_matrix_from_results(lsd_df, ordered_groups))
+    st.markdown("**LSD Grouping Summary**")
+    st.dataframe(_format_generic_grouping_summary(df, "Treatment", lsd_df, response_col="Y", reject_col="reject"))
+
+    st.subheader("Tukey HSD Pairwise Comparisons")
+    tukey = pairwise_tukeyhsd(endog=df["Y"], groups=df["Treatment"], alpha=alpha)
+    tuk_df = pd.DataFrame(data=tukey._results_table.data[1:], columns=tukey._results_table.data[0])
+    st.dataframe(tuk_df)
+    st.markdown("**Tukey Comparison Matrix (Sig/NS)**")
+    st.dataframe(_pairwise_matrix_from_results(tuk_df[['group1', 'group2', 'reject']], ordered_groups))
+    st.markdown("**Tukey Grouping Summary**")
+    st.dataframe(_format_tukey_summary_for_display(tukey, df, "Treatment", response_col="Y"))
+
+    st.subheader("Duncan Pairwise Comparisons")
+    try:
+        duncan_df, duncan_mse, duncan_df_error = _compute_duncan_pairwise(
+            df, group_col="Treatment", response_col="Y", alpha=alpha
+        )
+        st.caption(f"Pooled error terms: MSE = {duncan_mse:.4f}, df_error = {duncan_df_error:.0f}")
+        st.dataframe(duncan_df)
+        st.markdown("**Duncan Comparison Matrix (Sig/NS)**")
+        st.dataframe(_pairwise_matrix_from_results(duncan_df, ordered_groups))
+        st.markdown("**Duncan Grouping Summary**")
+        st.dataframe(_format_generic_grouping_summary(df, "Treatment", duncan_df, response_col="Y", reject_col="reject"))
+    except Exception as e:
+        st.error(f"Could not compute Duncan test: {e}")
 
 
 def Analysis():
@@ -1825,6 +2032,7 @@ Each concept includes 3 cases and an analysis guidance.
 # -------------------------
 PAGES = {
     "Anova One-way - Introduction": anova_oneway,
+    "Post-hoc Live Analyzer (LSD, Tukey, Duncan)": posthoc_live_three_tests,
     "Introduction to Factorial Designs": factorial_twolevels,
     "Factorial Designs with Three Factors and Three Levels": three_factorial,
     "Fractional Factorial Designs (2^k-p)": fractional_factorial,
