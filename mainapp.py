@@ -1,8 +1,11 @@
 # =========================
 # Factorial/ANOVA Streamlit App (clean & robust) — Py3.9 safe
 # =========================
+import sys
 import itertools
 from itertools import combinations
+
+sys.dont_write_bytecode = True
 
 import numpy as np
 import pandas as pd
@@ -495,13 +498,23 @@ def _format_tukey_summary_for_display(tukey_result, data_df, group_col, response
     
     return group_stats.sort_values('Mean', ascending=False).reset_index(drop=True)
 
+def _to_bool(value):
+    """Robust boolean conversion for tables where booleans may come as strings."""
+    if isinstance(value, (bool, np.bool_)):
+        return bool(value)
+    if isinstance(value, str):
+        return value.strip().lower() in {"true", "1", "yes", "y", "t"}
+    return bool(value)
+
 def _format_generic_grouping_summary(data_df, group_col, comparisons_df, response_col='Y', reject_col='reject'):
     """Build grouping letters from a generic pairwise comparison table."""
     group_stats = data_df.groupby(group_col)[response_col].agg(['mean', 'count']).reset_index()
     group_stats.rename(columns={'mean': 'Mean', 'count': 'N', group_col: 'Group'}, inplace=True)
     group_stats['Mean'] = group_stats['Mean'].round(2)
 
-    sig_df = comparisons_df[comparisons_df[reject_col]].copy()
+    comp_df = comparisons_df.copy()
+    comp_df[reject_col] = comp_df[reject_col].map(_to_bool)
+    sig_df = comp_df[comp_df[reject_col]].copy()
     sorted_groups = group_stats.sort_values('Mean', ascending=False)['Group'].tolist()
     group_letters = {group: [] for group in sorted_groups}
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -545,19 +558,27 @@ def _pairwise_matrix_from_results(comparisons_df, ordered_groups):
     for _, row in comparisons_df.iterrows():
         g1 = row['group1']
         g2 = row['group2']
-        label = "Sig" if bool(row['reject']) else "NS"
+        label = "Sig" if _to_bool(row['reject']) else "NS"
         matrix.loc[g1, g2] = label
         matrix.loc[g2, g1] = label
     return matrix
 
-def _compute_lsd_pairwise(df, group_col, response_col='Y', alpha=0.05):
-    """Fisher's LSD pairwise tests using pooled ANOVA MSE."""
+def _oneway_anova_with_error_terms(df, group_col, response_col='Y'):
+    """Fit one-way ANOVA model and return model, ANOVA table, MSE, and residual df."""
     model = smf.ols(f"{response_col} ~ C(Q('{group_col}'))", data=df).fit()
     anova_tbl = sm.stats.anova_lm(model, typ=2)
     resid_idx = anova_tbl.index.str.contains("Residual", case=False, regex=False)
+    if not resid_idx.any():
+        raise ValueError("Residual row not found in ANOVA table.")
     sse = float(anova_tbl.loc[resid_idx, 'sum_sq'].iloc[0])
     df_error = float(anova_tbl.loc[resid_idx, 'df'].iloc[0])
     mse = sse / df_error if df_error > 0 else np.nan
+    return model, anova_tbl, mse, df_error
+
+def _compute_lsd_pairwise(df, group_col, response_col='Y', alpha=0.05, mse=None, df_error=None):
+    """Fisher's LSD pairwise tests using pooled ANOVA MSE."""
+    if mse is None or df_error is None:
+        _, _, mse, df_error = _oneway_anova_with_error_terms(df, group_col, response_col)
 
     gstats = df.groupby(group_col)[response_col].agg(['mean', 'count']).reset_index()
     rows = []
@@ -582,21 +603,20 @@ def _compute_lsd_pairwise(df, group_col, response_col='Y', alpha=0.05):
                 'LSD_critical_diff': round(float(lsd_crit), 4) if np.isfinite(lsd_crit) else np.nan,
                 'reject': reject
             })
-    return pd.DataFrame(rows), mse, df_error
+    out = pd.DataFrame(rows)
+    if not out.empty:
+        out = out[['group1', 'group2', 'mean_diff', 'SE', 't_stat', 'p_value', 'LSD_critical_diff', 'reject']]
+    return out, mse, df_error
 
-def _compute_duncan_pairwise(df, group_col, response_col='Y', alpha=0.05):
+def _compute_duncan_pairwise(df, group_col, response_col='Y', alpha=0.05, mse=None, df_error=None):
     """
     Duncan's Multiple Range Test using rank distance r and studentized range.
     """
     if not hasattr(stats, 'studentized_range'):
         raise RuntimeError("scipy.stats.studentized_range is unavailable in this environment.")
 
-    model = smf.ols(f"{response_col} ~ C(Q('{group_col}'))", data=df).fit()
-    anova_tbl = sm.stats.anova_lm(model, typ=2)
-    resid_idx = anova_tbl.index.str.contains("Residual", case=False, regex=False)
-    sse = float(anova_tbl.loc[resid_idx, 'sum_sq'].iloc[0])
-    df_error = float(anova_tbl.loc[resid_idx, 'df'].iloc[0])
-    mse = sse / df_error if df_error > 0 else np.nan
+    if mse is None or df_error is None:
+        _, _, mse, df_error = _oneway_anova_with_error_terms(df, group_col, response_col)
 
     gstats = df.groupby(group_col)[response_col].agg(['mean', 'count']).reset_index()
     gstats = gstats.sort_values('mean', ascending=False).reset_index(drop=True)
@@ -623,7 +643,10 @@ def _compute_duncan_pairwise(df, group_col, response_col='Y', alpha=0.05):
                 'p_value': round(float(p_val), 6) if np.isfinite(p_val) else np.nan,
                 'reject': reject
             })
-    return pd.DataFrame(rows), mse, df_error
+    out = pd.DataFrame(rows)
+    if not out.empty:
+        out = out[['group1', 'group2', 'range_r', 'mean_diff', 'q_stat', 'q_critical', 'p_value', 'reject']]
+    return out, mse, df_error
 
 
 # -------------------------
@@ -730,7 +753,7 @@ def three_factorial():
         anova_table = sm.stats.anova_lm(model_anova, typ=2)
         
         # Clean up index names for display
-        anova_table.index = anova_table.index.str.replace("C\(Q\('", "", regex=True).str.replace("'\)\)", "", regex=True)
+        anova_table.index = anova_table.index.str.replace(r"C\(Q\('", "", regex=True).str.replace(r"'\)\)", "", regex=True)
         
         st.dataframe(anova_table)
     except Exception as e:
@@ -916,7 +939,7 @@ def factorial_twolevels():
         anova_table = sm.stats.anova_lm(model_anova, typ=2)
 
         # Clean up index names for display
-        anova_table.index = anova_table.index.str.replace("C\(Q\('", "", regex=True).str.replace("'\)\)", "", regex=True)
+        anova_table.index = anova_table.index.str.replace(r"C\(Q\('", "", regex=True).str.replace(r"'\)\)", "", regex=True)
 
         st.dataframe(anova_table)
     except Exception as e:
@@ -1037,7 +1060,7 @@ def anova_oneway():
     anova_table = sm.stats.anova_lm(model, typ=2)
     
     # Clean up index
-    anova_table.index = anova_table.index.str.replace("C\(Q\('", "", regex=True).str.replace("'\)\)", "", regex=True)
+    anova_table.index = anova_table.index.str.replace(r"C\(Q\('", "", regex=True).str.replace(r"'\)\)", "", regex=True)
 
     try:
         resid_row = anova_table.index.str.contains("Residual", case=False, regex=False)
@@ -1100,77 +1123,212 @@ def posthoc_live_three_tests():
     st.title("Post-hoc Live Analyzer: LSD, Tukey, and Duncan")
     st.markdown("By **Leonardo H. Talero-Sarmiento** "
                 "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
+    st.markdown(
+        "Move the three treatment sliders to recompute one-way ANOVA and all post-hoc tests in real time."
+    )
 
     st.sidebar.header("Simulation controls")
-    replications = st.sidebar.slider("Replications per treatment", 5, 150, 25, 1)
+    replications = st.sidebar.slider("Replications per treatment", 5, 200, 30, 1)
     noise_sd = st.sidebar.slider("Within-treatment sigma", 0.0, 10.0, 1.0, 0.1)
     alpha = st.sidebar.slider("Significance level (alpha)", 0.01, 0.10, 0.05, 0.01)
     seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=0, step=1)
 
     st.sidebar.header("Treatment labels")
-    g1_name = st.sidebar.text_input("Treatment 1 label", "Treatment A")
-    g2_name = st.sidebar.text_input("Treatment 2 label", "Treatment B")
-    g3_name = st.sidebar.text_input("Treatment 3 label", "Treatment C")
+    raw_names = [
+        st.sidebar.text_input("Treatment 1 label", "Treatment A"),
+        st.sidebar.text_input("Treatment 2 label", "Treatment B"),
+        st.sidebar.text_input("Treatment 3 label", "Treatment C"),
+    ]
+    names = [n.strip() if n and n.strip() else f"Treatment {i + 1}" for i, n in enumerate(raw_names)]
+    if len(set(names)) != 3:
+        st.error("Treatment labels must be unique to build pairwise comparisons.")
+        return
 
     st.sidebar.header("Treatment mean sliders")
-    m1 = st.sidebar.slider(f"Mean for {g1_name}", -100.0, 100.0, 20.0, 0.1)
-    m2 = st.sidebar.slider(f"Mean for {g2_name}", -100.0, 100.0, 23.0, 0.1)
-    m3 = st.sidebar.slider(f"Mean for {g3_name}", -100.0, 100.0, 27.0, 0.1)
+    m1 = st.sidebar.slider(f"Mean for {names[0]}", -100.0, 100.0, 20.0, 0.1)
+    m2 = st.sidebar.slider(f"Mean for {names[1]}", -100.0, 100.0, 23.0, 0.1)
+    m3 = st.sidebar.slider(f"Mean for {names[2]}", -100.0, 100.0, 27.0, 0.1)
 
     rng = np.random.default_rng(seed=seed or None)
-    means_map = {g1_name: m1, g2_name: m2, g3_name: m3}
-    df = pd.DataFrame({
-        "Treatment": np.repeat([g1_name, g2_name, g3_name], replications)
-    })
+    means_map = {names[0]: m1, names[1]: m2, names[2]: m3}
+    df = pd.DataFrame({"Treatment": np.repeat(names, replications)})
     df["Y"] = df["Treatment"].map(means_map).astype(float) + rng.normal(0, noise_sd, len(df))
 
-    st.subheader("Generated Data")
-    st.dataframe(df)
-    st.download_button(
-        "Download CSV",
-        data=df.to_csv(index=False),
-        file_name="posthoc_live_data.csv",
-        mime="text/csv"
+    _, anova_tbl, mse, df_error = _oneway_anova_with_error_terms(df, group_col="Treatment", response_col="Y")
+
+    group_summary = (
+        df.groupby("Treatment")["Y"]
+        .agg(N="size", Mean="mean", SD="std")
+        .assign(SE=lambda d: d["SD"] / np.sqrt(d["N"]))
+        .sort_values("Mean", ascending=False)
+        .round(4)
     )
+    ordered_groups = group_summary.index.tolist()
 
-    st.subheader("ANOVA Table (One-way)")
-    model = smf.ols("Y ~ C(Treatment)", data=df).fit()
-    anova_tbl = sm.stats.anova_lm(model, typ=2)
-    st.dataframe(anova_tbl)
+    lsd_df, _, _ = _compute_lsd_pairwise(
+        df, group_col="Treatment", response_col="Y", alpha=alpha, mse=mse, df_error=df_error
+    )
+    lsd_df["reject"] = lsd_df["reject"].map(_to_bool)
+    lsd_sig = lsd_df[lsd_df["reject"]].copy()
 
-    ordered_groups = df.groupby("Treatment")["Y"].mean().sort_values(ascending=False).index.tolist()
-
-    st.subheader("LSD (Fisher) Pairwise Comparisons")
-    lsd_df, lsd_mse, lsd_df_error = _compute_lsd_pairwise(df, group_col="Treatment", response_col="Y", alpha=alpha)
-    st.caption(f"Pooled error terms: MSE = {lsd_mse:.4f}, df_error = {lsd_df_error:.0f}")
-    st.dataframe(lsd_df)
-    st.markdown("**LSD Comparison Matrix (Sig/NS)**")
-    st.dataframe(_pairwise_matrix_from_results(lsd_df, ordered_groups))
-    st.markdown("**LSD Grouping Summary**")
-    st.dataframe(_format_generic_grouping_summary(df, "Treatment", lsd_df, response_col="Y", reject_col="reject"))
-
-    st.subheader("Tukey HSD Pairwise Comparisons")
     tukey = pairwise_tukeyhsd(endog=df["Y"], groups=df["Treatment"], alpha=alpha)
     tuk_df = pd.DataFrame(data=tukey._results_table.data[1:], columns=tukey._results_table.data[0])
-    st.dataframe(tuk_df)
-    st.markdown("**Tukey Comparison Matrix (Sig/NS)**")
-    st.dataframe(_pairwise_matrix_from_results(tuk_df[['group1', 'group2', 'reject']], ordered_groups))
-    st.markdown("**Tukey Grouping Summary**")
-    st.dataframe(_format_tukey_summary_for_display(tukey, df, "Treatment", response_col="Y"))
+    tuk_df["reject"] = tuk_df["reject"].map(_to_bool)
+    for c in ["meandiff", "p-adj", "lower", "upper"]:
+        if c in tuk_df.columns:
+            tuk_df[c] = pd.to_numeric(tuk_df[c], errors="coerce").round(4)
+    tuk_sig = tuk_df[tuk_df["reject"]].copy()
+    tuk_pair_df = tuk_df[["group1", "group2", "reject"]].copy()
 
-    st.subheader("Duncan Pairwise Comparisons")
+    duncan_df = pd.DataFrame()
+    duncan_sig = pd.DataFrame()
+    duncan_error = None
     try:
-        duncan_df, duncan_mse, duncan_df_error = _compute_duncan_pairwise(
-            df, group_col="Treatment", response_col="Y", alpha=alpha
+        duncan_df, _, _ = _compute_duncan_pairwise(
+            df, group_col="Treatment", response_col="Y", alpha=alpha, mse=mse, df_error=df_error
         )
-        st.caption(f"Pooled error terms: MSE = {duncan_mse:.4f}, df_error = {duncan_df_error:.0f}")
-        st.dataframe(duncan_df)
-        st.markdown("**Duncan Comparison Matrix (Sig/NS)**")
-        st.dataframe(_pairwise_matrix_from_results(duncan_df, ordered_groups))
-        st.markdown("**Duncan Grouping Summary**")
-        st.dataframe(_format_generic_grouping_summary(df, "Treatment", duncan_df, response_col="Y", reject_col="reject"))
+        duncan_df["reject"] = duncan_df["reject"].map(_to_bool)
+        duncan_sig = duncan_df[duncan_df["reject"]].copy()
     except Exception as e:
-        st.error(f"Could not compute Duncan test: {e}")
+        duncan_error = str(e)
+
+    summary_cols = st.columns(3)
+    for idx, g in enumerate(names):
+        summary_cols[idx].metric(f"Sample mean: {g}", f"{group_summary.loc[g, 'Mean']:.3f}")
+
+    st.subheader("Core Tables")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("**Treatment Summary (N, Mean, SD, SE)**")
+        st.dataframe(group_summary.reset_index())
+    with c2:
+        st.markdown("**ANOVA Table (One-way)**")
+        st.dataframe(anova_tbl.round(4))
+        st.caption(f"Pooled error terms for pairwise tests: MSE = {mse:.4f}, df_error = {df_error:.0f}")
+
+    st.subheader("Distribution by Treatment")
+    fig_box = go.Figure()
+    for g in names:
+        vals = list(np.asarray(df.loc[df["Treatment"] == g, "Y"]).ravel())
+        if not _is_finite_array(vals):
+            st.error("Non-finite values in treatment distribution.")
+            return
+        fig_box.add_trace(go.Box(y=vals, name=g, boxmean=True, showlegend=False))
+    fig_box.update_layout(
+        xaxis_title="Treatment",
+        yaxis_title="Y",
+        title="Box Plot by Treatment",
+        height=430
+    )
+    _safe_plot(fig_box)
+
+    st.subheader("Comparison Agreement Across Tests")
+    pair_rows = []
+    for g1, g2 in combinations(ordered_groups, 2):
+        pair_rows.append({"group1": g1, "group2": g2, "Comparison": f"{g1} vs {g2}"})
+    agreement_df = pd.DataFrame(pair_rows)
+
+    def _lookup_decision(comp_df, g1, g2):
+        needed_cols = {"group1", "group2", "reject"}
+        if comp_df.empty or not needed_cols.issubset(comp_df.columns):
+            return "NA"
+        mask = (
+            ((comp_df["group1"] == g1) & (comp_df["group2"] == g2)) |
+            ((comp_df["group1"] == g2) & (comp_df["group2"] == g1))
+        )
+        if not mask.any():
+            return "NA"
+        return "Sig" if _to_bool(comp_df.loc[mask, "reject"].iloc[0]) else "NS"
+
+    agreement_df["LSD"] = [
+        _lookup_decision(lsd_df, r["group1"], r["group2"]) for _, r in agreement_df.iterrows()
+    ]
+    agreement_df["Tukey"] = [
+        _lookup_decision(tuk_pair_df, r["group1"], r["group2"]) for _, r in agreement_df.iterrows()
+    ]
+    agreement_df["Duncan"] = (
+        [_lookup_decision(duncan_df, r["group1"], r["group2"]) for _, r in agreement_df.iterrows()]
+        if duncan_error is None else "Unavailable"
+    )
+    st.dataframe(agreement_df[["Comparison", "LSD", "Tukey", "Duncan"]])
+
+    tab_lsd, tab_tukey, tab_duncan, tab_data = st.tabs(
+        ["LSD", "Tukey HSD", "Duncan", "Generated Data"]
+    )
+
+    with tab_lsd:
+        st.markdown("**Significant Pairwise Differences**")
+        if lsd_sig.empty:
+            st.info(f"No significant pairwise differences for LSD at alpha = {alpha:.2f}.")
+        else:
+            st.dataframe(lsd_sig)
+        st.markdown("**Full LSD Pairwise Table**")
+        st.dataframe(lsd_df)
+        st.markdown("**LSD Comparison Matrix (Sig/NS)**")
+        st.dataframe(_pairwise_matrix_from_results(lsd_df[["group1", "group2", "reject"]], ordered_groups))
+        st.markdown("**LSD Grouping Summary**")
+        st.dataframe(_format_generic_grouping_summary(df, "Treatment", lsd_df, response_col="Y", reject_col="reject"))
+        st.download_button(
+            "Download LSD full report (CSV)",
+            data=lsd_df.to_csv(index=False).encode("utf-8"),
+            file_name="posthoc_lsd_full_report.csv",
+            mime="text/csv",
+            key="download_lsd_full_posthoc"
+        )
+
+    with tab_tukey:
+        st.markdown("**Significant Pairwise Differences**")
+        if tuk_sig.empty:
+            st.info(f"No significant pairwise differences for Tukey at alpha = {alpha:.2f}.")
+        else:
+            st.dataframe(tuk_sig)
+        st.markdown("**Full Tukey Pairwise Table**")
+        st.dataframe(tuk_df)
+        st.markdown("**Tukey Comparison Matrix (Sig/NS)**")
+        st.dataframe(_pairwise_matrix_from_results(tuk_pair_df, ordered_groups))
+        st.markdown("**Tukey Grouping Summary**")
+        st.dataframe(_format_tukey_summary_for_display(tukey, df, "Treatment", response_col="Y"))
+        st.download_button(
+            "Download Tukey full report (CSV)",
+            data=tuk_df.to_csv(index=False).encode("utf-8"),
+            file_name="posthoc_tukey_full_report.csv",
+            mime="text/csv",
+            key="download_tukey_full_posthoc"
+        )
+
+    with tab_duncan:
+        if duncan_error is not None:
+            st.error(f"Could not compute Duncan test: {duncan_error}")
+        else:
+            st.markdown("**Significant Pairwise Differences**")
+            if duncan_sig.empty:
+                st.info(f"No significant pairwise differences for Duncan at alpha = {alpha:.2f}.")
+            else:
+                st.dataframe(duncan_sig)
+            st.markdown("**Full Duncan Pairwise Table**")
+            st.dataframe(duncan_df)
+            st.markdown("**Duncan Comparison Matrix (Sig/NS)**")
+            st.dataframe(_pairwise_matrix_from_results(duncan_df[["group1", "group2", "reject"]], ordered_groups))
+            st.markdown("**Duncan Grouping Summary**")
+            st.dataframe(_format_generic_grouping_summary(df, "Treatment", duncan_df, response_col="Y", reject_col="reject"))
+            st.download_button(
+                "Download Duncan full report (CSV)",
+                data=duncan_df.to_csv(index=False).encode("utf-8"),
+                file_name="posthoc_duncan_full_report.csv",
+                mime="text/csv",
+                key="download_duncan_full_posthoc"
+            )
+
+    with tab_data:
+        st.dataframe(df.head(30))
+        st.caption("Showing first 30 rows for readability.")
+        st.download_button(
+            "Download generated dataset (CSV)",
+            data=df.to_csv(index=False),
+            file_name="posthoc_live_data.csv",
+            mime="text/csv",
+            key="download_posthoc_data"
+        )
 
 
 def Analysis():
