@@ -1119,6 +1119,229 @@ def anova_oneway():
     )
 
 
+def introduction_profile():
+    st.title("Introduction")
+    st.header("Welcome to the DOE Interactive App")
+    st.markdown(
+        """
+        This interactive application is designed to provide a hands-on understanding of
+        Design of Experiments (DOE), ANOVA, contrasts, factorial structures, and post-hoc analysis.
+
+        Use the navigation panel to explore each module and practice with live simulations
+        and downloadable datasets.
+        """
+    )
+
+    st.subheader("About the Author")
+    col1, col2 = st.columns([1, 3])
+
+    with col1:
+        try:
+            st.image("image_9095e1.jpeg")
+        except FileNotFoundError:
+            st.error("Profile image not found. Make sure 'image_9095e1.jpeg' is in your repo.")
+
+    with col2:
+        st.markdown(
+            """
+            **Leonardo H. Talero-Sarmiento** is a Ph.D. in Engineering from the
+            Universidad Autónoma de Bucaramanga, with expertise in mathematical modeling,
+            data analytics, operations research, manufacturing systems, process
+            improvement, and technology adoption.
+
+            His research addresses decision-making and production-planning challenges in
+            agricultural and industrial contexts, applying operations research,
+            bibliometric analysis, systematic reviews, and machine-learning methods
+            to strengthen value-chain resilience, optimize healthcare delivery,
+            and drive digital transformation.
+            """
+        )
+
+
+def contrast_analysis():
+    st.title("Contrast Analysis and Relationship with Factors")
+    st.markdown("By **Leonardo H. Talero-Sarmiento** "
+                "[View profile](https://apolo.unab.edu.co/en/persons/leonardo-talero)")
+    st.markdown("""
+This page computes a planned contrast from one-way ANOVA treatment means and shows how each factor level
+contributes to that contrast.
+    """)
+
+    st.sidebar.header("Simulation controls")
+    n_treatments = st.sidebar.slider("Number of treatment levels", 3, 6, 4, 1)
+    replications = st.sidebar.slider("Replications per treatment", 3, 100, 20, 1)
+    noise_sd = st.sidebar.slider("Within-treatment sigma", 0.0, 10.0, 1.0, 0.1)
+    alpha = st.sidebar.slider("Significance level (alpha)", 0.01, 0.10, 0.05, 0.01, key="contrast_alpha")
+    seed = st.sidebar.number_input("Random seed (optional)", min_value=0, value=7, step=1, key="contrast_seed")
+
+    st.sidebar.header("Factor and treatment labels")
+    factor_name = st.sidebar.text_input("Factor name", "Factor", key="contrast_factor_name")
+    raw_levels = []
+    for i in range(n_treatments):
+        raw_levels.append(st.sidebar.text_input(f"Treatment {i+1} label", f"Level {i+1}", key=f"contrast_level_{i}"))
+    level_names = [lv.strip() if lv and lv.strip() else f"Level {i+1}" for i, lv in enumerate(raw_levels)]
+    if len(set(level_names)) != len(level_names):
+        st.error("Treatment labels must be unique.")
+        return
+
+    st.sidebar.header("Treatment means")
+    means_map = {}
+    for lv in level_names:
+        means_map[lv] = st.sidebar.slider(
+            f"Mean for {lv}", -100.0, 100.0, 10.0 + 5.0 * len(means_map), 0.1, key=f"contrast_mean_{lv}"
+        )
+
+    rng = np.random.default_rng(seed=seed or None)
+    df = pd.DataFrame({factor_name: np.repeat(level_names, replications)})
+    df["Y"] = df[factor_name].map(means_map).astype(float) + rng.normal(0, noise_sd, len(df))
+
+    st.subheader("Generated Data")
+    st.dataframe(df)
+    st.download_button(
+        "Download generated contrast data (CSV)",
+        data=df.to_csv(index=False).encode("utf-8"),
+        file_name="contrast_analysis_data.csv",
+        mime="text/csv",
+        key="download_contrast_data"
+    )
+
+    _, anova_tbl, mse, df_error = _oneway_anova_with_error_terms(df, group_col=factor_name, response_col="Y")
+    anova_view = anova_tbl.copy().round(4)
+    anova_view.index = anova_view.index.str.replace(r"C\(Q\('", "", regex=True).str.replace(r"'\)\)", "", regex=True)
+    gstats = (
+        df.groupby(factor_name)["Y"]
+        .agg(N="size", Mean="mean", SD="std")
+        .assign(SE=lambda d: d["SD"] / np.sqrt(d["N"]))
+        .reset_index()
+    )
+
+    st.subheader("Core ANOVA Results")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("**Treatment summary**")
+        st.dataframe(gstats.round(4))
+    with c2:
+        st.markdown("**ANOVA table**")
+        st.dataframe(anova_view)
+        st.caption(f"Pooled error terms: MSE = {mse:.4f}, df_error = {df_error:.0f}")
+
+    st.subheader("Contrast Definition")
+    st.markdown("A valid contrast in one-way ANOVA satisfies:")
+    st.latex(r"\Gamma=\sum_{i=1}^{a} c_i\mu_i,\quad \sum_{i=1}^{a} c_i=0")
+    st.latex(r"C=\sum_{i=1}^{a} c_i\bar{y}_i,\quad SE(C)=\sqrt{MSE\sum_{i=1}^{a}\frac{c_i^2}{n_i}}")
+    st.latex(r"t_0=\frac{C}{SE(C)},\quad CI_{1-\alpha}: C\pm t_{\alpha/2,\nu}SE(C)")
+
+    st.markdown("**Enter contrast coefficients (`c_i`) by treatment level**")
+    default_coefs = [1.0, 1.0, -1.0, -1.0] if n_treatments == 4 else [1.0, -1.0] + [0.0] * (n_treatments - 2)
+    coef_cols = st.columns(min(4, n_treatments))
+    coef_map = {}
+    for i, lv in enumerate(level_names):
+        col = coef_cols[i % len(coef_cols)]
+        with col:
+            coef_map[lv] = st.number_input(
+                f"c({lv})", value=float(default_coefs[i]), step=0.5, key=f"contrast_coef_{i}_{lv}"
+            )
+
+    coef_series = pd.Series(coef_map, dtype=float)
+    mean_series = gstats.set_index(factor_name)["Mean"].reindex(level_names).astype(float)
+    n_series = gstats.set_index(factor_name)["N"].reindex(level_names).astype(float)
+
+    sum_c = float(coef_series.sum())
+    sum_nc = float((coef_series * n_series).sum())
+    if abs(sum_c) > 1e-10:
+        st.warning(f"Not a strict contrast: sum(c_i) = {sum_c:.6f}. Set coefficients so they sum to zero.")
+    else:
+        st.success("Valid contrast: sum(c_i) = 0.")
+    st.caption(f"For unequal n_i designs, also check sum(n_i*c_i) = {sum_nc:.6f}.")
+
+    c_value = float((coef_series * mean_series).sum())
+    denom = float(((coef_series ** 2) / n_series).sum())
+    se_c = np.sqrt(mse * denom) if np.isfinite(mse) and np.isfinite(denom) and denom > 0 else np.nan
+    t_stat = c_value / se_c if np.isfinite(se_c) and se_c > 0 else np.nan
+    p_value = 2 * (1 - stats.t.cdf(abs(t_stat), df=df_error)) if np.isfinite(t_stat) and df_error > 0 else np.nan
+    t_crit = stats.t.ppf(1 - alpha / 2, df_error) if df_error > 0 else np.nan
+    ci_low = c_value - t_crit * se_c if np.isfinite(t_crit) and np.isfinite(se_c) else np.nan
+    ci_high = c_value + t_crit * se_c if np.isfinite(t_crit) and np.isfinite(se_c) else np.nan
+
+    st.subheader("Contrast Test and Confidence Interval")
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Estimated contrast (C)", f"{c_value:.4f}")
+    m2.metric("SE(C)", f"{se_c:.4f}" if np.isfinite(se_c) else "NA")
+    m3.metric("t-statistic", f"{t_stat:.4f}" if np.isfinite(t_stat) else "NA")
+    m4.metric("p-value", f"{p_value:.6f}" if np.isfinite(p_value) else "NA")
+    st.write(f"{(1 - alpha) * 100:.0f}% CI for contrast: [{ci_low:.4f}, {ci_high:.4f}]")
+    st.caption("If CI includes 0, do not reject H0: contrast equals zero.")
+
+    scheffe_f = stats.f.ppf(1 - alpha, n_treatments - 1, df_error) if df_error > 0 else np.nan
+    scheffe_mult = np.sqrt((n_treatments - 1) * scheffe_f) if np.isfinite(scheffe_f) else np.nan
+    scheffe_margin = scheffe_mult * se_c if np.isfinite(scheffe_mult) and np.isfinite(se_c) else np.nan
+    s_low = c_value - scheffe_margin if np.isfinite(scheffe_margin) else np.nan
+    s_high = c_value + scheffe_margin if np.isfinite(scheffe_margin) else np.nan
+    st.write(f"Scheffe simultaneous CI: [{s_low:.4f}, {s_high:.4f}]")
+
+    contrib_df = pd.DataFrame({
+        factor_name: level_names,
+        "n_i": n_series.values,
+        "mean_i": mean_series.values,
+        "c_i": coef_series.values,
+        "c_i*mean_i": (coef_series * mean_series).values
+    })
+
+    if np.isfinite(denom) and denom > 0 and np.isfinite(mse) and mse > 0:
+        c_star = coef_series / np.sqrt(denom)
+        c_std = float((c_star * mean_series).sum())
+        t_std = c_std / np.sqrt(mse)
+        st.subheader("Standardized Contrast")
+        st.write(f"Standardized contrast C*: {c_std:.4f}")
+        st.write(f"t(C*) = C*/sqrt(MSE): {t_std:.4f}")
+        contrib_df["c_i_star"] = c_star.values
+
+    st.subheader("Relationship Between Factor Levels and Contrast")
+    st.dataframe(contrib_df.round(4))
+
+    corr = np.nan
+    if np.std(coef_series.values) > 0 and np.std(mean_series.values) > 0:
+        corr = float(np.corrcoef(coef_series.values, mean_series.values)[0, 1])
+    st.caption(
+        f"Correlation between contrast coefficients and level means: {corr:.4f}"
+        if np.isfinite(corr) else
+        "Correlation unavailable (insufficient variation)."
+    )
+
+    fig_rel = make_subplots(specs=[[{"secondary_y": True}]])
+    fig_rel.add_trace(
+        go.Bar(x=level_names, y=mean_series.values, name="Treatment mean", marker_color="#1f77b4"),
+        secondary_y=False
+    )
+    fig_rel.add_trace(
+        go.Scatter(x=level_names, y=coef_series.values, mode="lines+markers", name="Contrast coefficient", line=dict(color="#d62728")),
+        secondary_y=True
+    )
+    fig_rel.update_layout(
+        title="Treatment Means vs Contrast Coefficients",
+        xaxis_title=factor_name,
+        height=430
+    )
+    fig_rel.update_yaxes(title_text="Mean of Y", secondary_y=False)
+    fig_rel.update_yaxes(title_text="Coefficient c_i", secondary_y=True)
+    _safe_plot(fig_rel)
+
+    fig_contrib = go.Figure()
+    fig_contrib.add_trace(go.Bar(
+        x=level_names,
+        y=(coef_series * mean_series).values,
+        marker_color="#2ca02c",
+        name="Contribution c_i*mean_i"
+    ))
+    fig_contrib.update_layout(
+        title="Level Contributions to the Contrast Estimate",
+        xaxis_title=factor_name,
+        yaxis_title="c_i * mean_i",
+        height=400
+    )
+    _safe_plot(fig_contrib)
+
+
 def posthoc_live_three_tests():
     st.title("Post-hoc Live Analyzer: LSD, Tukey, and Duncan")
     st.markdown("By **Leonardo H. Talero-Sarmiento** "
@@ -2132,7 +2355,7 @@ estimate how each attribute level influences choice probability (part-worth util
 
 
 def missing_data_case_studies():
-    st.title("Practice Cases: Missing-Data DOE Scenarios")
+    st.title("Practice Cases: Missing-Data DOE Scenarios and Contrasts")
     st.markdown("""
 Use these downloadable hypothetical datasets to practice real-world troubleshooting when runs are missing.
 Each concept includes 3 cases and an analysis guidance.
@@ -2293,6 +2516,57 @@ Each concept includes 3 cases and an analysis guidance.
         _download_case(f3, "factorial_case_3_combination_missing", "fac_case_3")
         st.caption("Guideline: use Type II/III SS and explicitly state missing-data mechanism assumptions (MCAR/MAR/MNAR).")
 
+    # -------------------------
+    # Concept 4: Planned Contrasts
+    # -------------------------
+    con_rows = []
+    rng3 = np.random.default_rng(2026)
+    treatment_levels = ["A", "B", "C", "D"]
+    treatment_means = {"A": 40.0, "B": 42.0, "C": 49.0, "D": 51.0}
+    for r in range(1, 9):
+        for t in treatment_levels:
+            con_rows.append({
+                "Replication": r,
+                "Treatment": t,
+                "Y": round(float(rng3.normal(treatment_means[t], 1.3)), 2)
+            })
+    base_con = pd.DataFrame(con_rows)
+
+    with st.expander("Concept 4 - Planned Contrasts and Factor Relationships (3 cases)", expanded=False):
+        _context_box(
+            "Coating Process Optimization (One-way, 4 levels)",
+            [
+                "**Experimental units:** coated panels",
+                "**Aim:** compare low settings (A,B) against high settings (C,D) and explore trend effects",
+                "**Factor (IV):** Process setting level (A / B / C / D)",
+                "**Dependent variable (Y):** Adhesion score",
+                "**Model:** one-way ANOVA with planned contrasts"
+            ]
+        )
+
+        c_case1 = base_con.copy()
+        st.markdown("**Case 1: Balanced design for planned contrast (A+B) vs (C+D).**")
+        st.caption("Suggested coefficients: c = [1, 1, -1, -1].")
+        st.dataframe(c_case1.head(12))
+        _download_case(c_case1, "contrast_case_1_balanced", "contrast_case_1")
+        st.caption("Guideline: test C = sum(c_i * ybar_i) and report t-test plus CI for the contrast.")
+
+        c_case2 = base_con[~((base_con["Treatment"] == "D") & (base_con["Replication"].isin([2, 4, 6])))].copy()
+        st.markdown("**Case 2: Unequal sample sizes due to missing runs in treatment D.**")
+        st.caption("Suggested coefficients: c = [1, 1, -1, -1], but use unequal-n variance formula.")
+        st.dataframe(c_case2.head(12))
+        _download_case(c_case2, "contrast_case_2_unbalanced", "contrast_case_2")
+        st.caption("Guideline: compute SE(C) with sum(c_i^2 / n_i), not with a common n.")
+
+        c_case3 = base_con.copy()
+        dose_map = {"A": 1, "B": 2, "C": 3, "D": 4}
+        c_case3["DoseIndex"] = c_case3["Treatment"].map(dose_map)
+        st.markdown("**Case 3: Ordered factor levels to evaluate a linear trend contrast.**")
+        st.caption("Suggested linear trend coefficients: c = [-3, -1, 1, 3].")
+        st.dataframe(c_case3.head(12))
+        _download_case(c_case3, "contrast_case_3_linear_trend", "contrast_case_3")
+        st.caption("Guideline: relate sign and magnitude of c_i with group means to interpret trend direction.")
+
     st.info("Tip for students: Start with visual missingness checks, then compare complete-case ANOVA/OLS against a sensitivity method before final conclusions.")
 
 
@@ -2300,7 +2574,9 @@ Each concept includes 3 cases and an analysis guidance.
 # Navigation
 # -------------------------
 PAGES = {
+    "Introduction": introduction_profile,
     "Anova One-way - Introduction": anova_oneway,
+    "Contrast Analysis and Factor Relationships": contrast_analysis,
     "Post-hoc Live Analyzer (LSD, Tukey, Duncan)": posthoc_live_three_tests,
     "Introduction to Factorial Designs": factorial_twolevels,
     "Factorial Designs with Three Factors and Three Levels": three_factorial,

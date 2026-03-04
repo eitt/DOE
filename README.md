@@ -1,6 +1,6 @@
 # DOE – Interactive Design of Experiments
 
-An illustrative web-based application for Design of Experiments (DOE) analysis built with Streamlit. The application enables interactive exploration of factorial designs, fractional factorial designs, one-way ANOVA, conjoint analysis, and regression modeling, with real-time visualization and statistical output.
+An illustrative web-based application for Design of Experiments (DOE) analysis built with Streamlit. The application enables interactive exploration of factorial designs, fractional factorial designs, one-way ANOVA, planned contrast analysis, conjoint analysis, and regression modeling, with real-time visualization and statistical output.
 
 ---
 
@@ -50,6 +50,14 @@ This project provides an educational and exploratory environment for understandi
 * Boxplot visualization of group effects
 * ANOVA table and linear regression summary
 * Graphical representation of SST, SSTR, and SSE
+
+### Planned Contrast Analysis
+
+* Dedicated page to define and test user-selected contrast coefficients
+* t-test and confidence interval for a planned contrast
+* Scheffe simultaneous confidence interval for contrast comparisons
+* Standardized contrast output and level-by-level contribution table
+* Visual relationship between treatment means and contrast coefficients
 
 ### Statistical Outputs and Export
 
@@ -102,13 +110,24 @@ streamlit run mainapp.py
 4. Set level coefficients to control effect magnitude.
 5. Review the ANOVA table, regression output, and Tukey HSD groupings.
 
-### Fractional Factorial and Conjoint Analysis
+### Contrast Analysis
+
+1. Open the **Contrast Analysis and Factor Relationships** section.
+2. Define treatment labels, treatment means, and contrast coefficients.
+3. Verify the contrast rule `sum(c_i)=0`.
+4. Inspect contrast estimate, t-test, CI, and Scheffe CI.
+5. Interpret the contribution plot and coefficient-vs-mean relationship chart.
+
+### Fractional Factorial, Conjoint Analysis, and Practice Cases
 
 * Fractional factorial:
   Select the design configuration to review required runs, aliasing structure, and 3D factor space representation.
 
 * Conjoint analysis:
   Complete the interactive choice tasks. The application generates a dataset and estimates logistic regression coefficients with corresponding odds ratios.
+
+* Practice cases:
+  Download missing-data and contrast-focused datasets for guided exercises in one-way ANOVA, RCBD, factorial 2x2, and planned contrasts.
 
 ### Data Export
 
