@@ -2721,9 +2721,9 @@ def _taguchi_main_effect_plot(effect_df, y_title, title, prefer_high=True):
     fig.update_yaxes(title_text=y_title, row=2, col=1)
     fig.update_layout(title=title, height=560, margin=dict(t=70, l=40, r=20, b=35))
     return fig
-        best_name = valid_eta.loc[best_idx, "Configuración"]
-        best_eta = valid_eta.loc[best_idx, "S/N η (dB)"]
-        st.success(f"Según la razón S/N, la mejor alternativa es **{best_name}** con η = **{best_eta:.2f} dB**.")
+    best_name = valid_eta.loc[best_idx, "Configuración"]
+    best_eta = valid_eta.loc[best_idx, "S/N η (dB)"]
+    st.success(f"Según la razón S/N, la mejor alternativa es **{best_name}** con η = **{best_eta:.2f} dB**.")
 
     # Gráficas
     g1, g2 = st.columns(2)
