@@ -2571,10 +2571,486 @@ Each concept includes 3 cases and an analysis guidance.
 
 
 # -------------------------
+# NEW PAGE: Diseño robusto de Taguchi — caso café monodosis
+# -------------------------
+def _taguchi_coffee_data(tds_target=1.25):
+    """Datos sintéticos del caso docente de café monodosis."""
+    df = pd.DataFrame({
+        "Corrida": np.arange(1, 9),
+        "A": [1, 1, 1, 1, 2, 2, 2, 2],
+        "B": [1, 1, 2, 2, 1, 1, 2, 2],
+        "C": [1, 2, 1, 2, 1, 2, 1, 2],
+        "D": [1, 2, 2, 1, 2, 1, 1, 2],
+        "TDS_87": [1.170, 1.165, 1.200, 1.175, 1.200, 1.175, 1.210, 1.205],
+        "TDS_93": [1.370, 1.365, 1.330, 1.365, 1.320, 1.355, 1.320, 1.315],
+    })
+    df["y_87"] = (df["TDS_87"] - tds_target).abs()
+    df["y_93"] = (df["TDS_93"] - tds_target).abs()
+    df["Q"] = (df["y_87"] ** 2 + df["y_93"] ** 2) / 2.0
+    df["eta"] = -10.0 * np.log10(df["Q"])
+    df["desviacion_media"] = (df["y_87"] + df["y_93"]) / 2.0
+    return df
+
+
+def _taguchi_factor_info():
+    return {
+        "A": {"nombre": "Tostión", "n1": "Medio", "n2": "Medio-alto"},
+        "B": {"nombre": "Molienda", "n1": "Medio", "n2": "Medio-fino"},
+        "C": {"nombre": "Masa de café", "n1": "11 g", "n2": "13 g"},
+        "D": {"nombre": "Resistencia del filtro", "n1": "Baja", "n2": "Alta"},
+    }
+
+
+def _taguchi_main_effect_table(df, response_col, maximize=True):
+    info = _taguchi_factor_info()
+    rows = []
+    for factor, meta in info.items():
+        m1 = float(df.loc[df[factor] == 1, response_col].mean())
+        m2 = float(df.loc[df[factor] == 2, response_col].mean())
+        preferred = 1 if (m1 >= m2 if maximize else m1 <= m2) else 2
+        rows.append({
+            "Factor": factor,
+            "Nombre": meta["nombre"],
+            "Nivel 1": m1,
+            "Nivel 2": m2,
+            "Efecto (N2-N1)": m2 - m1,
+            "Nivel preferido": f"{factor}{preferred}",
+        })
+    return pd.DataFrame(rows)
+
+
+def _taguchi_anova_eta(df):
+    """ANOVA pedagógica sobre eta usando solo efectos principales del L8."""
+    info = _taguchi_factor_info()
+    y = df["eta"].astype(float)
+    grand = float(y.mean())
+    ss_total = float(((y - grand) ** 2).sum())
+    rows = []
+    ss_factors = 0.0
+    for factor, meta in info.items():
+        grouped = df.groupby(factor)["eta"].agg(["mean", "count"])
+        ss = float(sum(grouped.loc[level, "count"] * (grouped.loc[level, "mean"] - grand) ** 2
+                       for level in grouped.index))
+        ss_factors += ss
+        rows.append({
+            "Fuente": f"{factor} — {meta['nombre']}",
+            "SC": ss,
+            "gl": 1,
+        })
+    ss_error = max(ss_total - ss_factors, 0.0)
+    df_error = 3  # 7 gl totales - 4 efectos principales
+    ms_error = ss_error / df_error if df_error > 0 else np.nan
+    for row in rows:
+        row["CM"] = row["SC"] / row["gl"]
+        row["F"] = row["CM"] / ms_error if ms_error > 0 else np.nan
+        row["p"] = 1 - stats.f.cdf(row["F"], row["gl"], df_error) if np.isfinite(row["F"]) else np.nan
+        row["Contribución (%)"] = 100.0 * row["SC"] / ss_total if ss_total > 0 else np.nan
+    rows.append({
+        "Fuente": "Residuo / términos no modelados",
+        "SC": ss_error,
+        "gl": df_error,
+        "CM": ms_error,
+        "F": np.nan,
+        "p": np.nan,
+        "Contribución (%)": 100.0 * ss_error / ss_total if ss_total > 0 else np.nan,
+    })
+    rows.append({
+        "Fuente": "Total",
+        "SC": ss_total,
+        "gl": 7,
+        "CM": np.nan,
+        "F": np.nan,
+        "p": np.nan,
+        "Contribución (%)": 100.0,
+    })
+    return pd.DataFrame(rows)
+
+
+def _taguchi_process_figure():
+    """Diagrama ilustrativo del proceso y de dónde se fijan los factores A-D."""
+    stages = [
+        ("Tostión", "A: nivel de tostión"),
+        ("Molienda", "B: tamaño de molienda"),
+        ("Dosificación", "C: masa de café"),
+        ("Filtro y sellado", "D: resistencia del filtro"),
+        ("Producto", "Monodosis"),
+        ("Uso", "87–93 °C"),
+    ]
+    fig = go.Figure()
+    xs = np.arange(len(stages))
+    for i, (title, subtitle) in enumerate(stages):
+        fill = "#e8f3f5" if i < 4 else ("#f4ead5" if i == 4 else "#f8dddd")
+        border = "#0b7285" if i < 4 else ("#a06b19" if i == 4 else "#a63d40")
+        fig.add_shape(
+            type="rect", x0=i - 0.40, x1=i + 0.40, y0=0.34, y1=0.82,
+            fillcolor=fill, line=dict(color=border, width=2)
+        )
+        fig.add_annotation(x=i, y=0.66, text=f"<b>{title}</b>", showarrow=False, font=dict(size=14))
+        fig.add_annotation(x=i, y=0.48, text=subtitle, showarrow=False, font=dict(size=11))
+        if i < len(stages) - 1:
+            fig.add_annotation(x=i + 0.52, y=0.58, ax=i + 0.34, ay=0.58,
+                               xref="x", yref="y", axref="x", ayref="y",
+                               text="", showarrow=True, arrowhead=3, arrowsize=1.3,
+                               arrowwidth=2, arrowcolor="#566573")
+    fig.add_annotation(
+        x=4.5, y=0.12,
+        text="La empresa fija A–D; la temperatura de preparación aparece después, durante el uso.",
+        showarrow=False, font=dict(size=12, color="#444")
+    )
+    fig.update_xaxes(visible=False, range=[-0.6, 5.6])
+    fig.update_yaxes(visible=False, range=[0, 1])
+    fig.update_layout(height=300, margin=dict(l=15, r=15, t=20, b=20), plot_bgcolor="white")
+    return fig
+
+
+def _taguchi_main_effect_plot(effect_df, y_title, title, prefer_high=True):
+    fig = make_subplots(rows=2, cols=2, subplot_titles=[
+        f"A — Tostión", "B — Molienda", "C — Masa de café", "D — Filtro"
+    ])
+    positions = [(1, 1), (1, 2), (2, 1), (2, 2)]
+    for (_, row), (r, c) in zip(effect_df.iterrows(), positions):
+        vals = [float(row["Nivel 1"]), float(row["Nivel 2"])]
+        fig.add_trace(
+            go.Scatter(
+                x=["Nivel 1", "Nivel 2"], y=vals, mode="lines+markers+text",
+                text=[f"{vals[0]:.3f}", f"{vals[1]:.3f}"], textposition="top center",
+                line=dict(width=3), marker=dict(size=9), showlegend=False
+            ), row=r, col=c
+        )
+    fig.update_yaxes(title_text=y_title, row=1, col=1)
+    fig.update_yaxes(title_text=y_title, row=2, col=1)
+    fig.update_layout(title=title, height=560, margin=dict(t=70, l=40, r=20, b=35))
+    return fig
+
+
+def taguchi_robust_design():
+    st.title("Diseño robusto de Taguchi — Caso café monodosis")
+    st.markdown(
+        "Esta sección sigue un único caso docente: diseñar una monodosis de café que mantenga "
+        "su concentración próxima al objetivo aun cuando el consumidor prepare la bebida con "
+        "agua a temperaturas diferentes. Los datos son **sintéticos** y se usan con fines didácticos."
+    )
+
+    # Navegación interna con botones, toda en español.
+    if "taguchi_view" not in st.session_state:
+        st.session_state["taguchi_view"] = "Caso y proceso"
+
+    labels = [
+        "Caso y proceso",
+        "Arreglo L8",
+        "Cálculo S/N",
+        "Efectos principales",
+        "ANOVA",
+        "Confirmación",
+    ]
+    cols = st.columns(6)
+    for col, label in zip(cols, labels):
+        with col:
+            if st.button(label, key=f"taguchi_nav_{label}"):
+                st.session_state["taguchi_view"] = label
+
+    view = st.session_state["taguchi_view"]
+    st.caption(f"Vista actual: **{view}**")
+
+    tds_target = 1.25
+    df = _taguchi_coffee_data(tds_target=tds_target)
+    info = _taguchi_factor_info()
+
+    # =====================================================
+    # 1. CASO Y PROCESO
+    # =====================================================
+    if view == "Caso y proceso":
+        st.subheader("1. Del proceso productivo al problema de robustez")
+        st.plotly_chart(_taguchi_process_figure(), use_container_width=True)
+
+        c1, c2 = st.columns([1.15, 1])
+        with c1:
+            st.markdown("### Factores de control")
+            factor_rows = []
+            for f, meta in info.items():
+                factor_rows.append({
+                    "Factor": f,
+                    "Decisión de la empresa": meta["nombre"],
+                    "Nivel 1": meta["n1"],
+                    "Nivel 2": meta["n2"],
+                })
+            st.dataframe(pd.DataFrame(factor_rows), use_container_width=True)
+
+        with c2:
+            st.markdown("### Condición de ruido del ejercicio")
+            st.info(
+                "**Temperatura del agua usada por el consumidor:** 87 °C y 93 °C. "
+                "La empresa puede recomendar una temperatura, pero no garantizarla durante el uso."
+            )
+            st.markdown("### Respuesta de calidad")
+            st.latex(r"TDS^*=1.25\%")
+            st.latex(r"y=|TDS-TDS^*|")
+            st.write(
+                "No buscamos minimizar el TDS. Buscamos minimizar la **distancia al objetivo**: "
+                "por debajo, la bebida tiende a ser más débil; por encima, más intensa."
+            )
+
+        with st.expander("Tipos de variación en el diseño robusto", expanded=True):
+            v1, v2, v3, v4 = st.columns(4)
+            with v1:
+                st.markdown("**Ruido externo**")
+                st.write("Temperatura y humedad del entorno, almacenamiento o planta.")
+            with v2:
+                st.markdown("**Ruido interno**")
+                st.write("Variación de materia prima y tolerancias de componentes.")
+            with v3:
+                st.markdown("**Deterioro**")
+                st.write("Desgaste, deriva o pérdida de calibración de equipos.")
+            with v4:
+                st.markdown("**Factor de señal**")
+                st.write("Parámetro que el usuario modifica intencionalmente para pedir otra respuesta.")
+            st.caption(
+                "En este caso la temperatura se modela como **ruido de uso**, porque el objetivo de TDS permanece fijo. "
+                "En un diseño dinámico, una variable manipulada para solicitar deliberadamente distintos niveles de respuesta "
+                "podría modelarse como factor de señal."
+            )
+
+        st.markdown("### ¿Por qué usar Taguchi aquí?")
+        st.success(
+            "El problema ya no es identificar una causa, sino elegir una configuración A–D "
+            "que sea poco sensible a una condición de uso que seguirá variando."
+        )
+
+    # =====================================================
+    # 2. ARREGLO L8
+    # =====================================================
+    elif view == "Arreglo L8":
+        st.subheader("2. Arreglo ortogonal L8: ocho configuraciones, dos condiciones de ruido")
+        st.markdown(
+            "Con cuatro factores a dos niveles, un factorial completo requeriría 16 combinaciones. "
+            "El arreglo L8 utiliza ocho corridas para estudiar de forma eficiente los efectos principales."
+        )
+
+        design_view = df[["Corrida", "A", "B", "C", "D", "TDS_87", "TDS_93"]].copy()
+        design_view.columns = ["Corrida", "A", "B", "C", "D", "TDS a 87 °C (%)", "TDS a 93 °C (%)"]
+        st.dataframe(design_view.round(3), use_container_width=True)
+
+        st.markdown("### Visualización de la ortogonalidad")
+        coded = df[["A", "B", "C", "D"]].replace({1: -1, 2: 1})
+        corr = coded.corr()
+        fig_orth = go.Figure(data=go.Heatmap(
+            z=corr.values, x=corr.columns, y=corr.index,
+            zmin=-1, zmax=1, colorscale="RdBu", reversescale=True,
+            text=np.round(corr.values, 2), texttemplate="%{text}",
+            colorbar=dict(title="Correlación")
+        ))
+        fig_orth.update_layout(
+            title="Factores codificados (-1,+1): correlaciones entre columnas del L8",
+            height=410, margin=dict(t=65, l=40, r=30, b=40)
+        )
+        _safe_plot(fig_orth)
+        st.caption(
+            "Los valores fuera de la diagonal son 0: las columnas A–D son ortogonales entre sí. "
+            "Cada efecto principal puede estimarse sin correlación lineal con los demás efectos principales incluidos."
+        )
+
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Factorial completo", "16 corridas")
+        c2.metric("Arreglo L8", "8 corridas")
+        c3.metric("Reducción", "50 %")
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=df["Corrida"], y=df["TDS_87"], mode="lines+markers", name="87 °C"
+        ))
+        fig.add_trace(go.Scatter(
+            x=df["Corrida"], y=df["TDS_93"], mode="lines+markers", name="93 °C"
+        ))
+        fig.add_hline(y=tds_target, line_dash="dash", annotation_text="Objetivo TDS = 1.25 %")
+        fig.update_layout(
+            title="Respuesta observada en las dos condiciones de ruido",
+            xaxis_title="Corrida",
+            yaxis_title="TDS (%)",
+            height=430,
+        )
+        _safe_plot(fig)
+
+        st.download_button(
+            "Descargar datos del caso (CSV)",
+            data=df.to_csv(index=False).encode("utf-8"),
+            file_name="taguchi_cafe_monodosis_L8.csv",
+            mime="text/csv",
+            key="taguchi_download_l8"
+        )
+
+    # =====================================================
+    # 3. CÁLCULO S/N
+    # =====================================================
+    elif view == "Cálculo S/N":
+        st.subheader("3. Del TDS a la razón señal/ruido")
+        run = st.selectbox("Seleccione una corrida para desarrollar el cálculo", df["Corrida"].tolist(), index=0)
+        row = df.loc[df["Corrida"] == run].iloc[0]
+
+        c1, c2, c3 = st.columns(3)
+        c1.metric("TDS a 87 °C", f"{row['TDS_87']:.3f} %")
+        c2.metric("TDS a 93 °C", f"{row['TDS_93']:.3f} %")
+        c3.metric("Objetivo", f"{tds_target:.2f} %")
+
+        st.markdown("#### Paso 1 — desviación respecto al objetivo")
+        st.latex(r"y_{87}=|TDS_{87}-TDS^*|")
+        st.latex(r"y_{93}=|TDS_{93}-TDS^*|")
+        st.write(f"Para la corrida {run}:  y87 = **{row['y_87']:.3f}**,  y93 = **{row['y_93']:.3f}**.")
+
+        st.markdown("#### Paso 2 — pérdida cuadrática media")
+        st.latex(r"Q_i=\frac{y_{87}^2+y_{93}^2}{2}")
+        st.code(
+            f"Q{run} = ({row['y_87']:.3f}² + {row['y_93']:.3f}²) / 2 = {row['Q']:.5f}",
+            language="text"
+        )
+
+        st.markdown("#### Paso 3 — razón señal/ruido para menor-es-mejor")
+        st.latex(r"\eta_i=-10\log_{10}(Q_i)")
+        st.code(
+            f"η{run} = -10 log10({row['Q']:.5f}) = {row['eta']:.2f} dB",
+            language="text"
+        )
+
+        m1, m2, m3 = st.columns(3)
+        m1.metric("Desviación media", f"{row['desviacion_media']:.3f}")
+        m2.metric("Q", f"{row['Q']:.5f}")
+        m3.metric("η", f"{row['eta']:.2f} dB")
+        st.success("Regla de lectura: menor desviación y menor Q son mejores; en la escala S/N, **mayor η es mejor**.")
+
+        calc_table = df[["Corrida", "y_87", "y_93", "Q", "eta"]].copy()
+        calc_table.columns = ["Corrida", "y(87 °C)", "y(93 °C)", "Q", "η (dB)"]
+        st.dataframe(calc_table.round({"y(87 °C)": 3, "y(93 °C)": 3, "Q": 5, "η (dB)": 2}),
+                     use_container_width=True, hide_index=True)
+
+    # =====================================================
+    # 4. EFECTOS PRINCIPALES
+    # =====================================================
+    elif view == "Efectos principales":
+        st.subheader("4. ¿Qué niveles mejoran la robustez y el centrado?")
+        eta_eff = _taguchi_main_effect_table(df, "eta", maximize=True)
+        dev_eff = _taguchi_main_effect_table(df, "desviacion_media", maximize=False)
+
+        tab_sn, tab_media = st.tabs(["Efectos sobre S/N", "Efectos sobre la desviación media"])
+
+        with tab_sn:
+            st.markdown(
+                "La razón S/N resume el comportamiento bajo las dos condiciones de temperatura. "
+                "Para este criterio, el nivel preferido es el que tenga **mayor η**."
+            )
+            _safe_plot(_taguchi_main_effect_plot(
+                eta_eff, "η (dB)", "Efectos principales sobre la razón señal/ruido"
+            ))
+            show = eta_eff[["Factor", "Nombre", "Nivel 1", "Nivel 2", "Efecto (N2-N1)", "Nivel preferido"]].copy()
+            st.dataframe(show.round(3), use_container_width=True)
+
+        with tab_media:
+            st.markdown(
+                "Esta gráfica responde una pregunta complementaria: ¿qué niveles mantienen, en promedio, "
+                "la bebida más cerca del TDS objetivo? Aquí **menor desviación media es mejor**."
+            )
+            _safe_plot(_taguchi_main_effect_plot(
+                dev_eff, "Desviación media", "Efectos principales sobre la media de la desviación"
+            ))
+            show = dev_eff[["Factor", "Nombre", "Nivel 1", "Nivel 2", "Efecto (N2-N1)", "Nivel preferido"]].copy()
+            st.dataframe(show.round(4), use_container_width=True)
+
+        best = "–".join(eta_eff["Nivel preferido"].tolist())
+        st.success(f"Combinación sugerida por los efectos principales de S/N: **{best}**.")
+        st.caption(
+            "En el caso sintético, S/N y desviación media conducen a la misma dirección de niveles: "
+            "A2, B2, C1 y D2."
+        )
+
+    # =====================================================
+    # 5. ANOVA
+    # =====================================================
+    elif view == "ANOVA":
+        st.subheader("5. ANOVA de la razón S/N: ¿qué factores explican más variación?")
+        anova = _taguchi_anova_eta(df)
+        st.dataframe(anova.round({"SC": 4, "CM": 4, "F": 2, "p": 6, "Contribución (%)": 2}),
+                     use_container_width=True, hide_index=True)
+
+        plot_df = anova[anova["Fuente"].str.contains("—", regex=False)].copy()
+        fig = go.Figure(go.Bar(
+            x=plot_df["Contribución (%)"],
+            y=plot_df["Fuente"],
+            orientation="h",
+            text=plot_df["Contribución (%)"].map(lambda v: f"{v:.1f}%"),
+            textposition="outside"
+        ))
+        fig.update_layout(
+            title="Contribución de los factores a la variación de η",
+            xaxis_title="Contribución (%)",
+            yaxis_title="Factor",
+            height=430,
+            yaxis=dict(autorange="reversed")
+        )
+        _safe_plot(fig)
+
+        top2 = plot_df.sort_values("Contribución (%)", ascending=False).head(2)["Fuente"].tolist()
+        st.info(f"En estos datos sintéticos, las mayores contribuciones corresponden a **{top2[0]}** y **{top2[1]}**.")
+        st.warning(
+            "**Lectura metodológica:** el L8 no tiene réplica de error puro. El residuo mostrado corresponde a "
+            "variación no explicada por los cuatro efectos principales (incluye posibles interacciones y error). "
+            "Por eso, los porcentajes de contribución son más útiles pedagógicamente que interpretar los p-valores "
+            "como evidencia confirmatoria independiente."
+        )
+
+    # =====================================================
+    # 6. CONFIRMACIÓN
+    # =====================================================
+    elif view == "Confirmación":
+        st.subheader("6. La combinación recomendada todavía debe confirmarse")
+        eta_eff = _taguchi_main_effect_table(df, "eta", maximize=True)
+        best = "–".join(eta_eff["Nivel preferido"].tolist())
+        st.markdown(f"La combinación sugerida es **{best}**.")
+
+        c1, c2 = st.columns(2)
+        with c1:
+            st.markdown("#### Corrida de confirmación sintética")
+            t87 = st.number_input("TDS de confirmación a 87 °C (%)", value=1.23, step=0.005, format="%.3f")
+            t93 = st.number_input("TDS de confirmación a 93 °C (%)", value=1.28, step=0.005, format="%.3f")
+        y87 = abs(float(t87) - tds_target)
+        y93 = abs(float(t93) - tds_target)
+        q = (y87 ** 2 + y93 ** 2) / 2.0
+        eta_conf = -10 * np.log10(q) if q > 0 else np.inf
+
+        with c2:
+            st.markdown("#### Resultado")
+            st.metric("y(87 °C)", f"{y87:.3f}")
+            st.metric("y(93 °C)", f"{y93:.3f}")
+            st.metric("η de confirmación", "∞" if not np.isfinite(eta_conf) else f"{eta_conf:.2f} dB")
+
+        best_observed = float(df["eta"].max())
+        st.latex(r"Q_{conf}=\frac{y_{87}^2+y_{93}^2}{2}")
+        st.write(f"Q de confirmación = **{q:.5f}**")
+        if np.isfinite(eta_conf) and eta_conf > best_observed:
+            st.success(
+                f"η_confirmación = **{eta_conf:.2f} dB** supera la mejor corrida observada "
+                f"(**{best_observed:.2f} dB**). La confirmación es coherente con una mejora."
+            )
+        elif np.isfinite(eta_conf):
+            st.warning(
+                f"η_confirmación = **{eta_conf:.2f} dB** no supera la mejor corrida observada "
+                f"(**{best_observed:.2f} dB**). Conviene revisar la recomendación o repetir la confirmación."
+            )
+        else:
+            st.success("La confirmación coincide exactamente con el objetivo en ambas condiciones; Q = 0.")
+
+        st.markdown("### Lectura final")
+        st.write(
+            "La mejor corrida observada no es necesariamente la combinación recomendada. "
+            "Taguchi utiliza los efectos de los niveles para proponer una configuración y después exige "
+            "comprobarla experimentalmente."
+        )
+        st.caption("Todos los datos de esta sección son sintéticos y sirven únicamente para la sesión docente.")
+
+
+# -------------------------
 # Navigation
 # -------------------------
 PAGES = {
     "Introduction": introduction_profile,
+    "Diseño robusto de Taguchi — Café monodosis": taguchi_robust_design,
     "Anova One-way - Introduction": anova_oneway,
     "Contrast Analysis and Factor Relationships": contrast_analysis,
     "Post-hoc Live Analyzer (LSD, Tukey, Duncan)": posthoc_live_three_tests,
@@ -2586,6 +3062,6 @@ PAGES = {
     "Practice Cases: Missing Data": missing_data_case_studies,
 }
 
-st.title('Navigation')
-choice = st.radio("Go to", list(PAGES.keys()))
+st.title('Navegación')
+choice = st.radio("Ir a", list(PAGES.keys()))
 PAGES[choice]()
