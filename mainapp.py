@@ -2721,130 +2721,6 @@ def _taguchi_main_effect_plot(effect_df, y_title, title, prefer_high=True):
     fig.update_yaxes(title_text=y_title, row=2, col=1)
     fig.update_layout(title=title, height=560, margin=dict(t=70, l=40, r=20, b=35))
     return fig
-    best_name = valid_eta.loc[best_idx, "Configuración"]
-    best_eta = valid_eta.loc[best_idx, "S/N η (dB)"]
-    st.success(f"Según la razón S/N, la mejor alternativa es **{best_name}** con η = **{best_eta:.2f} dB**.")
-
-    # Gráficas
-    g1, g2 = st.columns(2)
-
-    with g1:
-        fig_raw = go.Figure()
-        for c in config_cols:
-            fig_raw.add_trace(go.Scatter(
-                x=edited["Réplica"],
-                y=pd.to_numeric(edited[c], errors="coerce"),
-                mode="lines+markers",
-                name=c,
-            ))
-        if target is not None:
-            fig_raw.add_hline(y=float(target), line_dash="dash", annotation_text="Objetivo")
-        fig_raw.update_layout(
-            title="Respuestas observadas",
-            xaxis_title="Réplica / condición de ruido",
-            yaxis_title="Respuesta y",
-            height=430,
-        )
-        _safe_plot(fig_raw)
-
-    with g2:
-        fig_sn = go.Figure(go.Bar(
-            x=result_df["Configuración"],
-            y=result_df["S/N η (dB)"],
-            text=result_df["S/N η (dB)"].map(lambda v: f"{v:.2f}" if np.isfinite(v) else "NA"),
-            textposition="outside",
-        ))
-        fig_sn.update_layout(
-            title="Comparación por razón señal/ruido",
-            xaxis_title="Configuración",
-            yaxis_title="η (dB) — mayor es mejor",
-            height=430,
-        )
-        _safe_plot(fig_sn)
-
-    # Cálculo detallado
-    st.markdown("### Cálculo paso a paso")
-    chosen = st.selectbox(
-        "Seleccione una configuración",
-        config_cols,
-        key=f"detail_{case}"
-    )
-    vals = pd.to_numeric(edited[chosen], errors="coerce").dropna().to_numpy(dtype=float)
-
-    if len(vals):
-        st.write("Observaciones:", ", ".join(f"{v:.4g}" for v in vals))
-        mean_y = float(np.mean(vals))
-        sd_y = float(np.std(vals, ddof=1)) if len(vals) > 1 else np.nan
-        eta_y = _taguchi_sn_value(vals, case)
-
-        if case == "Menor es mejor":
-            q = float(np.mean(vals**2))
-            st.latex(r"Q=\frac{1}{n}\sum y_i^2")
-            st.code(f"Q = ({' + '.join([f'{v:.4g}²' for v in vals])}) / {len(vals)} = {q:.6f}", language="text")
-            st.latex(r"\eta=-10\log_{10}(Q)")
-            st.code(f"η = -10 log10({q:.6f}) = {eta_y:.3f} dB", language="text")
-
-        elif case == "Mayor es mejor":
-            if np.any(vals == 0):
-                st.error("La fórmula mayor-es-mejor no está definida si alguna respuesta es 0.")
-            else:
-                q = float(np.mean(1.0/(vals**2)))
-                st.latex(r"Q=\frac{1}{n}\sum \frac{1}{y_i^2}")
-                st.code(
-                    f"Q = ({' + '.join([f'1/{v:.4g}²' for v in vals])}) / {len(vals)} = {q:.8f}",
-                    language="text"
-                )
-                st.latex(r"\eta=-10\log_{10}(Q)")
-                st.code(f"η = -10 log10({q:.8f}) = {eta_y:.3f} dB", language="text")
-
-        elif case == "Nominal — varianza dependiente de la media":
-            st.latex(r"\eta=20\log_{10}\left(\frac{\bar y}{s}\right)")
-            st.code(
-                f"ȳ = {mean_y:.4f}; s = {sd_y:.4f}; η = 20 log10({mean_y:.4f}/{sd_y:.4f}) = {eta_y:.3f} dB",
-                language="text"
-            )
-
-        else:
-            st.latex(r"\eta=-20\log_{10}(s)")
-            st.code(
-                f"s = {sd_y:.4f}; η = -20 log10({sd_y:.4f}) = {eta_y:.3f} dB",
-                language="text"
-            )
-
-        if target is not None:
-            delta = abs(mean_y - float(target))
-            st.metric("Desviación de la media respecto al objetivo", f"{delta:.4f}")
-            if delta > 0:
-                st.caption(
-                    "Una configuración puede tener una S/N alta y, sin embargo, estar descentrada. "
-                    "En nominal-es-mejor se debe estudiar **robustez + centrado**."
-                )
-
-    # Vinculación con el caso del café
-    st.markdown("### Conexión con el caso del café monodosis")
-    if case == "Menor es mejor":
-        st.info(
-            "En el caso del café no se minimiza directamente el TDS. Primero se transforma la respuesta: "
-            "**y = |TDS − 1.25|**. Como esa desviación idealmente vale 0, se analiza correctamente con "
-            "la razón S/N de **menor es mejor**."
-        )
-    elif "Nominal" in case:
-        st.info(
-            "También sería posible formular un estudio nominal directamente sobre TDS, pero entonces deben "
-            "separarse explícitamente dos preguntas: **¿qué tan variable es el TDS?** y "
-            "**¿qué tan cerca está su media de 1.25 %?**. La formulación actual con la desviación hace esa "
-            "lógica más transparente para una sesión de 30 minutos."
-        )
-    else:
-        st.info(
-            "Mayor-es-mejor sería pertinente si la característica de calidad fuera, por ejemplo, resistencia, "
-            "rendimiento o vida útil y no existiera un objetivo nominal intermedio."
-        )
-
-    st.caption(
-        "Referencia conceptual: las fórmulas corresponden a las variantes Taguchi SN−, SN+, SN0 y SN00. "
-        "En todos los casos se busca maximizar η; lo que cambia es cómo se define la pérdida frente al ruido."
-    )
 
 
 def taguchi_robust_design():
@@ -3167,6 +3043,389 @@ def taguchi_robust_design():
             "comprobarla experimentalmente."
         )
         st.caption("Todos los datos de esta sección son sintéticos y sirven únicamente para la sesión docente.")
+
+
+
+# -------------------------
+# NEW PAGE: Tipos de respuesta Taguchi y razón señal/ruido
+# -------------------------
+def _taguchi_sn_value(values, case):
+    """Calcula la razón señal/ruido de Taguchi para cuatro casos estándar."""
+    y = np.asarray(values, dtype=float)
+    y = y[np.isfinite(y)]
+
+    if len(y) == 0:
+        return np.nan
+
+    if case == "Menor es mejor":
+        return -10.0 * np.log10(np.mean(y ** 2))
+
+    if case == "Mayor es mejor":
+        if np.any(y == 0):
+            return np.nan
+        return -10.0 * np.log10(np.mean(1.0 / (y ** 2)))
+
+    if len(y) < 2:
+        return np.nan
+
+    mean_y = float(np.mean(y))
+    sd_y = float(np.std(y, ddof=1))
+
+    if case == "Nominal — varianza dependiente de la media":
+        if mean_y <= 0 or sd_y <= 0:
+            return np.nan
+        return 20.0 * np.log10(mean_y / sd_y)
+
+    if case == "Nominal — varianza independiente de la media":
+        if sd_y <= 0:
+            return np.inf
+        return -20.0 * np.log10(sd_y)
+
+    return np.nan
+
+
+def _taguchi_case_defaults(case):
+    """Datos ilustrativos para tres configuraciones y cuatro réplicas."""
+    if case == "Menor es mejor":
+        return pd.DataFrame({
+            "Réplica": [1, 2, 3, 4],
+            "Configuración A": [5.2, 4.9, 5.5, 5.1],
+            "Configuración B": [3.2, 3.5, 3.1, 3.4],
+            "Configuración C": [4.0, 2.0, 5.5, 3.0],
+        })
+    if case == "Mayor es mejor":
+        return pd.DataFrame({
+            "Réplica": [1, 2, 3, 4],
+            "Configuración A": [82, 85, 80, 84],
+            "Configuración B": [92, 95, 93, 94],
+            "Configuración C": [98, 70, 100, 76],
+        })
+    if case == "Nominal — varianza dependiente de la media":
+        return pd.DataFrame({
+            "Réplica": [1, 2, 3, 4],
+            "Configuración A": [48.0, 52.0, 49.0, 51.0],
+            "Configuración B": [58.0, 62.0, 59.0, 61.0],
+            "Configuración C": [49.8, 50.2, 50.0, 50.1],
+        })
+    return pd.DataFrame({
+        "Réplica": [1, 2, 3, 4],
+        "Configuración A": [48.0, 52.0, 49.0, 51.0],
+        "Configuración B": [49.7, 50.4, 50.1, 49.8],
+        "Configuración C": [54.8, 55.2, 55.1, 54.9],
+    })
+
+
+def _taguchi_case_metadata(case):
+    meta = {
+        "Menor es mejor": {
+            "pregunta": "¿Cómo hacer que una respuesta no negativa sea lo más pequeña y estable posible?",
+            "ejemplos": "Defectos, rugosidad, tiempo de espera, emisiones, desviación respecto a un objetivo.",
+            "formula": r"\eta=-10\log_{10}\left(\frac{1}{n}\sum_{i=1}^{n}y_i^2\right)",
+            "regla": "Mayor η es mejor; valores pequeños y poco variables de y producen una razón S/N mayor.",
+            "restriccion": "Adecuado cuando el ideal físico es cero o cuando se transforma la respuesta a una pérdida/desviación no negativa.",
+            "objetivo_default": 0.0,
+        },
+        "Mayor es mejor": {
+            "pregunta": "¿Cómo hacer que una respuesta positiva sea lo más grande y estable posible?",
+            "ejemplos": "Resistencia, rendimiento, vida útil, eficiencia, capacidad de carga.",
+            "formula": r"\eta=-10\log_{10}\left(\frac{1}{n}\sum_{i=1}^{n}\frac{1}{y_i^2}\right)",
+            "regla": "Mayor η es mejor; penaliza especialmente respuestas pequeñas.",
+            "restriccion": "Requiere respuestas distintas de cero y, en la práctica, normalmente positivas.",
+            "objetivo_default": None,
+        },
+        "Nominal — varianza dependiente de la media": {
+            "pregunta": "¿Cómo reducir la variación cuando la dispersión tiende a crecer con la media?",
+            "ejemplos": "Dimensiones, voltaje, fuerza o caudal cuando la desviación estándar escala con el nivel medio.",
+            "formula": r"\eta=20\log_{10}\left(\frac{\bar y}{s}\right)",
+            "regla": "Mayor η es mejor: busca una relación media/desviación estándar grande.",
+            "restriccion": "La S/N mide robustez relativa; el ajuste de la media al objetivo nominal debe verificarse por separado.",
+            "objetivo_default": 50.0,
+        },
+        "Nominal — varianza independiente de la media": {
+            "pregunta": "¿Cómo minimizar la variabilidad cuando la dispersión no depende materialmente de la media?",
+            "ejemplos": "Características nominales en las que se puede ajustar el centrado independientemente de la dispersión.",
+            "formula": r"\eta=-20\log_{10}(s)",
+            "regla": "Mayor η es mejor porque corresponde a menor desviación estándar.",
+            "restriccion": "La S/N se concentra en la dispersión; la cercanía de la media al objetivo nominal se analiza aparte.",
+            "objetivo_default": 50.0,
+        },
+    }
+    return meta[case]
+
+
+def taguchi_response_types():
+    st.title("Taguchi — Tipos de respuesta y razón señal/ruido")
+    st.markdown(
+        "Esta página compara los casos clásicos de razón señal/ruido de Taguchi. "
+        "En todos ellos, la regla final es la misma: **se selecciona el nivel o configuración con mayor S/N**, "
+        "pero la función utilizada depende de lo que signifique calidad para la respuesta."
+    )
+
+    if "taguchi_sn_case" not in st.session_state:
+        st.session_state["taguchi_sn_case"] = "Menor es mejor"
+
+    cases = [
+        "Menor es mejor",
+        "Mayor es mejor",
+        "Nominal — varianza dependiente de la media",
+        "Nominal — varianza independiente de la media",
+    ]
+
+    st.markdown("### Seleccione el tipo de característica de calidad")
+    bcols = st.columns(4)
+    for col, case in zip(bcols, cases):
+        with col:
+            if st.button(case, key=f"btn_sn_{case}", use_container_width=True):
+                st.session_state["taguchi_sn_case"] = case
+
+    case = st.session_state["taguchi_sn_case"]
+    meta = _taguchi_case_metadata(case)
+
+    st.info(f"**Caso activo:** {case}")
+    st.markdown(f"**Pregunta de ingeniería:** {meta['pregunta']}")
+    st.caption(f"Ejemplos: {meta['ejemplos']}")
+
+    # Resumen comparativo
+    with st.expander("Ver mapa completo de los cuatro casos", expanded=False):
+        summary = pd.DataFrame([
+            {
+                "Caso": "Menor es mejor",
+                "Qué se desea": "Acercar y a 0",
+                "S/N": "−10 log10(promedio(y²))",
+                "Lectura": "Penaliza magnitud y variación",
+            },
+            {
+                "Caso": "Mayor es mejor",
+                "Qué se desea": "Hacer y grande",
+                "S/N": "−10 log10(promedio(1/y²))",
+                "Lectura": "Penaliza respuestas pequeñas",
+            },
+            {
+                "Caso": "Nominal; varianza depende de media",
+                "Qué se desea": "Reducir variación relativa",
+                "S/N": "20 log10(media/s)",
+                "Lectura": "Robustez relativa a la escala",
+            },
+            {
+                "Caso": "Nominal; varianza independiente",
+                "Qué se desea": "Reducir dispersión",
+                "S/N": "−20 log10(s)",
+                "Lectura": "Separa dispersión del centrado",
+            },
+        ])
+        st.dataframe(summary, use_container_width=True, hide_index=True)
+        st.caption(
+            "En los casos nominales, una S/N alta no demuestra por sí sola que la media esté en el objetivo. "
+            "El centrado debe revisarse además de la robustez."
+        )
+
+    # Fórmula y explicación
+    f1, f2 = st.columns([1.05, 1])
+    with f1:
+        st.markdown("### Fórmula")
+        st.latex(meta["formula"])
+        st.success(meta["regla"])
+        st.warning(meta["restriccion"])
+
+    with f2:
+        st.markdown("### ¿Qué ocurre si cambia la media o la variabilidad?")
+        conceptual = go.Figure()
+
+        if case == "Menor es mejor":
+            x = np.array([1, 2, 3, 4, 5], dtype=float)
+            eta = [-10*np.log10(np.mean(np.repeat(v, 4)**2)) for v in x]
+            conceptual.add_trace(go.Scatter(x=x, y=eta, mode="lines+markers"))
+            conceptual.update_xaxes(title="Nivel medio de la respuesta (menor es preferible)")
+        elif case == "Mayor es mejor":
+            x = np.array([20, 40, 60, 80, 100], dtype=float)
+            eta = [-10*np.log10(np.mean(1/(np.repeat(v, 4)**2))) for v in x]
+            conceptual.add_trace(go.Scatter(x=x, y=eta, mode="lines+markers"))
+            conceptual.update_xaxes(title="Nivel medio de la respuesta (mayor es preferible)")
+        elif case == "Nominal — varianza dependiente de la media":
+            s_vals = np.array([8, 6, 4, 2, 1], dtype=float)
+            eta = 20*np.log10(50/s_vals)
+            conceptual.add_trace(go.Scatter(x=s_vals, y=eta, mode="lines+markers"))
+            conceptual.update_xaxes(title="Desviación estándar s, con media fija")
+        else:
+            s_vals = np.array([8, 6, 4, 2, 1], dtype=float)
+            eta = -20*np.log10(s_vals)
+            conceptual.add_trace(go.Scatter(x=s_vals, y=eta, mode="lines+markers"))
+            conceptual.update_xaxes(title="Desviación estándar s")
+
+        conceptual.update_yaxes(title="Razón S/N, η (dB)")
+        conceptual.update_layout(height=340, margin=dict(t=20, l=30, r=20, b=40))
+        _safe_plot(conceptual)
+
+    # Dataset editable
+    st.markdown("### Experimento ilustrativo")
+    st.write(
+        "Edite las réplicas si desea experimentar. Cada columna representa una configuración candidata "
+        "sometida a varias réplicas o condiciones de ruido."
+    )
+    defaults = _taguchi_case_defaults(case)
+    edited = st.data_editor(
+        defaults,
+        use_container_width=True,
+        hide_index=True,
+        num_rows="fixed",
+        key=f"editor_{case}",
+    )
+
+    config_cols = [c for c in edited.columns if c != "Réplica"]
+    rows = []
+    for c in config_cols:
+        vals = pd.to_numeric(edited[c], errors="coerce").dropna().to_numpy(dtype=float)
+        eta_val = _taguchi_sn_value(vals, case)
+        rows.append({
+            "Configuración": c,
+            "n": len(vals),
+            "Media": float(np.mean(vals)) if len(vals) else np.nan,
+            "Desv. estándar": float(np.std(vals, ddof=1)) if len(vals) > 1 else np.nan,
+            "S/N η (dB)": eta_val,
+        })
+    result_df = pd.DataFrame(rows)
+
+    # Métricas y objetivo nominal
+    target = meta["objetivo_default"]
+    if target is not None:
+        target = st.number_input(
+            "Objetivo nominal (para evaluar centrado)",
+            value=float(target),
+            step=0.5,
+            key=f"target_{case}"
+        )
+        result_df["|Media - objetivo|"] = (result_df["Media"] - float(target)).abs()
+
+    st.markdown("### Resultados por configuración")
+    st.dataframe(result_df.round(4), use_container_width=True, hide_index=True)
+
+    valid_eta = result_df[np.isfinite(result_df["S/N η (dB)"])].copy()
+    if not valid_eta.empty:
+        best_idx = valid_eta["S/N η (dB)"].idxmax()
+        best_name = valid_eta.loc[best_idx, "Configuración"]
+        best_eta = valid_eta.loc[best_idx, "S/N η (dB)"]
+        st.success(f"Según la razón S/N, la mejor alternativa es **{best_name}** con η = **{best_eta:.2f} dB**.")
+
+    # Gráficas
+    g1, g2 = st.columns(2)
+
+    with g1:
+        fig_raw = go.Figure()
+        for c in config_cols:
+            fig_raw.add_trace(go.Scatter(
+                x=edited["Réplica"],
+                y=pd.to_numeric(edited[c], errors="coerce"),
+                mode="lines+markers",
+                name=c,
+            ))
+        if target is not None:
+            fig_raw.add_hline(y=float(target), line_dash="dash", annotation_text="Objetivo")
+        fig_raw.update_layout(
+            title="Respuestas observadas",
+            xaxis_title="Réplica / condición de ruido",
+            yaxis_title="Respuesta y",
+            height=430,
+        )
+        _safe_plot(fig_raw)
+
+    with g2:
+        fig_sn = go.Figure(go.Bar(
+            x=result_df["Configuración"],
+            y=result_df["S/N η (dB)"],
+            text=result_df["S/N η (dB)"].map(lambda v: f"{v:.2f}" if np.isfinite(v) else "NA"),
+            textposition="outside",
+        ))
+        fig_sn.update_layout(
+            title="Comparación por razón señal/ruido",
+            xaxis_title="Configuración",
+            yaxis_title="η (dB) — mayor es mejor",
+            height=430,
+        )
+        _safe_plot(fig_sn)
+
+    # Cálculo detallado
+    st.markdown("### Cálculo paso a paso")
+    chosen = st.selectbox(
+        "Seleccione una configuración",
+        config_cols,
+        key=f"detail_{case}"
+    )
+    vals = pd.to_numeric(edited[chosen], errors="coerce").dropna().to_numpy(dtype=float)
+
+    if len(vals):
+        st.write("Observaciones:", ", ".join(f"{v:.4g}" for v in vals))
+        mean_y = float(np.mean(vals))
+        sd_y = float(np.std(vals, ddof=1)) if len(vals) > 1 else np.nan
+        eta_y = _taguchi_sn_value(vals, case)
+
+        if case == "Menor es mejor":
+            q = float(np.mean(vals**2))
+            st.latex(r"Q=\frac{1}{n}\sum y_i^2")
+            st.code(f"Q = ({' + '.join([f'{v:.4g}²' for v in vals])}) / {len(vals)} = {q:.6f}", language="text")
+            st.latex(r"\eta=-10\log_{10}(Q)")
+            st.code(f"η = -10 log10({q:.6f}) = {eta_y:.3f} dB", language="text")
+
+        elif case == "Mayor es mejor":
+            if np.any(vals == 0):
+                st.error("La fórmula mayor-es-mejor no está definida si alguna respuesta es 0.")
+            else:
+                q = float(np.mean(1.0/(vals**2)))
+                st.latex(r"Q=\frac{1}{n}\sum \frac{1}{y_i^2}")
+                st.code(
+                    f"Q = ({' + '.join([f'1/{v:.4g}²' for v in vals])}) / {len(vals)} = {q:.8f}",
+                    language="text"
+                )
+                st.latex(r"\eta=-10\log_{10}(Q)")
+                st.code(f"η = -10 log10({q:.8f}) = {eta_y:.3f} dB", language="text")
+
+        elif case == "Nominal — varianza dependiente de la media":
+            st.latex(r"\eta=20\log_{10}\left(\frac{\bar y}{s}\right)")
+            st.code(
+                f"ȳ = {mean_y:.4f}; s = {sd_y:.4f}; η = 20 log10({mean_y:.4f}/{sd_y:.4f}) = {eta_y:.3f} dB",
+                language="text"
+            )
+
+        else:
+            st.latex(r"\eta=-20\log_{10}(s)")
+            st.code(
+                f"s = {sd_y:.4f}; η = -20 log10({sd_y:.4f}) = {eta_y:.3f} dB",
+                language="text"
+            )
+
+        if target is not None:
+            delta = abs(mean_y - float(target))
+            st.metric("Desviación de la media respecto al objetivo", f"{delta:.4f}")
+            if delta > 0:
+                st.caption(
+                    "Una configuración puede tener una S/N alta y, sin embargo, estar descentrada. "
+                    "En nominal-es-mejor se debe estudiar **robustez + centrado**."
+                )
+
+    # Vinculación con el caso del café
+    st.markdown("### Conexión con el caso del café monodosis")
+    if case == "Menor es mejor":
+        st.info(
+            "En el caso del café no se minimiza directamente el TDS. Primero se transforma la respuesta: "
+            "**y = |TDS − 1.25|**. Como esa desviación idealmente vale 0, se analiza correctamente con "
+            "la razón S/N de **menor es mejor**."
+        )
+    elif "Nominal" in case:
+        st.info(
+            "También sería posible formular un estudio nominal directamente sobre TDS, pero entonces deben "
+            "separarse explícitamente dos preguntas: **¿qué tan variable es el TDS?** y "
+            "**¿qué tan cerca está su media de 1.25 %?**. La formulación actual con la desviación hace esa "
+            "lógica más transparente para una sesión de 30 minutos."
+        )
+    else:
+        st.info(
+            "Mayor-es-mejor sería pertinente si la característica de calidad fuera, por ejemplo, resistencia, "
+            "rendimiento o vida útil y no existiera un objetivo nominal intermedio."
+        )
+
+    st.caption(
+        "Referencia conceptual: las fórmulas corresponden a las variantes Taguchi SN−, SN+, SN0 y SN00. "
+        "En todos los casos se busca maximizar η; lo que cambia es cómo se define la pérdida frente al ruido."
+    )
 
 
 # -------------------------
