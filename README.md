@@ -72,8 +72,8 @@ This project provides an educational and exploratory environment for understandi
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/doe.git
-cd doe
+git clone https://github.com/eitt/DOE.git
+cd DOE
 ```
 
 ### 2. Install dependencies
